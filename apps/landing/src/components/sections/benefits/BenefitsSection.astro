@@ -1,0 +1,45 @@
+---
+import BenefitsContent from './BenefitsContent.astro';
+import CapabilityItem from './CapabilityItem.astro';
+import ReuseDemo from './demo/ReuseDemo.astro';
+
+const capabilities = [
+  {
+    title: 'Integração com o sistema existente',
+    description: 'O sistema que você já opera envia os agendamentos pela API. A agenda continua nele.',
+    iconPath: 'M5.5 4 2 8l3.5 4M10.5 4 14 8l-3.5 4',
+  },
+  {
+    title: 'Conversa conduzida pelo Confirma',
+    description:
+      'O Confirma envia a solicitação ao contato pelo WhatsApp e reconhece as respostas previstas.',
+    iconPath: 'M3 3h10a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1H7.5L4.5 13.5V11H3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z',
+  },
+  {
+    title: 'Resultado de volta ao seu sistema',
+    description:
+      'O resultado chega ao seu receptor de webhook, e o seu sistema decide como aplicá-lo à agenda.',
+    iconPath: 'M13 3.5V8a2 2 0 0 1-2 2H3.5M6.5 7 3.5 10l3 3',
+  },
+] as const;
+---
+
+<section id="beneficios" aria-labelledby="benefits-title" class="scroll-mt-22 py-16 md:py-24 min-[1200px]:py-30">
+  <div
+    class="mx-auto grid w-full max-w-[1120px] gap-12 px-5 md:px-8 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-x-[72px] lg:gap-y-8 min-[1200px]:px-12"
+  >
+    <div class="min-w-0 lg:col-start-1 lg:row-start-1">
+      <BenefitsContent />
+      <ReuseDemo />
+    </div>
+
+    <div class="min-w-0 lg:col-start-2 lg:row-start-1 lg:self-end">
+      <ul
+        class="md:max-lg:grid md:max-lg:grid-cols-3 md:max-lg:gap-x-6"
+        aria-label="O que a capacidade inclui"
+      >
+        {capabilities.map((capability) => <CapabilityItem {...capability} />)}
+      </ul>
+    </div>
+  </div>
+</section>
