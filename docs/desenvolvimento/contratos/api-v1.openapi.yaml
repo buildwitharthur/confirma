@@ -1,0 +1,497 @@
+openapi: 3.1.0
+info:
+  title: Confirma API
+  version: 1.0.0
+  description: |
+    Contrato público do MVP. A chave autenticada determina a conta; nenhuma operação
+    aceita account_id do consumidor. Aceitar um agendamento não significa que o contato confirmou.
+    O corpo bruto de cada requisição pode ter no máximo 64 KiB.
+    Esta superfície aceita somente chave de API; cookies de sessão não autenticam /v1.
+    /panel aceita somente sessão, /auth atende autenticação e /inbound exige segredo
+    por conexão; essas superfícies têm limites próprios e não integram os paths de /v1.
+    Todas ficam em https://api.useconfirma.com. O cookie de sessão é host-only
+    em api.useconfirma.com, sem Domain, com HttpOnly, Secure e SameSite=Lax.
+    CORS com credenciais permite somente https://app.useconfirma.com.
+    Comandos do painel validam Origin e cabeçalho personalizado ou token anti-CSRF.
+    Webhooks de entrada usam https://api.useconfirma.com/inbound.
+    O e-mail transacional sai de mail.useconfirma.com, com SPF, DKIM e DMARC.
+servers:
+  - url: https://api.useconfirma.com/v1
+    description: API pública do Confirma.
+externalDocs:
+  description: Documentação pública do Confirma.
+  url: https://docs.useconfirma.com
+security:
+  - apiKey: []
+tags:
+  - name: Appointments
+    description: Criação, consulta, cancelamento e exclusão de dados de agendamentos.
+paths:
+  /appointments:
+    post:
+      tags: [Appointments]
+      operationId: createAppointment
+      summary: Cria ou recupera idempotentemente um agendamento
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAppointmentRequest'
+            examples:
+              real:
+                value:
+                  external_id: agenda-8472
+                  contact:
+                    name: Maria da Silva
+                    social_name: Maria
+                    phone: '+5511999999999'
+                  scheduled_at: '2026-10-20T14:00:00-03:00'
+                  professional_or_service: Dra. Ana
+                  metadata:
+                    unit: centro
+              simulated:
+                value:
+                  external_id: test-001
+                  contact:
+                    name: Integração
+                    phone: '+5511999999999'
+                  scheduled_at: '2026-10-20T14:00:00-03:00'
+                  test: true
+      responses:
+        '201':
+          description: Agendamento criado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Appointment'
+        '200':
+          description: Repetição idempotente; retorna o agendamento existente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Appointment'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          description: Conteúdo divergente para o external_id ou conta incompleta.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                idempotency_conflict:
+                  value:
+                    code: idempotency_conflict
+                    message: O external_id já está associado a outro conteúdo.
+                    request_id: 8b8a03cf-0199-4f85-859a-96bfc1eb7235
+                account_not_configured:
+                  value:
+                    code: account_not_configured
+                    message: A conta não possui toda a configuração necessária.
+                    request_id: 8b8a03cf-0199-4f85-859a-96bfc1eb7235
+                    details:
+                      missing: [provider, webhook]
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '413':
+          $ref: '#/components/responses/PayloadTooLarge'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+  /appointments/{external_id}:
+    parameters:
+      - $ref: '#/components/parameters/ExternalId'
+    get:
+      tags: [Appointments]
+      operationId: getAppointment
+      summary: Consulta um agendamento da conta autenticada
+      responses:
+        '200':
+          description: Estado e histórico do agendamento.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppointmentDetail'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    delete:
+      tags: [Appointments]
+      operationId: eraseAppointmentData
+      summary: Solicita a exclusão antecipada dos dados pessoais
+      description: |
+        Operação idempotente. Retorna 204 inclusive quando o registro não existe ou já foi
+        excluído. Se uma chamada externa já estiver em andamento, retorna 202. A exclusão
+        é um comando durável retomável e conclui quando não restar chamada anterior em
+        andamento e os dados pessoais tiverem sido removidos. Se o processo cair, a
+        reconciliação retoma depois da reserva de 60 segundos. Nenhuma nova tentativa
+        começa depois do pedido. Falha de marcação completed após efeito restritivo
+        local não desfaz a operação; sua confirmação é repetida em segundo plano.
+      responses:
+        '202':
+          description: Exclusão aceita e aguardando uma chamada externa já iniciada.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeletionAccepted'
+        '204':
+          description: Exclusão concluída ou nenhum dado correspondente estava disponível.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+  /appointments/{external_id}/cancel:
+    parameters:
+      - $ref: '#/components/parameters/ExternalId'
+    post:
+      tags: [Appointments]
+      operationId: cancelAppointment
+      summary: Cancela definitivamente um agendamento pela origem
+      responses:
+        '200':
+          description: Cancelamento aplicado ou repetição do cancelamento da origem.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Appointment'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          description: A consulta já começou.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: appointment_started
+                message: A consulta já começou e não pode ser cancelada.
+                request_id: 8b8a03cf-0199-4f85-859a-96bfc1eb7235
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+components:
+  securitySchemes:
+    apiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: Confirma API key
+      description: Chave criada no painel. O valor completo é mostrado uma única vez.
+  parameters:
+    ExternalId:
+      name: external_id
+      in: path
+      required: true
+      description: Identificador opaco do agendamento no sistema integrador.
+      schema:
+        $ref: '#/components/schemas/ExternalId'
+  responses:
+    Unauthorized:
+      description: Chave ausente, inválida ou revogada.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: unauthorized
+            message: Credencial inválida.
+            request_id: 8b8a03cf-0199-4f85-859a-96bfc1eb7235
+    NotFound:
+      description: Registro inexistente, excluído ou fora do período consultável.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: appointment_not_found
+            message: Agendamento não encontrado.
+            request_id: 8b8a03cf-0199-4f85-859a-96bfc1eb7235
+    ValidationError:
+      description: Corpo ausente ou campos inválidos.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: validation_error
+            message: Um ou mais campos são inválidos.
+            request_id: 8b8a03cf-0199-4f85-859a-96bfc1eb7235
+            details:
+              fields:
+                - field: scheduled_at
+                  reason: timezone_required
+    TooManyRequests:
+      description: |
+        `rate_limited` inclui Retry-After em segundos. `quota_exceeded` não inclui esse cabeçalho.
+      headers:
+        Retry-After:
+          required: false
+          description: Segundos até nova tentativa; presente somente para rate_limited.
+          schema:
+            type: integer
+            minimum: 1
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            rate_limited:
+              value:
+                code: rate_limited
+                message: Limite de requisições por minuto excedido.
+                request_id: 8b8a03cf-0199-4f85-859a-96bfc1eb7235
+            quota_exceeded:
+              value:
+                code: quota_exceeded
+                message: Cota mensal de agendamentos excedida.
+                request_id: 8b8a03cf-0199-4f85-859a-96bfc1eb7235
+    ServiceUnavailable:
+      description: |
+        Dependência necessária temporariamente indisponível. recovery_log_unavailable
+        significa falha da confirmação inicial pending no registro externo, antes do
+        efeito local protegido. Falha posterior de completed é reconciliada e não
+        transforma um efeito restritivo aplicado em erro. Pedidos repetidos reutilizam
+        a entrada pending por conta, tipo e alvo. Falha local pode abandonar a entrada;
+        uma pendência órfã não reconciliada pode ser reaplicada em restauração.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: recovery_log_unavailable
+            message: Não foi possível registrar a operação com segurança.
+            request_id: 8b8a03cf-0199-4f85-859a-96bfc1eb7235
+    PayloadTooLarge:
+      description: O corpo bruto ultrapassa 64 KiB.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: payload_too_large
+            message: O corpo da requisição ultrapassa o limite de 64 KiB.
+            request_id: 8b8a03cf-0199-4f85-859a-96bfc1eb7235
+  schemas:
+    ExternalId:
+      type: string
+      minLength: 1
+      maxLength: 191
+      pattern: '^[^\x00-\x1F\x7F]+$'
+    CreateAppointmentRequest:
+      type: object
+      additionalProperties: false
+      required: [external_id, contact, scheduled_at]
+      properties:
+        external_id:
+          $ref: '#/components/schemas/ExternalId'
+        contact:
+          $ref: '#/components/schemas/ContactInput'
+        scheduled_at:
+          type: string
+          format: date-time
+          description: Data futura com deslocamento UTC explícito; o sufixo Z também é válido.
+          examples: ['2026-10-20T14:00:00-03:00']
+        professional_or_service:
+          type: string
+          maxLength: 240
+        metadata:
+          type: object
+          maxProperties: 50
+          description: |
+            Objeto JSON com no máximo 16 KiB quando serializado em UTF-8. Acima disso,
+            a API responde 422 com `validation_error` e `details.fields[].reason` igual a
+            `metadata_too_large`. O conteúdo volta em todos os webhooks do agendamento,
+            segue a retenção de dados pessoais e não deve conter dado sensível.
+        test:
+          type: boolean
+          default: false
+    ContactInput:
+      type: object
+      additionalProperties: false
+      required: [name, phone]
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 160
+        social_name:
+          type: string
+          minLength: 1
+          maxLength: 160
+        phone:
+          type: string
+          pattern: '^\+[1-9][0-9]{7,14}$'
+          description: Número em E.164.
+    AppointmentStatus:
+      type: string
+      enum: [scheduled, sent, confirmed, canceled, no_response, failed]
+      description: |
+        Valores técnicos correspondentes a agendado, enviado, confirmado, cancelado,
+        sem resposta e falha.
+    FailureReason:
+      type: string
+      enum:
+        - contact_opted_out
+        - deadline_too_short
+        - no_send_window
+        - provider_disconnected
+        - attempts_exhausted
+        - invalid_message
+        - send_not_performed
+        - invalid_number
+    CanceledBy:
+      type: string
+      enum: [contact, system]
+    Appointment:
+      allOf:
+        - $ref: '#/components/schemas/AppointmentFields'
+      unevaluatedProperties: false
+    AppointmentFields:
+      type: object
+      required:
+        - id
+        - external_id
+        - status
+        - scheduled_at
+        - timezone
+        - test
+        - delivery_uncertain
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        external_id:
+          $ref: '#/components/schemas/ExternalId'
+        status:
+          $ref: '#/components/schemas/AppointmentStatus'
+        failure_reason:
+          oneOf:
+            - $ref: '#/components/schemas/FailureReason'
+            - type: 'null'
+        canceled_by:
+          oneOf:
+            - $ref: '#/components/schemas/CanceledBy'
+            - type: 'null'
+        scheduled_at:
+          type: string
+          format: date-time
+        timezone:
+          type: string
+          maxLength: 64
+          description: Fuso IANA congelado no aceite.
+        test:
+          type: boolean
+        delivery_uncertain:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    AppointmentDetail:
+      unevaluatedProperties: false
+      allOf:
+        - $ref: '#/components/schemas/AppointmentFields'
+        - type: object
+          required: [events, webhook_delivery]
+          properties:
+            events:
+              type: array
+              items:
+                $ref: '#/components/schemas/AppointmentEvent'
+            webhook_delivery:
+              $ref: '#/components/schemas/WebhookDeliverySummary'
+    AppointmentEvent:
+      type: object
+      additionalProperties: false
+      required: [id, sequence, type, resulting_status, actor, occurred_at]
+      properties:
+        id:
+          type: string
+          format: uuid
+        sequence:
+          type: integer
+          minimum: 1
+        type:
+          type: string
+          enum:
+            - created
+            - send_accepted
+            - send_uncertain
+            - reminder_sent
+            - reminder_skipped
+            - reminder_failed
+            - clarification_sent
+            - confirmed
+            - canceled_by_contact
+            - canceled_by_source
+            - no_response
+            - failed
+            - personal_data_erased
+        resulting_status:
+          $ref: '#/components/schemas/AppointmentStatus'
+        reason:
+          type: [string, 'null']
+        actor:
+          type: string
+          enum: [contact, source_system, confirma, dashboard_user]
+        occurred_at:
+          type: string
+          format: date-time
+    WebhookDeliverySummary:
+      type: object
+      additionalProperties: false
+      required: [status]
+      properties:
+        status:
+          type: string
+          enum: [not_applicable, pending, delivering, delivered, delivery_failed, suppressed]
+        event_id:
+          type: [string, 'null']
+          format: uuid
+        automatic_attempts:
+          type: integer
+          minimum: 0
+          maximum: 6
+        last_attempt_at:
+          type: [string, 'null']
+          format: date-time
+    DeletionAccepted:
+      type: object
+      additionalProperties: false
+      required: [status, external_call_may_complete]
+      properties:
+        status:
+          type: string
+          const: pending
+        external_call_may_complete:
+          type: boolean
+          const: true
+    Error:
+      type: object
+      additionalProperties: false
+      required: [code, message, request_id]
+      properties:
+        code:
+          type: string
+          maxLength: 64
+        message:
+          type: string
+          maxLength: 500
+        request_id:
+          type: string
+          format: uuid
+        details:
+          type: object
