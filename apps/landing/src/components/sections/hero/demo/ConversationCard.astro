@@ -1,0 +1,70 @@
+---
+const pop =
+  'animate-[hero-pop_560ms_cubic-bezier(0.16,1,0.3,1)_var(--at)_backwards] motion-reduce:animate-none';
+const step =
+  'animate-[hero-step_560ms_cubic-bezier(0.16,1,0.3,1)_var(--at)_backwards] motion-reduce:animate-none';
+---
+
+<div
+  role="group"
+  aria-label="Conversa de confirmação"
+  style="--at: 380ms"
+  class:list={[
+    'rounded-[20px] border border-transparent p-4 text-night lg:px-[18px] lg:pt-[18px] lg:pb-4',
+    '[background:linear-gradient(180deg,var(--confirma-apoio-branco)_55%,color-mix(in_srgb,var(--confirma-apoio-branco)_70%,var(--confirma-marca-nevoa)))_padding-box,var(--aresta-clara)_border-box]',
+    '[box-shadow:var(--brilho-topo),0_0_0_1px_rgb(61_220_151/0.22),0_2px_3px_var(--noite-funda),2px_24px_48px_-18px_var(--noite-funda),0_28px_64px_-20px_rgb(61_220_151/0.24)]',
+    pop,
+  ]}
+>
+  <div
+    class="mb-3.5 flex items-center justify-between gap-3 border-b border-light-green-gray pb-3"
+  >
+    <strong
+      class="flex items-center gap-2 text-[0.8125rem] font-semibold before:size-2 before:rounded-full before:bg-brand before:[box-shadow:0_0_0_3px_var(--confirma-apoio-verde-claro)] before:content-['']"
+    >
+      Confirmação via WhatsApp
+    </strong>
+    <span class="font-mono text-[0.6875rem] font-medium text-dark-green-gray">texto</span>
+  </div>
+
+  <div class="flex flex-col gap-2.5">
+    <p
+      style="--at: 560ms"
+      class:list={[
+        'relative max-w-[88%] self-start rounded-[14px] rounded-bl-[4px] border border-light-green-gray px-3 py-2.5 text-sm leading-normal',
+        '[background:linear-gradient(180deg,var(--confirma-marca-nevoa),color-mix(in_srgb,var(--confirma-marca-nevoa)_85%,var(--confirma-apoio-cinza-verde-claro)))] [box-shadow:var(--brilho-topo),var(--elev-1)]',
+        step,
+      ]}
+    >
+      Olá,
+      <span
+        class="rounded-md bg-light-green px-[3px] py-px font-mono text-[0.85em] font-medium whitespace-nowrap text-dark-green"
+        >{'{{nome}}'}</span
+      >! Seu agendamento está marcado para 20/10/2026 às 14:00.<span
+        class="mt-1.5 block text-dark-green-gray">Responda 1 para confirmar ou 2 para cancelar.</span
+      >
+    </p>
+
+    <p
+      style="--at: 980ms"
+      class:list={[
+        'relative max-w-[88%] min-w-12 self-end rounded-[14px] rounded-br-[4px] px-3 py-2.5 text-center text-base leading-normal font-semibold text-white',
+        '[background:linear-gradient(180deg,color-mix(in_srgb,var(--confirma-marca-verde)_90%,var(--confirma-marca-menta)),var(--confirma-marca-verde)_45%,color-mix(in_srgb,var(--confirma-marca-verde)_86%,var(--confirma-marca-noite)))] [box-shadow:inset_0_1px_0_rgb(255_255_255/0.22),inset_0_-1px_0_rgb(11_31_26/0.16),var(--elev-2)]',
+        pop,
+      ]}
+    >
+      <span class="sr-only">Resposta do contato: </span>1
+    </p>
+  </div>
+
+  <p
+    style="--at: 1120ms"
+    class:list={['mt-2.5 flex items-center justify-end gap-2 text-xs text-dark-green-gray', step]}
+  >
+    <span
+      class="inline-flex items-center gap-[7px] rounded-full border border-brand bg-light-green px-2.5 py-[5px] text-xs leading-[1.4] font-medium whitespace-nowrap text-dark-green before:size-1.5 before:shrink-0 before:rounded-full before:bg-brand before:content-['']"
+    >
+      Resposta reconhecida
+    </span>
+  </p>
+</div>

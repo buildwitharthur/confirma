@@ -1,0 +1,91 @@
+---
+import OriginCard from './OriginCard.astro';
+import FlowConnector from './FlowConnector.astro';
+import ConversationCard from './ConversationCard.astro';
+import WebhookCard from './WebhookCard.astro';
+
+const surfaceTokens = [
+  '[--aresta-clara:linear-gradient(168deg,rgb(255_255_255/0.95),var(--confirma-apoio-cinza-verde-claro)_42%,color-mix(in_srgb,var(--confirma-apoio-cinza-verde-claro)_70%,var(--confirma-apoio-cinza-verde-medio)))]',
+  '[--noite-funda:color-mix(in_srgb,var(--confirma-marca-noite)_62%,black)]',
+  '[--brilho-topo:inset_0_1px_0_rgb(255_255_255/0.9)]',
+  '[--brilho-topo-escuro:inset_0_1px_0_rgb(255_255_255/0.07)]',
+  '[--base-escura:inset_0_-1px_0_rgb(11_31_26/0.05)]',
+  '[--elev-1:0_1px_1px_rgb(11_31_26/0.05),1px_2px_4px_-1px_rgb(11_31_26/0.07)]',
+  '[--elev-2:0_1px_2px_rgb(11_31_26/0.06),1px_8px_18px_-8px_rgb(11_31_26/0.16)]',
+];
+---
+
+<div
+  class:list={[
+    'relative isolate rounded-3xl border border-[rgb(157_181_172/0.14)] bg-[linear-gradient(180deg,rgb(19_48_42/0.7),rgb(11_31_26/0)_92%)] px-4 pt-7 pb-6 sm:px-8 sm:pt-10 sm:pb-8 lg:px-10 lg:pt-14 lg:pb-10 min-[1200px]:px-14 min-[1200px]:pt-16 min-[1200px]:pb-11',
+    surfaceTokens,
+  ]}
+>
+  <div
+    class="pointer-events-none absolute inset-0 -z-10 overflow-hidden rounded-[inherit]"
+    aria-hidden="true"
+  >
+    <div
+      class="absolute inset-0 [background-image:radial-gradient(rgb(157_181_172/0.16)_1px,transparent_1.4px)] [background-size:22px_22px] [mask-image:radial-gradient(70%_70%_at_50%_45%,#000_0,transparent_80%)]"
+    >
+    </div>
+    <div
+      class="absolute top-[46%] left-1/2 aspect-[2] w-[min(560px,90%)] -translate-x-1/2 -translate-y-1/2 bg-[radial-gradient(closest-side,rgb(61_220_151/0.12),transparent)]"
+    >
+    </div>
+  </div>
+
+  <div
+    class="mx-auto grid max-w-[440px] grid-cols-[minmax(0,1fr)] justify-items-center lg:max-w-none lg:grid-cols-[minmax(0,1fr)_88px_minmax(0,1.32fr)_88px_minmax(0,1fr)] lg:items-center min-[1200px]:grid-cols-[minmax(0,1fr)_104px_minmax(0,1.3fr)_104px_minmax(0,1fr)]"
+  >
+    <div class="relative w-[92%] min-w-0 justify-self-start lg:w-full lg:justify-self-stretch">
+      <OriginCard />
+    </div>
+
+    <FlowConnector label="API" direction="to-chat" delay="280ms" />
+
+    <div class="relative z-[2] w-full min-w-0 lg:-mx-5 lg:w-[calc(100%+40px)]">
+      <ConversationCard />
+    </div>
+
+    <FlowConnector label="webhook" direction="to-result" delay="1280ms" />
+
+    <div class="relative w-[92%] min-w-0 justify-self-end lg:w-full lg:justify-self-stretch">
+      <WebhookCard />
+    </div>
+  </div>
+</div>
+
+<style is:global>
+  @keyframes hero-step {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+  }
+
+  @keyframes hero-pop {
+    from {
+      opacity: 0;
+      transform: translateY(8px) scale(0.96);
+    }
+  }
+
+  @keyframes hero-draw-y {
+    from {
+      transform: scale(1, 0);
+    }
+  }
+
+  @keyframes hero-draw-x {
+    from {
+      transform: scale(0, 1);
+    }
+  }
+
+  @keyframes hero-glow {
+    from {
+      border-color: var(--confirma-apoio-verde-profundo);
+    }
+  }
+</style>
