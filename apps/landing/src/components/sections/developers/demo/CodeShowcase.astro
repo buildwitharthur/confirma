@@ -1,0 +1,53 @@
+---
+import CodeExample from './CodeExample.astro';
+
+const surfaceTokens = [
+  '[--noite-funda:color-mix(in_srgb,var(--confirma-marca-noite)_62%,#000)]',
+  '[--rebaixo-escuro:inset_0_2px_6px_-1px_rgb(4_12_10/0.55),inset_0_0_0_1px_rgb(4_12_10/0.35),0_1px_0_rgb(255_255_255/0.05)]',
+];
+
+const surface =
+  '[background:linear-gradient(180deg,color-mix(in_srgb,var(--confirma-apoio-verde-escuro)_85%,var(--confirma-apoio-verde-profundo)),var(--confirma-apoio-verde-escuro)_30%,color-mix(in_srgb,var(--confirma-apoio-verde-escuro)_75%,var(--confirma-marca-noite)))_padding-box,linear-gradient(168deg,color-mix(in_srgb,var(--confirma-apoio-verde-acinzentado)_85%,var(--confirma-apoio-cinza-verde-medio)),var(--confirma-apoio-verde-profundo)_38%,var(--noite-funda))_border-box] [box-shadow:inset_0_1px_0_rgb(255_255_255/0.08),0_2px_2px_var(--noite-funda),2px_20px_40px_-20px_var(--noite-funda)]';
+
+const request = `{
+  "external_id": "test-001",
+  "contact": {
+    "name": "Integração",
+    "phone": "+5511999999999"
+  },
+  "scheduled_at": "2026-10-20T14:00:00-03:00",
+  "test": true
+}`;
+
+const event = `"type": "appointment.confirmed",
+"appointment": {
+  "external_id": "test-001",
+  "status": "confirmed",
+  "sequence": 3
+},
+"test": true`;
+---
+
+<div
+  class:list={['min-w-0 overflow-hidden rounded-[20px] border border-transparent px-1.5 pb-1.5', surfaceTokens, surface]}
+>
+  <CodeExample
+    accent="POST"
+    label="/v1/appointments"
+    meta="JSON · exemplo de teste"
+    ariaLabel="Exemplo de criação de agendamento de teste; rolagem horizontal disponível"
+    code={request}
+  />
+  <CodeExample
+    separated
+    accent="appointment.confirmed"
+    meta="webhook → seu receptor"
+    ariaLabel="Trecho ilustrativo do evento de confirmação de teste"
+    comment="// Trecho do evento de teste; não é o payload completo."
+    code={event}
+  />
+  <p class="max-w-none px-3.5 pt-3 pb-1.5 text-xs text-light-green-gray">
+    Exemplos ilustrativos derivados dos contratos. Não executam requisições. Em telas estreitas,
+    role o código lateralmente.
+  </p>
+</div>

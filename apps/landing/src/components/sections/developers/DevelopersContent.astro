@@ -1,0 +1,72 @@
+---
+import TechnicalFeature from './TechnicalFeature.astro';
+
+// URL oficial da documentação ainda não definida; sem ela o CTA não navega.
+const docsUrl: string | undefined = undefined;
+
+const ctaClasses = [
+  'inline-flex min-h-[52px] items-center justify-center gap-2.5 rounded-[10px] border border-transparent px-5 py-[15px] text-[0.9375rem] leading-[1.2] font-semibold text-white no-underline lg:min-h-12 lg:py-[13px]',
+  '[background:linear-gradient(180deg,color-mix(in_srgb,var(--confirma-apoio-verde-escuro)_80%,var(--confirma-apoio-verde-profundo)),var(--confirma-apoio-verde-escuro))_padding-box,linear-gradient(168deg,var(--confirma-apoio-verde-acinzentado),var(--confirma-apoio-verde-profundo)_60%,color-mix(in_srgb,var(--confirma-marca-noite)_62%,#000))_border-box]',
+  '[box-shadow:inset_0_1px_0_rgb(255_255_255/0.07),0_1px_1px_rgb(4_12_10/0.5),1px_4px_10px_-4px_rgb(4_12_10/0.8)]',
+];
+
+const ctaInteractive = [
+  'transition-[translate,color,box-shadow] duration-[220ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:-translate-y-px hover:duration-200 active:translate-y-px active:duration-[140ms] motion-reduce:hover:translate-y-0 motion-reduce:active:translate-y-0',
+  'hover:[box-shadow:inset_0_1px_0_rgb(255_255_255/0.11),0_1px_1px_rgb(4_12_10/0.5),1px_8px_16px_-6px_rgb(4_12_10/0.85)]',
+  'active:[box-shadow:inset_0_2px_6px_-1px_rgb(4_12_10/0.55),inset_0_0_0_1px_rgb(4_12_10/0.35),0_1px_0_rgb(255_255_255/0.05)]',
+  'focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-mint',
+];
+---
+
+<div class="min-w-0">
+  <p
+    class="mb-4 flex items-center gap-2.5 text-xs leading-[1.2] font-semibold tracking-[0.09em] text-mint uppercase"
+  >
+    Para desenvolvedores
+  </p>
+
+  <h2
+    id="developer-title"
+    class="font-display text-[clamp(1.875rem,1.35rem+2.3vw,2.5rem)] leading-[1.12] font-semibold tracking-[-0.012em] text-balance md:text-[clamp(2.25rem,1.3rem+2vw,2.875rem)] lg:text-[clamp(2.25rem,1.2rem+1.5vw,2.625rem)]"
+  >
+    <span class="block">Conecte pela API.</span>
+    <span class="block">Receba o resultado por webhook.</span>
+  </h2>
+
+  <p
+    class="mt-4 max-w-[65ch] text-[1.0625rem] leading-[1.6] text-pretty text-light-green-gray md:mt-5 md:text-[1.125rem]"
+  >
+    Uma requisição cria o agendamento; o resultado chega ao seu receptor como um evento assinado. Os
+    contratos completos estão na documentação.
+  </p>
+
+  <ul class="mt-8 grid gap-4 text-[0.9375rem] text-light-green-gray">
+    <TechnicalFeature>API <code>/v1</code> com autenticação por chave de API.</TechnicalFeature>
+    <TechnicalFeature>
+      <code>external_id</code> correlaciona o agendamento ao seu sistema.
+    </TechnicalFeature>
+    <TechnicalFeature>
+      Eventos assinados com HMAC-SHA256, validáveis pelo cabeçalho <code>Confirma-Signature</code>.
+    </TechnicalFeature>
+  </ul>
+
+  <div class="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3 md:mt-8">
+    {
+      docsUrl ? (
+        <a href={docsUrl} class:list={[ctaClasses, ctaInteractive]}>
+          Ler a documentação
+          <span class="inline-block text-[1.1em] leading-none font-normal" aria-hidden="true">
+            ↗
+          </span>
+        </a>
+      ) : (
+        <span class:list={[ctaClasses]}>
+          Ler a documentação
+          <span class="inline-block text-[1.1em] leading-none font-normal" aria-hidden="true">
+            ↗
+          </span>
+        </span>
+      )
+    }
+  </div>
+</div>
