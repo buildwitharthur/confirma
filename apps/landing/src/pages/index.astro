@@ -1,5 +1,21 @@
 ---
 import '../styles/global.css';
+
+const title = 'Confirma | Confirmações por WhatsApp via API';
+
+const description =
+  'O Confirma ajuda software houses e desenvolvedores a integrar confirmações de agendamentos via WhatsApp ao sistema existente e receber o resultado por webhook.';
+
+const canonicalUrl = new URL('/', Astro.site);
+
+const isIndexable = import.meta.env.PUBLIC_SITE_INDEXABLE === 'true';
+
+const organizationSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Confirma',
+  url: canonicalUrl.toString(),
+};
 ---
 
 <!doctype html>
@@ -7,23 +23,33 @@ import '../styles/global.css';
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta
-      name="description"
-      content="API de confirmação de agendamentos por WhatsApp, integrada ao seu sistema."
-    />
+    <meta name="description" content={description} />
+    <meta name="robots" content={isIndexable ? 'index, follow' : 'noindex, follow'} />
     <meta name="theme-color" content="#0B1F1A" />
+    <link rel="canonical" href={canonicalUrl} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Confirma" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:locale" content="pt_BR" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..700&family=Geist+Mono:wght@400..600&family=Manrope:wght@400..600&display=swap"
     />
-    <title>Confirma — Agendou, confirmou.</title>
+    <title>{title}</title>
+    <script type="application/ld+json" set:html={JSON.stringify(organizationSchema)}></script>
   </head>
   <body>
     <main class="font-sans text-night">
-      <h1 class="font-display">Confirma</h1>
-      <p>A landing page está em desenvolvimento.</p>
+      <h1 class="font-display">Confirmações por WhatsApp, integradas ao seu sistema.</h1>
+      <p>{description}</p>
     </main>
   </body>
 </html>
