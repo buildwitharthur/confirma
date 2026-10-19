@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import Header from '../components/layout/header/Header.astro';
 
 const title = 'Confirma | Confirmações por WhatsApp via API';
 
@@ -47,7 +48,8 @@ const organizationSchema = {
     <script type="application/ld+json" set:html={JSON.stringify(organizationSchema)}></script>
   </head>
   <body>
-    <main class="font-sans text-night">
+    <Header />
+    <main id="conteudo" class="font-sans text-night">
       <h1 class="font-display">Confirmações por WhatsApp, integradas ao seu sistema.</h1>
       <p>{description}</p>
     </main>
