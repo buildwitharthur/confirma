@@ -4,15 +4,18 @@ O workflow de integração contínua está em `.github/workflows/ci.yml`. Esta e
 
 ## O que o CI valida
 
-O workflow instala as dependências com o lockfile, executa as verificações centralizadas do monorepo e gera o build de produção da landing:
+O workflow instala as dependências com o lockfile, executa as verificações centralizadas do monorepo e valida a mesma imagem Docker de produção utilizada pelo Coolify:
 
 1. `pnpm install --frozen-lockfile`;
-2. `pnpm lint`;
-3. `pnpm format:check`;
-4. `pnpm typecheck`, orquestrado pelo Turborepo;
-5. `pnpm --filter @confirma/landing build`.
+2. `pnpm typecheck`, orquestrado pelo Turborepo;
+3. `pnpm lint`;
+4. `pnpm format:check`;
+5. build da imagem com `docker build --file apps/landing/Dockerfile --tag confirma-landing:ci .`;
+6. smoke test do container na porta local `8080`, verificando inicialização, execução do Nginx e resposta HTML HTTP 200.
 
 Qualquer falha reprova a execução. O repositório ainda não possui scripts ou arquivos de testes automatizados, portanto não há uma etapa de testes a executar neste momento. Quando um workspace passar a ter testes, eles deverão ser adicionados ao fluxo por meio de um script não interativo real.
+
+O Dockerfile usa a raiz do monorepo como contexto e o próprio Dockerfile da landing executa a compilação Astro dentro do estágio `builder`. Por isso, o workflow não executa um build Astro isolado antes do `docker build`.
 
 ## Quando o workflow é executado
 
@@ -39,15 +42,22 @@ Na raiz do monorepo:
 
 ```bash
 pnpm install --frozen-lockfile
+pnpm typecheck
 pnpm lint
 pnpm format:check
-pnpm typecheck
-pnpm --filter @confirma/landing build
+docker build --file apps/landing/Dockerfile --tag confirma-landing:ci .
+docker run --detach --name confirma-landing-ci --publish 8080:80 confirma-landing:ci
+curl --fail --max-time 5 http://127.0.0.1:8080/
+docker rm --force confirma-landing-ci
 ```
 
 ## Expansão futura
 
 O typecheck já usa o Turborepo e as verificações da raiz podem incorporar novos workspaces conforme eles adquirirem scripts funcionais. Builds, lint e testes de dashboard, API ou documentação devem ser adicionados somente quando esses aplicativos e seus scripts estiverem implementados e validados.
+
+## Assets públicos
+
+O Dockerfile copia `apps/landing/public` para o estágio de build antes da compilação Astro. Os arquivos públicos são, portanto, incluídos no `dist` e transferidos para a imagem final do Nginx junto com os demais artefatos estáticos.
 
 ## CD
 

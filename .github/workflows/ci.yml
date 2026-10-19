@@ -42,14 +42,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Typecheck
+        run: pnpm typecheck
+
       - name: Lint
         run: pnpm lint
 
       - name: Check formatting
         run: pnpm format:check
 
-      - name: Typecheck
-        run: pnpm typecheck
-
-      - name: Build landing
-        run: pnpm --filter @confirma/landing build
+      - name: Build production image
+        run: docker build --file apps/landing/Dockerfile --tag confirma-landing:ci .

@@ -9,6 +9,7 @@ RUN corepack enable \
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json ./
 COPY apps/landing/package.json apps/landing/tsconfig.json apps/landing/astro.config.mjs ./apps/landing/
 COPY apps/landing/src ./apps/landing/src
+COPY apps/landing/public ./apps/landing/public
 
 RUN pnpm install --frozen-lockfile
 RUN pnpm turbo run build --filter=@confirma/landing
