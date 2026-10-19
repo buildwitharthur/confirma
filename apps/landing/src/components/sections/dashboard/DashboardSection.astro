@@ -1,0 +1,23 @@
+---
+import DashboardContent from './DashboardContent.astro';
+import DashboardDemo from './demo/DashboardDemo.astro';
+
+const surfaceTokens = [
+  '[--aresta-clara:linear-gradient(168deg,rgb(255_255_255/0.95),var(--confirma-apoio-cinza-verde-claro)_42%,color-mix(in_srgb,var(--confirma-apoio-cinza-verde-claro)_70%,var(--confirma-apoio-cinza-verde-medio)))]',
+  '[--brilho-topo:inset_0_1px_0_rgb(255_255_255/0.9)]',
+  '[--elev-3:0_1px_2px_rgb(11_31_26/0.06),2px_14px_28px_-12px_rgb(11_31_26/0.16),4px_36px_64px_-28px_rgb(11_31_26/0.18)]',
+];
+---
+
+<section
+  id="painel"
+  aria-labelledby="dashboard-title"
+  class:list={['scroll-mt-22 pt-6 pb-16 md:pt-24 md:pb-24 min-[1200px]:pt-6 min-[1200px]:pb-30', surfaceTokens]}
+>
+  <div
+    class="mx-auto w-full max-w-[1280px] border-t border-light-green-gray px-5 pt-16 md:px-8 md:pt-24 min-[1200px]:px-12 min-[1200px]:pt-30"
+  >
+    <DashboardContent />
+    <DashboardDemo />
+  </div>
+</section>

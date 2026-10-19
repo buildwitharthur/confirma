@@ -1,0 +1,44 @@
+---
+export interface Props {
+  state: 'scheduled' | 'sent' | 'confirmed' | 'canceled' | 'no_response' | 'failed';
+  /** Relevo de 1px usado dentro da demonstração do painel. */
+  raised?: boolean;
+}
+
+const { state, raised = false } = Astro.props;
+
+const labels = {
+  scheduled: 'Agendado',
+  sent: 'Enviado',
+  confirmed: 'Confirmado',
+  canceled: 'Cancelado',
+  no_response: 'Sem resposta',
+  failed: 'Falha',
+} as const;
+
+const base =
+  "inline-flex items-center gap-[7px] rounded-full border px-2.5 py-[5px] text-xs leading-[1.4] font-medium whitespace-nowrap before:size-1.5 before:shrink-0 before:rounded-full before:content-['']";
+
+const variants = {
+  scheduled:
+    'border-light-green-gray bg-white text-dark-green-gray before:bg-current',
+  sent: 'border-medium-green-gray bg-white text-dark-green before:bg-transparent before:[box-shadow:inset_0_0_0_1.5px_currentColor]',
+  confirmed: [
+    'border-brand text-dark-green before:bg-brand',
+    raised
+      ? '[background:linear-gradient(180deg,color-mix(in_srgb,var(--confirma-apoio-verde-claro)_50%,var(--confirma-apoio-branco)),var(--confirma-apoio-verde-claro))]'
+      : 'bg-light-green',
+  ],
+  canceled: 'border-red bg-white text-red before:bg-current',
+  no_response: 'border-amber bg-white text-night before:bg-amber',
+  failed: 'border-red bg-white text-red before:bg-current',
+} as const;
+---
+
+<span
+  class:list={[
+    base,
+    variants[state],
+    raised && '[box-shadow:var(--brilho-topo),0_1px_1px_rgb(11_31_26/0.06)]',
+  ]}>{labels[state]}</span
+>

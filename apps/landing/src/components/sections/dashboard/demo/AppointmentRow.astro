@@ -1,0 +1,48 @@
+---
+import StatusBadge from '../StatusBadge.astro';
+import type { Props as BadgeProps } from '../StatusBadge.astro';
+
+export interface Props {
+  id: string;
+  time: string;
+  state: BadgeProps['state'];
+  event?: string;
+  meta?: string;
+  highlighted?: boolean;
+  /** Atraso da animação de entrada. */
+  at: string;
+}
+
+const { id, time, state, event, meta, highlighted = false, at } = Astro.props;
+
+const cell = [
+  'border-b border-light-green-gray px-2 py-3 align-middle group-last:border-b-0 sm:px-3',
+  highlighted && 'bg-[rgb(230_245_238/0.75)]',
+];
+---
+
+<tr
+  class="group animate-[dashboard-step_560ms_cubic-bezier(0.16,1,0.3,1)_var(--at)_backwards] motion-reduce:animate-none"
+  style={`--at: ${at}`}
+>
+  <td class:list={[cell, 'pl-1']}>
+    <span class="font-mono text-[0.8125rem] font-medium text-night">{id}</span>
+    <span class="mt-0.5 block text-xs text-dark-green-gray sm:hidden">{time}</span>
+  </td>
+  <td class:list={[cell, 'hidden sm:table-cell']}>{time}</td>
+  <td class:list={cell}>
+    <StatusBadge {state} raised />
+  </td>
+  <td class:list={[cell, 'hidden pr-1 sm:table-cell']}>
+    {
+      event ? (
+        <>
+          <code class="text-xs text-dark-green-gray">{event}</code>
+          {meta && <small class="mt-0.5 block font-mono text-[0.6875rem] text-dark-green-gray">{meta}</small>}
+        </>
+      ) : (
+        <span class="text-green-gray">—<span class="sr-only">Nenhum evento enviado</span></span>
+      )
+    }
+  </td>
+</tr>

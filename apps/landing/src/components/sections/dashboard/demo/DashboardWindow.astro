@@ -1,0 +1,31 @@
+---
+import AppointmentsTable from './AppointmentsTable.astro';
+---
+
+<div
+  class="relative overflow-hidden rounded-[20px] border border-transparent [background:linear-gradient(var(--confirma-apoio-branco),var(--confirma-apoio-branco))_padding-box,var(--aresta-clara)_border-box] [box-shadow:var(--elev-3)]"
+>
+  <div
+    class="flex items-center gap-3 border-b border-light-green-gray px-4 py-3 [background:linear-gradient(180deg,color-mix(in_srgb,var(--confirma-apoio-branco)_50%,var(--confirma-marca-nevoa)),var(--confirma-marca-nevoa))] [box-shadow:var(--brilho-topo),0_1px_0_var(--confirma-apoio-branco)]"
+  >
+    <img src="/confirma-simbolo-verde.svg" width="22" height="22" alt="" class="size-[22px]" />
+    <span
+      class="hidden overflow-hidden text-[0.8125rem] text-ellipsis whitespace-nowrap text-dark-green-gray sm:inline"
+      >Painel / <strong class="font-semibold text-night">Agendamentos</strong></span
+    >
+    <span
+      class="ml-auto text-[0.6875rem] font-semibold tracking-[0.06em] whitespace-nowrap text-dark-green-gray uppercase"
+      >Representação conceitual</span
+    >
+  </div>
+
+  <div
+    class="px-4 pt-5 pb-2 sm:px-6 sm:pt-6 lg:pt-7 lg:pr-[252px] lg:pb-3 lg:pl-8 min-[1200px]:pr-[268px]"
+  >
+    <p class="font-sans text-lg leading-snug font-semibold tracking-[-0.005em]">Agendamentos</p>
+    <p class="mt-0.5 text-[0.8125rem] text-dark-green-gray">
+      Estados e eventos de webhook por agendamento
+    </p>
+    <AppointmentsTable />
+  </div>
+</div>
