@@ -30,7 +30,8 @@ html {
   background: var(--confirma-marca-nevoa);
   color: var(--confirma-marca-noite);
   overflow-x: hidden;
-  scrollbar-color: var(--confirma-apoio-cinza-verde-medio) var(--confirma-marca-nevoa);
+  scroll-behavior: smooth;
+  scrollbar-color: var(--confirma-apoio-verde-acinzentado) var(--confirma-marca-noite);
   scrollbar-width: thin;
 }
 
@@ -133,21 +134,23 @@ body {
   display: none;
 }
 
-::-webkit-scrollbar {
-  width: 0.625rem;
-  height: 0.625rem;
-}
+/* Fallback for engines without scrollbar-color (Safari); elsewhere the standard properties on html apply. */
+@supports not (scrollbar-color: auto) {
+  html::-webkit-scrollbar {
+    width: 0.625rem;
+  }
 
-::-webkit-scrollbar-track {
-  background: var(--confirma-marca-nevoa);
-}
+  html::-webkit-scrollbar-track {
+    background: var(--confirma-marca-noite);
+  }
 
-::-webkit-scrollbar-thumb {
-  border: 2px solid var(--confirma-marca-nevoa);
-  border-radius: 999px;
-  background: var(--confirma-apoio-cinza-verde-medio);
-}
+  html::-webkit-scrollbar-thumb {
+    border: 2px solid var(--confirma-marca-noite);
+    border-radius: 999px;
+    background: var(--confirma-apoio-verde-acinzentado);
+  }
 
-::-webkit-scrollbar-thumb:hover {
-  background: var(--confirma-apoio-verde-acinzentado);
+  html::-webkit-scrollbar-thumb:hover {
+    background: var(--confirma-apoio-cinza-verde-medio);
+  }
 }
