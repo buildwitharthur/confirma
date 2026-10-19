@@ -1,0 +1,76 @@
+---
+import DemoFrame from './DemoFrame.astro';
+import FlowHead from './FlowHead.astro';
+
+const request = [
+  ['external_id', 'test-001'],
+  ['contact.name', 'Integração'],
+  ['contact.phone', '+5511999999999'],
+  ['scheduled_at', '2026-10-20T14:00:00-03:00'],
+  ['test', 'true'],
+] as const;
+
+const response = [
+  ['external_id', 'test-001'],
+  ['status', 'scheduled'],
+] as const;
+---
+
+<DemoFrame
+  captionId="how-caption-appointment"
+  caption="Requisição simplificada de um agendamento de teste, com dados fictícios."
+>
+  <article
+    aria-label="Requisição do sistema cliente"
+    class="relative min-w-0 rounded-2xl border border-transparent p-4 text-night sm:w-[86%] sm:pb-10 [background:linear-gradient(180deg,var(--confirma-apoio-branco),color-mix(in_srgb,var(--confirma-marca-nevoa)_70%,var(--confirma-apoio-branco)))_padding-box,var(--aresta-clara)_border-box] [box-shadow:var(--brilho-topo),var(--base-escura),var(--elev-2)]"
+  >
+    <FlowHead tone="light" kicker="Seu sistema" route="POST /v1/appointments">
+      <rect x="2" y="3" width="12" height="11" rx="2.5"></rect>
+      <path d="M2 6.5h12M5.5 1.5v3M10.5 1.5v3"></path>
+    </FlowHead>
+    <dl class="grid gap-1.5 border-t border-light-green-gray pt-3 font-mono text-xs leading-[1.4]">
+      {
+        request.map(([name, value]) => (
+          <div class="flex flex-wrap justify-between gap-x-3">
+            <dt class="text-dark-green-gray">{name}</dt>
+            <dd class="ml-auto min-w-0 text-right text-night [overflow-wrap:anywhere]">{value}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </article>
+
+  <article
+    aria-label="Resposta da API do Confirma"
+    class="relative z-10 min-w-0 rounded-2xl border border-transparent p-4 text-white transition-transform duration-[420ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-data-[active=false]/panel:translate-y-2 sm:-mt-7 sm:ml-auto sm:w-[62%] [background:linear-gradient(180deg,color-mix(in_srgb,var(--confirma-apoio-verde-escuro)_88%,var(--confirma-apoio-verde-profundo)),color-mix(in_srgb,var(--confirma-apoio-verde-escuro)_70%,var(--confirma-marca-noite)))_padding-box,var(--aresta-escura)_border-box] [box-shadow:var(--brilho-topo-escuro),0_2px_3px_rgb(11_31_26/0.2),2px_16px_32px_-14px_rgb(11_31_26/0.5)]"
+  >
+    <FlowHead tone="dark" kicker="API do Confirma" route="201 Created">
+      <path
+        d="M8 2.5v7M5 6.5l3 3 3-3M2.5 10.5v1.5a1.5 1.5 0 0 0 1.5 1.5h8a1.5 1.5 0 0 0 1.5-1.5v-1.5"
+      ></path>
+    </FlowHead>
+    <p class="mb-3 text-sm leading-[1.45] text-light-green-gray">
+      Agendamento recebido. Ainda não é a confirmação do contato.
+    </p>
+    <dl
+      class="grid gap-1.5 rounded-[10px] bg-[rgb(11_31_26/0.55)] p-2.5 font-mono text-xs leading-[1.4] [box-shadow:var(--rebaixo-escuro)]"
+    >
+      {
+        response.map(([name, value]) => (
+          <div class="flex flex-wrap justify-between gap-x-3">
+            <dt class="text-medium-green-gray">{name}</dt>
+            <dd class="ml-auto min-w-0 text-right text-mist [overflow-wrap:anywhere]">{value}</dd>
+          </div>
+        ))
+      }
+    </dl>
+    <div class="mt-3.5 flex items-center justify-between gap-2 text-xs text-medium-green-gray">
+      <span>Estado</span>
+      <span
+        class="inline-flex items-center gap-[7px] rounded-full border border-muted-green px-2.5 py-[5px] text-xs leading-[1.4] font-medium whitespace-nowrap text-light-green-gray before:size-1.5 before:shrink-0 before:rounded-full before:bg-current before:content-['']"
+      >
+        Agendado
+      </span>
+    </div>
+  </article>
+</DemoFrame>
