@@ -26,7 +26,7 @@ Usar a paleta somente como referência cromática de [`tokens.json`](../assets/t
 | Textos, labels, navegação e componentes | Manrope |
 | Código, rotas, eventos, campos e identificadores técnicos | Geist Mono |
 
-No protótipo HTML, o carregamento externo das fontes é permitido para representar a composição visual. Na implementação Astro, hospedar as fontes em arquivos WOFF2 junto ao site, usando `display=swap` e fallbacks com métricas ajustadas. Em ambos os casos, as famílias aprovadas são Bricolage Grotesque para títulos, Manrope para textos e componentes e Geist Mono para conteúdo técnico. Não manter Manrope + DM Sans, Inter ou Plus Jakarta Sans como especificações concorrentes. A tipografia do painel permanece independente, baseada em IBM Plex Sans e IBM Plex Mono.
+No protótipo HTML e na implementação Astro, o carregamento externo das fontes usa Google Fonts com `display=swap` e fallbacks com métricas ajustadas. Em ambos os casos, as famílias aprovadas são Bricolage Grotesque para títulos, Manrope para textos e componentes e Geist Mono para conteúdo técnico. Não manter Manrope + DM Sans, Inter ou Plus Jakarta Sans como especificações concorrentes. A tipografia do painel permanece independente, baseada em IBM Plex Sans e IBM Plex Mono. O carregamento externo permanece identificado para futura revisão de privacidade; isso não constitui aprovação jurídica.
 
 Títulos usam `text-wrap: balance`, sem `<br>` para corrigir largura e sem depender de peso 700/800. Corpo mínimo de 16px; labels e código podem ser menores quando legíveis.
 

@@ -1,0 +1,21 @@
+:root {
+  --confirma-marca-verde: #0a7f50;
+  --confirma-marca-menta: #3ddc97;
+  --confirma-marca-noite: #0b1f1a;
+  --confirma-marca-nevoa: #f3f7f5;
+
+  --confirma-apoio-branco: #ffffff;
+  --confirma-apoio-verde-escuro: #13302a;
+  --confirma-apoio-verde-claro: #e6f5ee;
+  --confirma-apoio-cinza-verde-escuro: #4a5e57;
+  --confirma-apoio-cinza-verde-medio: #9db5ac;
+  --confirma-apoio-cinza-verde-claro: #d5e1dc;
+  --confirma-apoio-verde-profundo: #24443b;
+  --confirma-apoio-cinza-verde: #738a82;
+  --confirma-apoio-verde-acinzentado: #5e8579;
+
+  --confirma-acento-ambar: #f5a524;
+  --confirma-acento-marrom-ambar: #3a2400;
+  --confirma-acento-vermelho: #c8262c;
+  --confirma-acento-coral: #f26b6f;
+}
