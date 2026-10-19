@@ -1,0 +1,16 @@
+---
+interface Props {
+  code: string;
+  description: string;
+}
+
+const { code, description } = Astro.props;
+---
+
+<li class="flex items-center gap-4 border-b border-light-green-gray py-3.5">
+  <code
+    class="min-w-16 rounded-lg border border-light-green-gray bg-white px-2 py-[7px] text-center font-mono text-sm font-medium text-dark-green"
+    >{code}</code
+  >
+  <span class="text-[0.9375rem] leading-normal">{description}</span>
+</li>
