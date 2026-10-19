@@ -1,0 +1,23 @@
+---
+import { footerLinks } from './footer-links';
+
+const itemClass = 'inline-flex min-h-11 items-center py-2 text-sm text-light-green-gray';
+---
+
+<nav class="grid w-full grid-cols-2 items-center gap-x-6 gap-y-2 sm:flex sm:w-auto sm:flex-wrap" aria-label="Institucional">
+  {
+    footerLinks.map((link) =>
+      link.href ? (
+        <a
+          class:list={[itemClass, 'underline decoration-transparent underline-offset-[5px] transition-[text-decoration-color] duration-[180ms] hover:decoration-current focus-visible:decoration-current']}
+          href={link.href}
+        >
+          {link.label}
+          <span class="ml-1" aria-hidden="true">↗</span>
+        </a>
+      ) : (
+        <span class={itemClass}>{link.label}</span>
+      )
+    )
+  }
+</nav>
