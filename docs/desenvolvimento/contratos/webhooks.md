@@ -2,7 +2,7 @@
 
 ## Endereços
 
-A API de consulta e configuração usa `https://api.useconfirma.com`, e a documentação pública está em `https://docs.useconfirma.com`. Webhooks de entrada e recebimento do provedor são publicados sob `https://api.useconfirma.com/inbound`. Os webhooks de resultado deste contrato são enviados à URL do receptor do cliente; não são enviados ao próprio Confirma.
+A API de consulta e configuração usa `https://api.useconfirma.com.br`, e a documentação pública está em `https://docs.useconfirma.com.br`. Webhooks de entrada e recebimento do provedor são publicados sob `https://api.useconfirma.com.br/inbound`. Os webhooks de resultado deste contrato são enviados à URL do receptor do cliente; não são enviados ao próprio Confirma.
 
 ## Transporte
 

@@ -4,7 +4,7 @@
 
 **Objetivo:** criar o primeiro vínculo conta/usuário e abrir uma sessão válida.
 
-**Ator e gatilho:** convidado recebe o e-mail do piloto; o link vale 7 dias e usa `https://app.useconfirma.com/convite#{token}`.
+**Ator e gatilho:** convidado recebe o e-mail do piloto; o link vale 7 dias e usa `https://app.useconfirma.com.br/convite#{token}`.
 
 **Pré-condições:** convite criado pela equipe do Confirma; token disponível no fragmento.
 

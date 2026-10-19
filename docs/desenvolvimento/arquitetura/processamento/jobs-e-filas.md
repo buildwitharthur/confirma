@@ -67,4 +67,4 @@ Na restauração, entradas restritivas ainda `pending` são reaplicadas, `abando
 
 ## Origem de e-mail
 
-O comando `notification.send_due` usa o domínio remetente `mail.useconfirma.com`; SPF, DKIM e DMARC precisam estar configurados. O domínio não define uma caixa postal nem escolhe o serviço de e-mail.
+O comando `notification.send_due` usa o domínio remetente `mail.useconfirma.com.br`; SPF, DKIM e DMARC precisam estar configurados. O domínio não define uma caixa postal nem escolhe o serviço de e-mail.

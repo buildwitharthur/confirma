@@ -9,18 +9,18 @@ info:
     Esta superfície aceita somente chave de API; cookies de sessão não autenticam /v1.
     /panel aceita somente sessão, /auth atende autenticação e /inbound exige segredo
     por conexão; essas superfícies têm limites próprios e não integram os paths de /v1.
-    Todas ficam em https://api.useconfirma.com. O cookie de sessão é host-only
-    em api.useconfirma.com, sem Domain, com HttpOnly, Secure e SameSite=Lax.
-    CORS com credenciais permite somente https://app.useconfirma.com.
+    Todas ficam em https://api.useconfirma.com.br. O cookie de sessão é host-only
+    em api.useconfirma.com.br, sem Domain, com HttpOnly, Secure e SameSite=Lax.
+    CORS com credenciais permite somente https://app.useconfirma.com.br.
     Comandos do painel validam Origin e cabeçalho personalizado ou token anti-CSRF.
-    Webhooks de entrada usam https://api.useconfirma.com/inbound.
-    O e-mail transacional sai de mail.useconfirma.com, com SPF, DKIM e DMARC.
+    Webhooks de entrada usam https://api.useconfirma.com.br/inbound.
+    O e-mail transacional sai de mail.useconfirma.com.br, com SPF, DKIM e DMARC.
 servers:
-  - url: https://api.useconfirma.com/v1
+  - url: https://api.useconfirma.com.br/v1
     description: API pública do Confirma.
 externalDocs:
   description: Documentação pública do Confirma.
-  url: https://docs.useconfirma.com
+  url: https://docs.useconfirma.com.br
 security:
   - apiKey: []
 tags:

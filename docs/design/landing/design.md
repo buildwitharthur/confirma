@@ -85,7 +85,7 @@ Nunca prometer aprovação ou acesso imediato, nem revelar pedido preexistente, 
 
 ## 9. Fallback e pendências
 
-O `noscript` deve informar que a solicitação requer JavaScript. Isso informa a limitação, mas não constitui alternativa funcional de envio. Não oferecer `contato@useconfirma.com` como canal público.
+O `noscript` deve informar que a solicitação requer JavaScript. Isso informa a limitação, mas não constitui alternativa funcional de envio. Não oferecer `contato@useconfirma.com.br` como canal público.
 
 Permanecem pendentes:
 

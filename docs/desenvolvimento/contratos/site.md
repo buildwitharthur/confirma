@@ -2,7 +2,7 @@
 
 ## Escopo
 
-O site público em `https://useconfirma.com` recebe pedidos de acesso ao piloto por `POST /site/access-requests` em `https://api.useconfirma.com`. `/site` é uma superfície própria, ao lado de `/v1`, `/panel`, `/auth` e `/inbound`; não faz parte da API `/v1`, não aceita chave de API nem sessão do painel, e não cria usuário ou conta. O acesso ao beta continua exclusivamente por convite da equipe.
+O site público em `https://useconfirma.com.br` recebe pedidos de acesso ao piloto por `POST /site/access-requests` em `https://api.useconfirma.com.br`. `/site` é uma superfície própria, ao lado de `/v1`, `/panel`, `/auth` e `/inbound`; não faz parte da API `/v1`, não aceita chave de API nem sessão do painel, e não cria usuário ou conta. O acesso ao beta continua exclusivamente por convite da equipe.
 
 A operação aceita somente `application/json` e não exige autenticação por cookie ou Bearer. Não utiliza credenciais de sessão. CORS não substitui validação do contrato, controles antispam ou as demais proteções da API.
 
@@ -25,8 +25,8 @@ A política normativa da operação pública é:
 
 | Item | Valor |
 | --- | --- |
-| Origem de produção autorizada | `https://useconfirma.com` |
-| API | `https://api.useconfirma.com` |
+| Origem de produção autorizada | `https://useconfirma.com.br` |
+| API | `https://api.useconfirma.com.br` |
 | Método da operação | `POST` |
 | Método de preflight | `OPTIONS` |
 | Cabeçalho permitido | `Content-Type` |

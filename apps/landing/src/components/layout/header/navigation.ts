@@ -19,12 +19,12 @@ export const mobileNavigation: NavigationItem[] = [
 
 export const utilityNavigation: NavigationItem[] = [
   {
-    href: 'https://docs.useconfirma.com',
+    href: 'https://docs.useconfirma.com.br',
     label: 'Documentação',
     external: true,
   },
   {
-    href: 'https://app.useconfirma.com',
+    href: 'https://app.useconfirma.com.br',
     label: 'Entrar',
     external: true,
   },

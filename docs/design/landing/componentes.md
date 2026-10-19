@@ -80,6 +80,6 @@ Ao fechar durante o preenchimento, preservar respostas somente em memória enqua
 
 O painel é a única experiência de solicitação. O footer pode conter links funcionais que abrem o assistente, além de documentação, painel, termos e privacidade quando publicados.
 
-Continuam pendentes: texto jurídico do consentimento; tolerância para divergência de relógios em `form_opened_at`; retenção de logs técnicos; validação do timeout de 15 segundos; e fallback `noscript` informativo sem oferecer `contato@useconfirma.com` como canal funcional. O contrato de sucesso, `submission_rejected`, `details`, erros de servidor e preflight CORS estão definidos em [Contrato do site](../../desenvolvimento/contratos/site.md).
+Continuam pendentes: texto jurídico do consentimento; tolerância para divergência de relógios em `form_opened_at`; retenção de logs técnicos; validação do timeout de 15 segundos; e fallback `noscript` informativo sem oferecer `contato@useconfirma.com.br` como canal funcional. O contrato de sucesso, `submission_rejected`, `details`, erros de servidor e preflight CORS estão definidos em [Contrato do site](../../desenvolvimento/contratos/site.md).
 
 Não modificar `prototipo.html`, `tokens.json`, requisitos, contratos, painel, API ou infraestrutura nesta tarefa.

@@ -45,7 +45,7 @@ As fontes exigem URL para criação e endpoint mais segredo para o teste isolado
 
 | Operação | Condições | Resultado/fonte |
 | --- | --- | --- |
-| `SubmitAccessRequest` | Origem de produção `https://useconfirma.com`, JSON e campos válidos, consentimento de contato, antispam e limite por origem; sem chave ou sessão; não pressupõe conta | 202 uniforme após decisão transacional, sem enumeração. DEC-008–011; RF-026; CU-023; contrato do site |
+| `SubmitAccessRequest` | Origem de produção `https://useconfirma.com.br`, JSON e campos válidos, consentimento de contato, antispam e limite por origem; sem chave ou sessão; não pressupõe conta | 202 uniforme após decisão transacional, sem enumeração. DEC-008–011; RF-026; CU-023; contrato do site |
 | `InspectInvitation` / `AcceptInvitation` | Convite válido, não usado, até 7 dias; token no fragmento, enviado no corpo; aceitação exige senha 10–128/não comum, nome, aceite e versões vigentes | Conta só nasce na aceitação; HTTP 201 com sessão; erro uniforme de convite. RF-025; CU-020 |
 | Entrar / recuperar / redefinir senha | E-mail/senha no beta; limite `/auth`; cinco falhas bloqueiam e-mail por 15 min; recuperação uniforme; link 1 h e uso único | Jornadas de RF-025/CU-021; métodos, paths e schemas específicos ainda precisam ser formalizados no contrato de identidade |
 | `AcceptTerms` / sair | Sessão; versões vigentes para aceitar; operações disponíveis durante gate de termos | Libera comandos após aceite. `/v1` permanece independente. Reautenticação necessária ao caminho de exclusão deve continuar acessível; transporte pendente. RF-025; CU-022 |

@@ -1,6 +1,6 @@
 # Plano de implementação — Documentação pública
 
-**Aplicação:** Site, frente de documentação pública em `https://docs.useconfirma.com`.
+**Aplicação:** Site, frente de documentação pública em `https://docs.useconfirma.com.br`.
 
 **Estado do plano:** Preliminar. A arquitetura registra Starlight como tecnologia prevista, mas a estratégia de implementação ainda será estudada.
 

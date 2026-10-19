@@ -1,6 +1,6 @@
 # Plano de implementação — Painel
 
-**Aplicação:** Painel web em `https://app.useconfirma.com`.
+**Aplicação:** Painel web em `https://app.useconfirma.com.br`.
 
 **Escopo documentado:** autenticação, onboarding, acompanhamento de agendamentos, configurações, integrações, privacidade e exclusão de conta, sempre por sessão e pela API em `/panel` ou `/auth`.
 

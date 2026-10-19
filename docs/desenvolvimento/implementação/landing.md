@@ -1,6 +1,6 @@
 # Plano de implementação — Landing
 
-**Aplicação:** Site, frente de landing pública (`https://useconfirma.com`).
+**Aplicação:** Site, frente de landing pública (`https://useconfirma.com.br`).
 
 **Fontes principais:** contrato do site, documentação de design da landing, arquitetura de contexto, componentes e implantação, requisitos e regras de negócio aplicáveis ao pedido de acesso.
 
@@ -115,7 +115,7 @@ O fluxo da interface está alinhado ao contrato, os dados enviados e os estados 
   - **Commit:** Pendente.
 
 - [ ] **LAND-013 — Definir a comunicação da landing com a API**
-  - **Descrição:** Planejar a chamada para a origem `https://api.useconfirma.com/site`, incluindo origem autorizada, envelope de erro e limites de responsabilidade.
+  - **Descrição:** Planejar a chamada para a origem `https://api.useconfirma.com.br/site`, incluindo origem autorizada, envelope de erro e limites de responsabilidade.
   - **Critério de aceite:** O plano não introduz autenticação de painel, chave de API ou acesso direto a dados.
   - **Dependências:** LAND-009; API-001.
   - **Commit:** Pendente.

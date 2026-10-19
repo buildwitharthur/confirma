@@ -47,7 +47,7 @@ Exige endpoint e segredo configurados, cria `webhook.test` e não cria agendamen
 
 ## Aceitar o convite (`/auth`)
 
-O convidado ainda não tem sessão, por isso os dois comandos abaixo são atendidos sob `/auth` e sujeitos ao limite dessa superfície. O link do convite é `https://app.useconfirma.com/convite#{token}`: o token fica no fragmento, que não chega ao servidor nem aos logs de acesso, e o app o lê e o envia no corpo.
+O convidado ainda não tem sessão, por isso os dois comandos abaixo são atendidos sob `/auth` e sujeitos ao limite dessa superfície. O link do convite é `https://app.useconfirma.com.br/convite#{token}`: o token fica no fragmento, que não chega ao servidor nem aos logs de acesso, e o app o lê e o envia no corpo.
 
 ```text
 InspectInvitation { token: string } -> InvitationInfo {
@@ -176,4 +176,4 @@ Listagens e detalhes são sempre filtrados pela conta da sessão. O detalhe do a
 
 ## Sessão e privacidade
 
-O painel está em `https://app.useconfirma.com` e usa `https://api.useconfirma.com/panel` e `https://api.useconfirma.com/auth`. O cookie de sessão é restrito ao host `api.useconfirma.com`, sem atributo `Domain`, com `HttpOnly`, `Secure` e `SameSite=Lax`. CORS com credenciais permite somente a origem exata `https://app.useconfirma.com`, sem curingas. Comandos do painel verificam `Origin` e exigem cabeçalho personalizado ou token anti-CSRF. `/v1` nunca autentica por cookie; `/panel` nunca autentica por chave de API. Identidades e sessões residem no mesmo banco e backup; restauração invalida todas as sessões. Histórico de privacidade conserva evidência própria e mostra “mensagem de origem expurgada” quando o identificador informativo não localizar mais a mensagem.
+O painel está em `https://app.useconfirma.com.br` e usa `https://api.useconfirma.com.br/panel` e `https://api.useconfirma.com.br/auth`. O cookie de sessão é restrito ao host `api.useconfirma.com.br`, sem atributo `Domain`, com `HttpOnly`, `Secure` e `SameSite=Lax`. CORS com credenciais permite somente a origem exata `https://app.useconfirma.com.br`, sem curingas. Comandos do painel verificam `Origin` e exigem cabeçalho personalizado ou token anti-CSRF. `/v1` nunca autentica por cookie; `/panel` nunca autentica por chave de API. Identidades e sessões residem no mesmo banco e backup; restauração invalida todas as sessões. Histórico de privacidade conserva evidência própria e mostra “mensagem de origem expurgada” quando o identificador informativo não localizar mais a mensagem.

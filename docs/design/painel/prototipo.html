@@ -987,7 +987,7 @@ const MONTH_LIMIT = 1000;            // RF-022
 const TARGET_VERSION = '2.3.7';      // versão-alvo do beta (DEC-007); não homologada sem ensaios reais
 const TERMS_CURRENT = { terms: '2026-10-15', privacy: '2026-10-15' };   // versões demonstrativas
 const TERMS_OLD = { terms: '2026-03-02', privacy: '2026-03-02' };
-const TERMS_URL = 'https://useconfirma.com/termos', PRIVACY_URL = 'https://useconfirma.com/privacidade';
+const TERMS_URL = 'https://useconfirma.com.br/termos', PRIVACY_URL = 'https://useconfirma.com.br/privacidade';
 const COMMON_PW = ['1234567890', '12345678910', '0123456789', 'senha12345', 'senha123456', 'password123', 'qwertyuiop', 'abcdefghij', 'confirma123', 'aaaaaaaaaa', '1111111111'];
 
 const STATUS = {
@@ -2125,7 +2125,7 @@ function testsComponent() {
     <section class="panel panel-pad" aria-label="Teste de webhook">${webhookTestBlock('h3')}</section>
     <section class="panel panel-pad test-card" aria-labelledby="t3"><div class="tc-head"><div><h3 id="t3">Simulação pela API <span class="tag test">test: true</span></h3><p class="meta">O integrador cria um agendamento com <code>test: true</code>. Não envia WhatsApp, não conta no uso mensal e simula uma confirmação em poucos segundos, com webhook <code>appointment.confirmed</code> e <code>test: true</code>.</p></div></div>
       <ul class="checklist">${reqLine(r.hook, 'URL de webhook cadastrada (exigida pela simulação)')}${reqLine(r.key, 'Chave de API ativa para autenticar a chamada')}<li>${icon('info', 'todo')}<span>WhatsApp não é exigido na simulação</span><span></span></li></ul>
-      <pre class="code" tabindex="0" aria-label="Exemplo de requisição de simulação"><span class="k">POST</span> https://api.useconfirma.com/v1/appointments
+      <pre class="code" tabindex="0" aria-label="Exemplo de requisição de simulação"><span class="k">POST</span> https://api.useconfirma.com.br/v1/appointments
 Authorization: Bearer &lt;sua chave de API&gt;
 Content-Type: application/json
 

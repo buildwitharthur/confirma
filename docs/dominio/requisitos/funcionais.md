@@ -366,7 +366,7 @@ A plataforma deve criar o acesso ao painel por convite da equipe do Confirma e o
 
 - No piloto, contas são criadas somente por convite. O cadastro aberto no site fica fora do MVP.
 - O convite chega por e-mail com link para definir a senha e vale por 7 dias. Assunto: "Seu acesso ao piloto do Confirma". Texto: "Você foi convidado para o piloto do Confirma." Botão: "Criar minha conta". Rodapé: "O convite vale por 7 dias."
-- O link do convite é `https://app.useconfirma.com/convite#{token}`. O token fica no fragmento, que não chega ao servidor nem aos logs de acesso.
+- O link do convite é `https://app.useconfirma.com.br/convite#{token}`. O token fica no fragmento, que não chega ao servidor nem aos logs de acesso.
 - O convite guarda o hash do token e nunca o token em claro. A conta e o vínculo com o usuário são criados só na aceitação, para que um convite vencido não deixe registro de conta. Na aceitação, a pessoa define a senha, aceita os termos e informa o nome da conta, com "empresa ou projeto" do pedido de acesso como sugestão.
 - Um e-mail corresponde a uma conta no painel, conforme RF-019.
 - O beta oferece entrada por e-mail e senha. Link mágico e Google OAuth ficam fora do escopo obrigatório do beta e podem ser avaliados em versão futura, sem criar dependência para os fluxos atuais.
@@ -374,8 +374,8 @@ A plataforma deve criar o acesso ao painel por convite da equipe do Confirma e o
 - A recuperação de senha usa um link válido por 1 hora e de uso único. Assunto: "Redefina sua senha do Confirma". Texto: "Recebemos um pedido para redefinir sua senha." Botão: "Redefinir senha". Rodapé: "O link vale por 1 hora e só pode ser usado uma vez. Se não foi você, ignore esta mensagem. Sua senha continua a mesma." O pedido tem a mesma resposta exista ou não uma conta com o e-mail.
 - A senha tem de 10 a 128 caracteres, sem exigência de maiúsculas, números ou símbolos. Senhas de uma lista de senhas comuns são recusadas.
 - Depois de 5 tentativas erradas seguidas para o mesmo e-mail, a entrada fica bloqueada por 15 minutos. A contagem vale também para e-mails sem conta, e a resposta de erro é a mesma nos dois casos, para não revelar quais e-mails existem. O contador é guardado por HMAC do e-mail e expira 24 horas depois da última falha.
-- Os e-mails de autenticação saem de `mail.useconfirma.com`.
-- Na tela de definição de senha do convite, exigir uma caixa de aceite, desmarcada por padrão, com o texto "Li e aceito os Termos de uso e a Política de Privacidade.", em que os dois nomes são links para `https://useconfirma.com/termos` e `https://useconfirma.com/privacidade`. Sem o aceite, a conta não é criada.
+- Os e-mails de autenticação saem de `mail.useconfirma.com.br`.
+- Na tela de definição de senha do convite, exigir uma caixa de aceite, desmarcada por padrão, com o texto "Li e aceito os Termos de uso e a Política de Privacidade.", em que os dois nomes são links para `https://useconfirma.com.br/termos` e `https://useconfirma.com.br/privacidade`. Sem o aceite, a conta não é criada.
 - Registrar a data, a hora e a versão dos termos aceitos por cada conta.
 - Cada versão dos termos e da política de privacidade é identificada pela data de vigência no formato AAAA-MM-DD, como `2026-11-01`, e só pode existir uma versão por data. Termos e política têm versões independentes, e o registro do aceite guarda as duas. As versões vigentes ficam na configuração do sistema. O responsável pelo Confirma decide quando uma mudança é relevante: a que altera direitos ou obrigações, o tratamento de dados ou condições comerciais. Correções de texto não geram nova versão.
 - Quando a versão aceita é anterior à vigente, pedir novo aceite no próximo acesso ao painel. A tela oferece "Continuar", "Sair" e o link "Excluir minha conta", que segue a reautenticação de RF-023. Não há exclusão individual de agendamentos nessa tela.
@@ -390,9 +390,9 @@ O site deve receber pedidos de acesso ao piloto por formulário e guardá-los no
 **Critérios de aceitação:**
 
 - Pedir nome, e-mail, empresa ou projeto, provedor de WhatsApp pretendido (Evolution API, outro ou ainda não tenho) e, de forma opcional, uma frase sobre o que pretende confirmar. Exigir o aceite de contato sobre o piloto, com link para a política de privacidade.
-- Receber o envio por `POST /site/access-requests` em `api.useconfirma.com`, uma superfície própria, separada do contrato público da API de agendamentos, que aceita só a origem `https://useconfirma.com`.
+- Receber o envio por `POST /site/access-requests` em `api.useconfirma.com.br`, uma superfície própria, separada do contrato público da API de agendamentos, que aceita só a origem `https://useconfirma.com.br`.
 - Limitar o tamanho dos campos: nome até 100 caracteres, e-mail até 254, empresa ou projeto até 120 e a frase opcional até 500.
-- Guardar cada pedido no banco do Confirma e avisar `contato@useconfirma.com` por e-mail a cada pedido novo.
+- Guardar cada pedido no banco do Confirma e avisar `contato@useconfirma.com.br` por e-mail a cada pedido novo.
 - Um mesmo e-mail enviado de novo, com o pedido ainda pendente, atualiza o pedido existente, sem criar outro. Se o pedido já está convidado ou recusado, o novo envio é ignorado sem alterar nenhum dado, e a equipe só reabre um pedido recusado por decisão própria. A resposta mostrada ao visitante é a mesma nos dois casos.
 - O formulário exige só o aceite de contato sobre o piloto, e não o aceite dos termos de uso.
 - A equipe lista os pedidos e decide cada um como pendente, convidado ou recusado por um comando operacional de linha de comando, sem área administrativa no painel. O comando oferece listar, convidar e recusar, usa a mesma camada de serviço do produto, de modo que a mudança de estado, a criação do convite e o envio do e-mail acontecem juntos, e cada uso fica registrado, inclusive a listagem, que lê dado pessoal, com o identificador do operador, a ação, o alvo e o resultado, sem e-mail nem outros dados pessoais. O convite sai pelo e-mail de convite de RF-025. Quem não é convidado não recebe resposta individual.
@@ -402,6 +402,6 @@ O site deve receber pedidos de acesso ao piloto por formulário e guardá-los no
 - Validar JSON, `Content-Type`, os oito campos, limites, tipos, enumeração do provedor, `consent: true` e `form_opened_at`, retornando os códigos e detalhes definidos no contrato do site sem devolver valores pessoais.
 - Distinguir rejeição técnica `submission_rejected` de estado interno `rejected`; a primeira não registra pedido e a segunda não é reaberta por novo envio.
 - Retornar 429 `rate_limited` para o limite por origem e incluir `Retry-After` somente quando o prazo for calculável, sem retry automático obrigatório, contadores ou endereço de origem na resposta.
-- Permitir preflight CORS `OPTIONS` somente para `https://useconfirma.com`, anunciando `POST` e `Content-Type`, sem credenciais de sessão e com `Vary: Origin` quando a resposta variar por origem.
+- Permitir preflight CORS `OPTIONS` somente para `https://useconfirma.com.br`, anunciando `POST` e `Content-Type`, sem credenciais de sessão e com `Vary: Origin` quando a resposta variar por origem.
 - Após timeout inicial de 15 segundos no cliente, tratar o resultado como incerto, manter respostas somente em memória, não repetir automaticamente e permitir reenvio manual; a validação técnica desse timeout permanece pendente.
 - Preservar o registro durável do aviso interno, sem exigir sua entrega antes do 202, e garantir que concorrência não crie mais de uma linha por e-mail normalizado.

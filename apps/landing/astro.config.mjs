@@ -7,13 +7,13 @@ const isIndexable = process.env.PUBLIC_SITE_INDEXABLE === 'true';
 
 export default defineConfig({
   output: 'static',
-  site: 'https://useconfirma.com',
+  site: 'https://useconfirma.com.br',
   integrations: [
     react(),
     ...(isIndexable
       ? [
           sitemap({
-            filter: (page) => page === 'https://useconfirma.com/',
+            filter: (page) => page === 'https://useconfirma.com.br/',
           }),
         ]
       : []),

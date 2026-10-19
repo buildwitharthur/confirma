@@ -45,14 +45,14 @@ A [matriz de pré-condições](../../dominio/pre-condicoes.md) consolida as cond
 
 | Superfície | Endereço |
 | --- | --- |
-| Site público | `https://useconfirma.com`; `https://www.useconfirma.com` redireciona para ele. |
-| Painel | `https://app.useconfirma.com` |
-| API pública | `https://api.useconfirma.com/v1` |
-| Comandos do painel | `https://api.useconfirma.com/panel` |
-| Autenticação | `https://api.useconfirma.com/auth` |
-| Webhooks de entrada e recebimento | `https://api.useconfirma.com/inbound` |
-| Pedidos de acesso do site | `https://api.useconfirma.com/site` |
-| Documentação | `https://docs.useconfirma.com` |
-| Remetente transacional | `mail.useconfirma.com`, com SPF, DKIM e DMARC configurados. |
+| Site público | `https://useconfirma.com.br`; `https://www.useconfirma.com.br` redireciona para ele. |
+| Painel | `https://app.useconfirma.com.br` |
+| API pública | `https://api.useconfirma.com.br/v1` |
+| Comandos do painel | `https://api.useconfirma.com.br/panel` |
+| Autenticação | `https://api.useconfirma.com.br/auth` |
+| Webhooks de entrada e recebimento | `https://api.useconfirma.com.br/inbound` |
+| Pedidos de acesso do site | `https://api.useconfirma.com.br/site` |
+| Documentação | `https://docs.useconfirma.com.br` |
+| Remetente transacional | `mail.useconfirma.com.br`, com SPF, DKIM e DMARC configurados. |
 
-O painel está em `https://app.useconfirma.com` e usa `https://api.useconfirma.com/panel` e `https://api.useconfirma.com/auth`. O cookie de sessão é restrito ao host `api.useconfirma.com`, sem atributo `Domain`, com `HttpOnly`, `Secure` e `SameSite=Lax`. CORS com credenciais permite somente a origem exata `https://app.useconfirma.com`, sem curingas. Comandos do painel verificam `Origin` e exigem cabeçalho personalizado ou token anti-CSRF. `/v1` nunca autentica por cookie; `/panel` nunca autentica por chave de API.
+O painel está em `https://app.useconfirma.com.br` e usa `https://api.useconfirma.com.br/panel` e `https://api.useconfirma.com.br/auth`. O cookie de sessão é restrito ao host `api.useconfirma.com.br`, sem atributo `Domain`, com `HttpOnly`, `Secure` e `SameSite=Lax`. CORS com credenciais permite somente a origem exata `https://app.useconfirma.com.br`, sem curingas. Comandos do painel verificam `Origin` e exigem cabeçalho personalizado ou token anti-CSRF. `/v1` nunca autentica por cookie; `/panel` nunca autentica por chave de API.

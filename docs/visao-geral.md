@@ -85,4 +85,4 @@ O índice será atualizado quando novos documentos forem adicionados. Dúvidas e
 
 ## Endereços públicos
 
-O site é `https://useconfirma.com`, com redirecionamento de `https://www.useconfirma.com`. Painel, API e documentação usam, respectivamente, `https://app.useconfirma.com`, `https://api.useconfirma.com` e `https://docs.useconfirma.com`. E-mails transacionais usam `mail.useconfirma.com`, autenticado por SPF, DKIM e DMARC.
+O site é `https://useconfirma.com.br`, com redirecionamento de `https://www.useconfirma.com.br`. Painel, API e documentação usam, respectivamente, `https://app.useconfirma.com.br`, `https://api.useconfirma.com.br` e `https://docs.useconfirma.com.br`. E-mails transacionais usam `mail.useconfirma.com.br`, autenticado por SPF, DKIM e DMARC.

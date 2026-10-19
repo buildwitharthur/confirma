@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://useconfirma.com/sitemap-index.xml
+Sitemap: https://useconfirma.com.br/sitemap-index.xml

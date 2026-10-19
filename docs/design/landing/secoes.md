@@ -464,7 +464,7 @@ A paleta oficial compartilhada permanece em [`../assets/tokens.json`](../assets/
 
 - Aprovar a headline e os textos provisórios do hero.
 - Validar a proposta de conteúdo de cada seção com produto e negócio.
-- Usar os destinos documentados — `https://docs.useconfirma.com`, `https://app.useconfirma.com`, `https://useconfirma.com/termos` e `https://useconfirma.com/privacidade` — apenas quando estiverem publicados; a disponibilidade pública continua dependência externa.
+- Usar os destinos documentados — `https://docs.useconfirma.com.br`, `https://app.useconfirma.com.br`, `https://useconfirma.com.br/termos` e `https://useconfirma.com.br/privacidade` — apenas quando estiverem publicados; a disponibilidade pública continua dependência externa.
 - Preservar a decisão já estabelecida de pedido de acesso e convite (RF-025/026); cadastro público exigiria nova decisão de produto, não é pendência do recorte atual.
 - Aprovar qualquer exemplo de código, payload, estado ou interface antes de transformá-lo em asset ou componente.
 - Avaliar visualmente os três PNGs existentes e aprovar sua aplicação final.

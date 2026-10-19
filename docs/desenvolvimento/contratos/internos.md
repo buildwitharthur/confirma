@@ -74,7 +74,7 @@ Identidades e sessões são restauradas com o mesmo banco; invalidar todas as se
 
 ## Superfícies e isolamento
 
-Na origem da API, `/v1` aceita somente chave de API, nunca cookie; `/panel` aceita somente sessão, nunca chave; `/auth` atende autenticação; `/inbound` exige segredo por conexão; `/site` recebe pedidos de acesso e aceita só a origem `https://useconfirma.com`. Cada superfície tem limite próprio, e o excesso responde 429: `/panel`, 120 por minuto por sessão; `/auth`, 10 por minuto por endereço de origem, além do bloqueio por e-mail; `/inbound`, 300 por minuto por conexão de WhatsApp; `/site`, 5 pedidos por hora por endereço de origem. Os valores são recalibrados no piloto. A conta vem da chave ou sessão e do vínculo, nunca de uma escolha arbitrária na entrada. Repositórios e comandos usam `account_id` e referências compostas. Logs usam somente IDs, `request_id` e códigos sanitizados.
+Na origem da API, `/v1` aceita somente chave de API, nunca cookie; `/panel` aceita somente sessão, nunca chave; `/auth` atende autenticação; `/inbound` exige segredo por conexão; `/site` recebe pedidos de acesso e aceita só a origem `https://useconfirma.com.br`. Cada superfície tem limite próprio, e o excesso responde 429: `/panel`, 120 por minuto por sessão; `/auth`, 10 por minuto por endereço de origem, além do bloqueio por e-mail; `/inbound`, 300 por minuto por conexão de WhatsApp; `/site`, 5 pedidos por hora por endereço de origem. Os valores são recalibrados no piloto. A conta vem da chave ou sessão e do vínculo, nunca de uma escolha arbitrária na entrada. Repositórios e comandos usam `account_id` e referências compostas. Logs usam somente IDs, `request_id` e códigos sanitizados.
 
 ## Entradas externas sem efeito local
 
@@ -86,6 +86,6 @@ Na restauração, entradas restritivas ainda `pending` são reaplicadas, `abando
 
 ## Origens de implantação
 
-O painel está em `https://app.useconfirma.com` e usa `https://api.useconfirma.com/panel` e `https://api.useconfirma.com/auth`. O cookie de sessão é restrito ao host `api.useconfirma.com`, sem atributo `Domain`, com `HttpOnly`, `Secure` e `SameSite=Lax`. CORS com credenciais permite somente a origem exata `https://app.useconfirma.com`, sem curingas. Comandos do painel verificam `Origin` e exigem cabeçalho personalizado ou token anti-CSRF. `/v1` nunca autentica por cookie; `/panel` nunca autentica por chave de API.
+O painel está em `https://app.useconfirma.com.br` e usa `https://api.useconfirma.com.br/panel` e `https://api.useconfirma.com.br/auth`. O cookie de sessão é restrito ao host `api.useconfirma.com.br`, sem atributo `Domain`, com `HttpOnly`, `Secure` e `SameSite=Lax`. CORS com credenciais permite somente a origem exata `https://app.useconfirma.com.br`, sem curingas. Comandos do painel verificam `Origin` e exigem cabeçalho personalizado ou token anti-CSRF. `/v1` nunca autentica por cookie; `/panel` nunca autentica por chave de API.
 
-Webhooks de entrada e recebimento do provedor usam `https://api.useconfirma.com/inbound/<identificador-opaco>`. Avisos transacionais são enviados por `mail.useconfirma.com`, com SPF, DKIM e DMARC configurados.
+Webhooks de entrada e recebimento do provedor usam `https://api.useconfirma.com.br/inbound/<identificador-opaco>`. Avisos transacionais são enviados por `mail.useconfirma.com.br`, com SPF, DKIM e DMARC configurados.

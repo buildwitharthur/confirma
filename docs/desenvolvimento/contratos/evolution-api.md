@@ -84,7 +84,7 @@ Content-Type: application/json
 {
   "webhook": {
     "enabled": true,
-    "url": "https://api.useconfirma.com/inbound/<identificador-opaco>",
+    "url": "https://api.useconfirma.com.br/inbound/<identificador-opaco>",
     "headers": {
       "X-Confirma-Provider-Secret": "<segredo>"
     },
@@ -156,7 +156,7 @@ No primeiro envio, `InvalidNumber` leva o agendamento a `failed` e gera webhook.
 
 ## Webhook recebido
 
-O endereço de recebimento é `https://api.useconfirma.com/inbound/<identificador-opaco>`. O segredo é exigido por conexão, preferencialmente em cabeçalho; o identificador da rota não é credencial de painel nem chave da API pública.
+O endereço de recebimento é `https://api.useconfirma.com.br/inbound/<identificador-opaco>`. O segredo é exigido por conexão, preferencialmente em cabeçalho; o identificador da rota não é credencial de painel nem chave da API pública.
 
 A Evolution API 2.3.7 envia um envelope com `event`, `instance`, `data`, `destination`, `date_time`, `sender`, `server_url` e `apikey`. O Confirma usa somente `event`, `instance` e os campos necessários dentro de `data`; `apikey`, destino, URL do servidor e payload bruto não são persistidos nem registrados.
 
