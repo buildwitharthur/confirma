@@ -1,0 +1,17 @@
+node_modules/
+.pnpm-store/
+.turbo/
+dist/
+build/
+coverage/
+*.tsbuildinfo
+*.log
+logs/
+tmp/
+temp/
+.env
+.env.*
+!.env.example
+*.local
+.DS_Store
+Thumbs.db
