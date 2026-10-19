@@ -3,8 +3,10 @@
   "compilerOptions": {
     "module": "ESNext",
     "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
     "lib": ["ES2024", "DOM", "DOM.Iterable"],
-    "types": ["node"]
+    "types": ["node", "react", "react-dom"]
   },
   "include": [".astro/types.d.ts", "**/*"],
   "exclude": ["dist"]
