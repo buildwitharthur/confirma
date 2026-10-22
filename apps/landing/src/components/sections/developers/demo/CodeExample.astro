@@ -1,29 +1,41 @@
 ---
 interface Props {
-  accent: string;
-  label?: string;
-  meta: string;
-  ariaLabel: string;
-  code: string;
-  comment?: string;
-  separated?: boolean;
+	accent: string;
+	label?: string;
+	meta: string;
+	ariaLabel: string;
+	code: string;
+	comment?: string;
+	separated?: boolean;
 }
 
-const { accent, label, meta, ariaLabel, code, comment, separated = false } = Astro.props;
+const {
+	accent,
+	label,
+	meta,
+	ariaLabel,
+	code,
+	comment,
+	separated = false,
+} = Astro.props;
 ---
 
 <div
-  class:list={[
-    'flex flex-wrap items-center justify-between gap-4 px-3.5 py-[15px] font-mono text-xs leading-normal font-medium text-light-green-gray',
-    separated &&
-      'mt-1.5 border-t border-[var(--noite-funda)] [box-shadow:inset_0_1px_0_rgb(255_255_255/0.05)]',
-  ]}
+	class:list={[
+		'flex flex-wrap items-center justify-between gap-4 px-3.5 py-[15px] font-mono text-xs leading-normal font-medium text-light-green-gray',
+		separated &&
+			'mt-1.5 border-t border-[var(--noite-funda)] [box-shadow:inset_0_1px_0_rgb(255_255_255/0.05)]',
+	]}
 >
-  <span><span class="text-mint">{accent}</span>{label && ` ${label}`}</span>
-  <span>{meta}</span>
+	<span>
+		<span class="text-mint">{accent}</span>
+		{label && ` ${label}`}
+	</span>
+	<span>{meta}</span>
 </div>
 <pre
-  tabindex="0"
-  role="region"
-  aria-label={ariaLabel}
-  class="m-0 max-w-full overflow-x-auto rounded-xl bg-[color-mix(in_srgb,var(--confirma-marca-noite)_78%,var(--confirma-apoio-verde-escuro))] px-4 py-5 font-mono text-[0.8125rem] leading-[1.65] font-normal whitespace-pre text-mist [tab-size:2] [box-shadow:var(--rebaixo-escuro)] focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-mint"><code>{comment && <span class="text-medium-green-gray">{comment}</span>}{comment && '\n'}{code}</code></pre>
+	tabindex="0"
+	role="region"
+	aria-label={ariaLabel}
+	class="m-0 max-w-full overflow-x-auto rounded-xl bg-[color-mix(in_srgb,var(--confirma-marca-noite)_78%,var(--confirma-apoio-verde-escuro))] px-4 py-5 font-mono text-[0.8125rem] leading-[1.65] font-normal whitespace-pre text-mist [tab-size:2] [box-shadow:var(--rebaixo-escuro)] focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-mint"
+><code>{comment && <span class="text-medium-green-gray">{comment}</span>}{comment && '\n'}{code}</code></pre>

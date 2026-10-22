@@ -1,33 +1,41 @@
 ---
 import StatusBadge from './StatusBadge.astro';
 
-const states = ['scheduled', 'sent', 'confirmed', 'canceled', 'no_response', 'failed'] as const;
+const states = [
+	'scheduled',
+	'sent',
+	'confirmed',
+	'canceled',
+	'no_response',
+	'failed',
+] as const;
 ---
 
 <div class="grid items-end gap-x-16 gap-y-5 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)]">
-  <div class="min-w-0">
-    <p
-      class="mb-4 flex items-center gap-2.5 text-xs leading-[1.2] font-semibold tracking-[0.09em] text-brand uppercase"
-    >
-      Painel de acompanhamento
-    </p>
-    <h2
-      id="dashboard-title"
-      class="max-w-[22ch] font-display text-[clamp(1.875rem,1.35rem+2.3vw,2.5rem)] leading-[1.12] font-semibold tracking-[-0.012em] text-balance md:text-[clamp(2.25rem,1.3rem+2vw,2.875rem)] lg:text-[clamp(2.25rem,1.2rem+1.5vw,2.625rem)]"
-    >
-      Saiba o que aconteceu com cada agendamento.
-    </h2>
-  </div>
+	<div class="min-w-0">
+		<p class="mb-4 flex items-center gap-2.5 text-xs leading-[1.2] font-semibold tracking-[0.09em] text-brand uppercase">
+			Painel de acompanhamento
+		</p>
+		<h2
+			id="dashboard-title"
+			class="max-w-[22ch] font-display text-[clamp(1.875rem,1.35rem+2.3vw,2.5rem)] leading-[1.12] font-semibold tracking-[-0.012em] text-balance md:text-[clamp(2.25rem,1.3rem+2vw,2.875rem)] lg:text-[clamp(2.25rem,1.2rem+1.5vw,2.625rem)]"
+		>
+			Saiba o que aconteceu com cada agendamento.
+		</h2>
+	</div>
 
-  <div class="min-w-0">
-    <p
-      class="mt-4 text-[1.0625rem] leading-[1.6] text-pretty text-dark-green-gray md:mt-5 md:text-[1.125rem] lg:mt-0"
-    >
-      Consulte o estado, o histórico e a entrega do webhook de cada agendamento. No mesmo painel,
-      você configura a conta, a conexão de WhatsApp, o template e o webhook.
-    </p>
-    <ul class="mt-5 flex flex-wrap gap-2" aria-label="Estados do agendamento">
-      {states.map((state) => <li><StatusBadge state={state} /></li>)}
-    </ul>
-  </div>
+	<div class="min-w-0">
+		<p class="mt-4 text-[1.0625rem] leading-[1.6] text-pretty text-dark-green-gray md:mt-5 md:text-[1.125rem] lg:mt-0">
+			Consulte o estado, o histórico e a entrega do webhook de cada agendamento.
+			No mesmo painel, você configura a conta, a conexão de WhatsApp, o template
+			e o webhook.
+		</p>
+		<ul class="mt-5 flex flex-wrap gap-2" aria-label="Estados do agendamento">
+			{states.map((state) => (
+				<li>
+					<StatusBadge state={state} />
+				</li>
+			))}
+		</ul>
+	</div>
 </div>

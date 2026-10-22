@@ -1,37 +1,39 @@
 ---
 interface Props {
-  variant: 'in' | 'out';
-  time: string;
-  at: string;
+	variant: 'in' | 'out';
+	time: string;
+	at: string;
 }
 
 const { variant, time, at } = Astro.props;
 
 const base =
-  'relative max-w-[92%] px-3 pt-2.5 pb-2 text-[0.9375rem] leading-normal sm:max-w-[86%] motion-reduce:animate-none';
+	'relative max-w-[92%] px-3 pt-2.5 pb-2 text-[0.9375rem] leading-normal sm:max-w-[86%] motion-reduce:animate-none';
 
 const variants = {
-  in: [
-    'self-start rounded-[14px] rounded-tl-[4px] border border-transparent',
-    '[background:linear-gradient(var(--confirma-apoio-branco),var(--confirma-apoio-branco))_padding-box,var(--aresta-clara)_border-box]',
-    '[box-shadow:var(--brilho-topo),var(--elev-1)]',
-    'animate-[whatsapp-step_560ms_cubic-bezier(0.16,1,0.3,1)_var(--at)_backwards]',
-  ],
-  out: [
-    'min-w-[72px] self-end rounded-[14px] rounded-tr-[4px] text-right text-white',
-    '[background:linear-gradient(180deg,color-mix(in_srgb,var(--confirma-marca-verde)_90%,var(--confirma-marca-menta)),var(--confirma-marca-verde)_45%,color-mix(in_srgb,var(--confirma-marca-verde)_86%,var(--confirma-marca-noite)))]',
-    '[box-shadow:inset_0_1px_0_rgb(255_255_255/0.22),inset_0_-1px_0_rgb(11_31_26/0.16),var(--elev-2)]',
-    'animate-[whatsapp-pop_560ms_cubic-bezier(0.16,1,0.3,1)_var(--at)_backwards]',
-  ],
+	in: [
+		'self-start rounded-[14px] rounded-tl-[4px] border border-transparent',
+		'[background:linear-gradient(var(--confirma-apoio-branco),var(--confirma-apoio-branco))_padding-box,var(--aresta-clara)_border-box]',
+		'[box-shadow:var(--brilho-topo),var(--elev-1)]',
+		'animate-[whatsapp-step_560ms_cubic-bezier(0.16,1,0.3,1)_var(--at)_backwards]',
+	],
+	out: [
+		'min-w-[72px] self-end rounded-[14px] rounded-tr-[4px] text-right text-white',
+		'[background:linear-gradient(180deg,color-mix(in_srgb,var(--confirma-marca-verde)_90%,var(--confirma-marca-menta)),var(--confirma-marca-verde)_45%,color-mix(in_srgb,var(--confirma-marca-verde)_86%,var(--confirma-marca-noite)))]',
+		'[box-shadow:inset_0_1px_0_rgb(255_255_255/0.22),inset_0_-1px_0_rgb(11_31_26/0.16),var(--elev-2)]',
+		'animate-[whatsapp-pop_560ms_cubic-bezier(0.16,1,0.3,1)_var(--at)_backwards]',
+	],
 };
 ---
 
 <div class:list={[base, variants[variant]]} style={`--at: ${at}`}>
-  <slot />
-  <span
-    class:list={[
-      'mt-1 block text-right text-[0.6875rem]',
-      variant === 'out' ? 'text-light-green' : 'text-dark-green-gray',
-    ]}>{time}</span
-  >
+	<slot />
+	<span
+		class:list={[
+			'mt-1 block text-right text-[0.6875rem]',
+			variant === 'out' ? 'text-light-green' : 'text-dark-green-gray',
+		]}
+	>
+		{time}
+	</span>
 </div>

@@ -2,40 +2,41 @@
 import ResponseCommand from './ResponseCommand.astro';
 
 const commands = [
-  { code: '1', description: 'Confirma o agendamento.' },
-  { code: '2', description: 'Cancela o agendamento.' },
-  { code: 'PARAR', description: 'Interrompe as mensagens.' },
+	{ code: '1', description: 'Confirma o agendamento.' },
+	{ code: '2', description: 'Cancela o agendamento.' },
+	{ code: 'PARAR', description: 'Interrompe as mensagens.' },
 ] as const;
 ---
 
 <div class="min-w-0">
-  <p
-    class="mb-4 flex items-center gap-2.5 text-xs leading-[1.2] font-semibold tracking-[0.09em] text-brand uppercase"
-  >
-    No WhatsApp do contato
-  </p>
+	<p class="mb-4 flex items-center gap-2.5 text-xs leading-[1.2] font-semibold tracking-[0.09em] text-brand uppercase">
+		No WhatsApp do contato
+	</p>
 
-  <h2
-    id="whatsapp-title"
-    class="font-display text-[clamp(1.875rem,1.35rem+2.3vw,2.5rem)] leading-[1.12] font-semibold tracking-[-0.012em] text-balance md:text-[clamp(2.25rem,1.3rem+2vw,2.875rem)] lg:text-[clamp(2.25rem,1.2rem+1.5vw,2.625rem)]"
-  >
-    Quem recebe só precisa responder 1&nbsp;ou&nbsp;2.
-  </h2>
+	<h2
+		id="whatsapp-title"
+		class="font-display text-[clamp(1.875rem,1.35rem+2.3vw,2.5rem)] leading-[1.12] font-semibold tracking-[-0.012em] text-balance md:text-[clamp(2.25rem,1.3rem+2vw,2.875rem)] lg:text-[clamp(2.25rem,1.2rem+1.5vw,2.625rem)]"
+	>
+		Quem recebe só precisa responder 1&nbsp;ou&nbsp;2.
+	</h2>
 
-  <p
-    class="mt-4 max-w-[65ch] text-[1.0625rem] leading-[1.6] text-pretty text-dark-green-gray md:mt-5 md:text-[1.125rem]"
-  >
-    A solicitação chega pelo WhatsApp e a resposta é uma mensagem de texto. O contato não precisa
-    instalar nada, abrir links ou criar cadastro.
-  </p>
+	<p class="mt-4 max-w-[65ch] text-[1.0625rem] leading-[1.6] text-pretty text-dark-green-gray md:mt-5 md:text-[1.125rem]">
+		A solicitação chega pelo WhatsApp e a resposta é uma mensagem de texto. O
+		contato não precisa instalar nada, abrir links ou criar cadastro.
+	</p>
 
-  <ul class="mt-6 border-t border-light-green-gray" aria-label="Respostas reconhecidas">
-    {commands.map((command) => <ResponseCommand {...command} />)}
-  </ul>
+	<ul
+		class="mt-6 border-t border-light-green-gray"
+		aria-label="Respostas reconhecidas"
+	>
+		{commands.map((command) => (
+			<ResponseCommand {...command} />
+		))}
+	</ul>
 
-  <p class="mt-6 max-w-[65ch] text-sm leading-[1.6] text-pretty text-dark-green-gray">
-    A mensagem usa o template da conta, e o Confirma acrescenta a instrução de resposta. Cada
-    resposta reconhecida recebe uma confirmação automática; uma resposta não reconhecida pode gerar
-    uma pergunta de esclarecimento.
-  </p>
+	<p class="mt-6 max-w-[65ch] text-sm leading-[1.6] text-pretty text-dark-green-gray">
+		A mensagem usa o template da conta, e o Confirma acrescenta a instrução de
+		resposta. Cada resposta reconhecida recebe uma confirmação automática; uma
+		resposta não reconhecida pode gerar uma pergunta de esclarecimento.
+	</p>
 </div>

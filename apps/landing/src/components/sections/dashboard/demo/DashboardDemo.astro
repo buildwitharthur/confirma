@@ -4,27 +4,27 @@ import AppointmentDetail from './AppointmentDetail.astro';
 ---
 
 <figure
-  aria-labelledby="panel-caption"
-  class="relative mt-10 md:mt-14 lg:mt-16 lg:pr-18 min-[1200px]:pr-24"
+	aria-labelledby="panel-caption"
+	class="relative mt-10 md:mt-14 lg:mt-16 lg:pr-18 min-[1200px]:pr-24"
 >
-  <DashboardWindow />
-  <div class="relative mt-3 lg:absolute lg:top-34 lg:right-0 lg:z-2 lg:m-0 lg:w-75 min-[1200px]:top-37 min-[1200px]:-right-2 min-[1200px]:w-80">
-    <AppointmentDetail />
-  </div>
-  <figcaption
-    id="panel-caption"
-    class="mt-4 max-w-[60ch] text-[0.8125rem] leading-normal text-dark-green-gray"
-  >
-    Representação conceitual do acompanhamento, com identificadores fictícios. Não é uma captura do
-    painel final.
-  </figcaption>
+	<DashboardWindow />
+	<div class="relative mt-3 lg:absolute lg:top-34 lg:right-0 lg:z-2 lg:m-0 lg:w-75 min-[1200px]:top-37 min-[1200px]:-right-2 min-[1200px]:w-80">
+		<AppointmentDetail />
+	</div>
+	<figcaption
+		id="panel-caption"
+		class="mt-4 max-w-[60ch] text-[0.8125rem] leading-normal text-dark-green-gray"
+	>
+		Representação conceitual do acompanhamento, com identificadores fictícios.
+		Não é uma captura do painel final.
+	</figcaption>
 </figure>
 
 <style is:global>
-  @keyframes dashboard-step {
-    from {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-  }
+	@keyframes dashboard-step {
+		from {
+			opacity: 0;
+			transform: translateY(10px);
+		}
+	}
 </style>

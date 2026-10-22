@@ -1,22 +1,35 @@
 ---
 interface Props {
-  href: string;
-  label: string;
-  class?: string;
-  current?: boolean;
-  external?: boolean;
+	href: string;
+	label: string;
+	class?: string;
+	current?: boolean;
+	external?: boolean;
 }
 
-const { href, label, class: className, current = false, external = false } = Astro.props;
+const {
+	href,
+	label,
+	class: className,
+	current = false,
+	external = false,
+} = Astro.props;
 ---
 
 <a
-  class:list={['relative inline-flex min-h-11 items-center whitespace-nowrap text-sm font-medium text-white no-underline transition-colors duration-[180ms] after:absolute after:bottom-1 after:left-0 after:right-0 after:h-0.5 after:origin-left after:scale-x-0 after:bg-mint after:transition-transform after:duration-[180ms] hover:text-mint hover:after:scale-x-100 focus-visible:text-white aria-[current=location]:after:scale-x-100', className]}
-  href={href}
-  aria-current={current ? 'location' : undefined}
-  target={external ? '_blank' : undefined}
-  rel={external ? 'noreferrer' : undefined}
+	class:list={[
+		'relative inline-flex min-h-11 items-center whitespace-nowrap text-sm font-medium text-white no-underline transition-colors duration-[180ms] after:absolute after:bottom-1 after:left-0 after:right-0 after:h-0.5 after:origin-left after:scale-x-0 after:bg-mint after:transition-transform after:duration-[180ms] hover:text-mint hover:after:scale-x-100 focus-visible:text-white aria-[current=location]:after:scale-x-100',
+		className,
+	]}
+	href={href}
+	aria-current={current ? 'location' : undefined}
+	target={external ? '_blank' : undefined}
+	rel={external ? 'noreferrer' : undefined}
 >
-  {label}
-  {external && <span class="ml-1" aria-hidden="true">↗</span>}
+	{label}
+	{external && (
+		<span class="ml-1" aria-hidden="true">
+			↗
+		</span>
+	)}
 </a>

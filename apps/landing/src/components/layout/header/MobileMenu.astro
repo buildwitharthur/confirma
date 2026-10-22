@@ -4,16 +4,31 @@ import { mobileNavigation, mobileUtilityNavigation } from './navigation';
 ---
 
 <div
-  id="mobile-menu"
-  class="fixed inset-x-0 top-16 bottom-0 z-40 overflow-y-auto bg-night px-5 pb-10 pt-6 text-white motion-safe:animate-[menu-in_250ms_cubic-bezier(0.22,1,0.36,1)] lg:hidden"
-  role="dialog"
-  aria-modal="true"
-  aria-label="Navegação"
-  hidden
+	id="mobile-menu"
+	class="fixed inset-x-0 top-16 bottom-0 z-40 overflow-y-auto bg-night px-5 pb-10 pt-6 text-white motion-safe:animate-[menu-in_250ms_cubic-bezier(0.22,1,0.36,1)] lg:hidden"
+	role="dialog"
+	aria-modal="true"
+	aria-label="Navegação"
+	hidden
 >
-  <nav class="mx-auto flex max-w-2xl flex-col gap-2" aria-label="Principal mobile">
-    {mobileNavigation.map((item) => <NavLink {...item} class="min-h-[52px] self-start text-xl font-semibold tracking-[-0.005em]" />)}
-    {mobileUtilityNavigation.map((item) => <NavLink {...item} class="min-h-[52px] self-start text-xl font-semibold tracking-[-0.005em] text-mint" />)}
-    <span class="mt-1 text-sm text-medium-green-gray">Para quem já possui acesso.</span>
-  </nav>
+	<nav
+		class="mx-auto flex max-w-2xl flex-col gap-2"
+		aria-label="Principal mobile"
+	>
+		{mobileNavigation.map((item) => (
+			<NavLink
+				{...item}
+				class="min-h-[52px] self-start text-xl font-semibold tracking-[-0.005em]"
+			/>
+		))}
+		{mobileUtilityNavigation.map((item) => (
+			<NavLink
+				{...item}
+				class="min-h-[52px] self-start text-xl font-semibold tracking-[-0.005em] text-mint"
+			/>
+		))}
+		<span class="mt-1 text-sm text-medium-green-gray">
+			Para quem já possui acesso.
+		</span>
+	</nav>
 </div>

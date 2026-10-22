@@ -9,81 +9,74 @@ import { steps } from './steps';
 const demos = [AppointmentDemo, ConfirmationDemo, WebhookDemo];
 
 const surfaceTokens = [
-  '[--luz-angulo:168deg]',
-  '[--aresta-clara:linear-gradient(168deg,rgb(255_255_255/0.95),var(--confirma-apoio-cinza-verde-claro)_42%,color-mix(in_srgb,var(--confirma-apoio-cinza-verde-claro)_70%,var(--confirma-apoio-cinza-verde-medio)))]',
-  '[--aresta-escura:linear-gradient(168deg,rgb(255_255_255/0.13),rgb(157_181_172/0.12)_30%,rgb(11_31_26/0.6))]',
-  '[--brilho-topo:inset_0_1px_0_rgb(255_255_255/0.9)]',
-  '[--brilho-topo-escuro:inset_0_1px_0_rgb(255_255_255/0.07)]',
-  '[--base-escura:inset_0_-1px_0_rgb(11_31_26/0.05)]',
-  '[--elev-1:0_1px_1px_rgb(11_31_26/0.05),1px_2px_4px_-1px_rgb(11_31_26/0.07)]',
-  '[--elev-2:0_1px_2px_rgb(11_31_26/0.06),1px_8px_18px_-8px_rgb(11_31_26/0.16)]',
-  '[--rebaixo:inset_0_1px_2px_rgb(11_31_26/0.07)]',
-  '[--rebaixo-escuro:inset_0_2px_6px_-1px_rgb(4_12_10/0.55),inset_0_0_0_1px_rgb(4_12_10/0.35),0_1px_0_rgb(255_255_255/0.05)]',
+	'[--luz-angulo:168deg]',
+	'[--aresta-clara:linear-gradient(168deg,rgb(255_255_255/0.95),var(--confirma-apoio-cinza-verde-claro)_42%,color-mix(in_srgb,var(--confirma-apoio-cinza-verde-claro)_70%,var(--confirma-apoio-cinza-verde-medio)))]',
+	'[--aresta-escura:linear-gradient(168deg,rgb(255_255_255/0.13),rgb(157_181_172/0.12)_30%,rgb(11_31_26/0.6))]',
+	'[--brilho-topo:inset_0_1px_0_rgb(255_255_255/0.9)]',
+	'[--brilho-topo-escuro:inset_0_1px_0_rgb(255_255_255/0.07)]',
+	'[--base-escura:inset_0_-1px_0_rgb(11_31_26/0.05)]',
+	'[--elev-1:0_1px_1px_rgb(11_31_26/0.05),1px_2px_4px_-1px_rgb(11_31_26/0.07)]',
+	'[--elev-2:0_1px_2px_rgb(11_31_26/0.06),1px_8px_18px_-8px_rgb(11_31_26/0.16)]',
+	'[--rebaixo:inset_0_1px_2px_rgb(11_31_26/0.07)]',
+	'[--rebaixo-escuro:inset_0_2px_6px_-1px_rgb(4_12_10/0.55),inset_0_0_0_1px_rgb(4_12_10/0.35),0_1px_0_rgb(255_255_255/0.05)]',
 ];
 ---
 
 <section
-  id="como-funciona"
-  aria-labelledby="how-title"
-  class:list={[
-    'scroll-mt-22 border-y border-light-green-gray bg-white py-16 md:py-24 min-[1200px]:py-30',
-    surfaceTokens,
-  ]}
+	id="como-funciona"
+	aria-labelledby="how-title"
+	class:list={[
+		'scroll-mt-22 border-y border-light-green-gray bg-white py-16 md:py-24 min-[1200px]:py-30',
+		surfaceTokens,
+	]}
 >
-  <div class="mx-auto w-full max-w-[1120px] px-5 md:px-8 min-[1200px]:px-12">
-    <div class="max-w-[720px]">
-      <p
-        class="mb-4 flex items-center gap-2.5 text-xs leading-[1.2] font-semibold tracking-[0.09em] text-brand uppercase"
-      >
-        Como funciona
-      </p>
-      <h2
-        id="how-title"
-        class="max-w-[20ch] font-display text-[clamp(1.875rem,1.35rem+2.3vw,2.5rem)] leading-[1.12] font-semibold tracking-[-0.012em] text-balance md:text-[clamp(2.25rem,1.3rem+2vw,2.875rem)]"
-      >
-        Do agendamento ao resultado, em três etapas.
-      </h2>
-      <p
-        class="mt-4 max-w-[65ch] text-[1.0625rem] leading-[1.6] text-pretty text-dark-green-gray md:mt-5 md:text-[1.125rem]"
-      >
-        Seu sistema envia o agendamento e aplica o resultado. O Confirma conversa com o contato e
-        informa o resultado, sem criar nem alterar agendamentos no seu sistema.
-      </p>
-    </div>
+	<div class="mx-auto w-full max-w-[1120px] px-5 md:px-8 min-[1200px]:px-12">
+		<div class="max-w-[720px]">
+			<p class="mb-4 flex items-center gap-2.5 text-xs leading-[1.2] font-semibold tracking-[0.09em] text-brand uppercase">
+				Como funciona
+			</p>
+			<h2
+				id="how-title"
+				class="max-w-[20ch] font-display text-[clamp(1.875rem,1.35rem+2.3vw,2.5rem)] leading-[1.12] font-semibold tracking-[-0.012em] text-balance md:text-[clamp(2.25rem,1.3rem+2vw,2.875rem)]"
+			>
+				Do agendamento ao resultado, em três etapas.
+			</h2>
+			<p class="mt-4 max-w-[65ch] text-[1.0625rem] leading-[1.6] text-pretty text-dark-green-gray md:mt-5 md:text-[1.125rem]">
+				Seu sistema envia o agendamento e aplica o resultado. O Confirma
+				conversa com o contato e informa o resultado, sem criar nem alterar
+				agendamentos no seu sistema.
+			</p>
+		</div>
 
-    <div
-      data-how-walk
-      class="group/walk mt-10 grid data-[tabs]:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] data-[tabs]:items-start data-[tabs]:gap-x-6 min-[1200px]:data-[tabs]:gap-x-10"
-    >
-      <p
-        class="col-span-full mb-4 hidden max-w-[65ch] text-[0.8125rem] leading-normal text-dark-green-gray group-data-[tabs]/walk:block"
-      >
-        Selecione uma etapa para ver a demonstração correspondente.
-      </p>
+		<div
+			data-how-walk
+			class="group/walk mt-10 grid data-[tabs]:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] data-[tabs]:items-start data-[tabs]:gap-x-6 min-[1200px]:data-[tabs]:gap-x-10"
+		>
+			<p class="col-span-full mb-4 hidden max-w-[65ch] text-[0.8125rem] leading-normal text-dark-green-gray group-data-[tabs]/walk:block">
+				Selecione uma etapa para ver a demonstração correspondente.
+			</p>
 
-      <StepSelector steps={steps} client:load />
+			<StepSelector steps={steps} client:load />
 
-      <div class="flex min-w-0 flex-col gap-14 group-data-[tabs]/walk:grid">
-        {
-          steps.map((step, index) => {
-            const Demo = demos[index];
+			<div class="flex min-w-0 flex-col gap-14 group-data-[tabs]/walk:grid">
+				{steps.map((step, index) => {
+					const Demo = demos[index];
 
-            return (
-              <div class="flex min-w-0 flex-col gap-5 group-data-[tabs]/walk:[grid-area:1/1]">
-                <div class="group-data-[tabs]/walk:hidden">
-                  <StepItem step={step} />
-                </div>
-                <div
-                  data-step-panel={index}
-                  class="group/panel flex min-w-0 flex-1 flex-col rounded-[20px] transition-[opacity,translate,visibility] duration-[280ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-data-[tabs]/walk:data-[active=false]:invisible group-data-[tabs]/walk:data-[active=false]:translate-y-1.5 group-data-[tabs]/walk:data-[active=false]:opacity-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
-                >
-                  <Demo />
-                </div>
-              </div>
-            );
-          })
-        }
-      </div>
-    </div>
-  </div>
+					return (
+						<div class="flex min-w-0 flex-col gap-5 group-data-[tabs]/walk:[grid-area:1/1]">
+							<div class="group-data-[tabs]/walk:hidden">
+								<StepItem step={step} />
+							</div>
+							<div
+								data-step-panel={index}
+								class="group/panel flex min-w-0 flex-1 flex-col rounded-[20px] transition-[opacity,translate,visibility] duration-[280ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-data-[tabs]/walk:data-[active=false]:invisible group-data-[tabs]/walk:data-[active=false]:translate-y-1.5 group-data-[tabs]/walk:data-[active=false]:opacity-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+							>
+								<Demo />
+							</div>
+						</div>
+					);
+				})}
+			</div>
+		</div>
+	</div>
 </section>

@@ -4,161 +4,226 @@ import MobileMenu from './MobileMenu.astro';
 import { primaryNavigation, utilityNavigation } from './navigation';
 ---
 
-<header id="header" class="absolute inset-x-0 top-0 z-50 h-16 border-b border-deep-green text-white transition-colors duration-[180ms] lg:h-[72px]">
-  <div class="mx-auto flex h-full max-w-[1440px] items-center justify-between gap-5 px-5 lg:grid lg:grid-cols-[1fr_auto_1fr] lg:gap-6 lg:px-8 xl:gap-8 xl:px-12">
-    <a class="inline-flex min-h-11 shrink-0 items-center justify-self-start" href="#inicio" aria-label="Confirma — início">
-      <img src="/confirma-logo-branco.svg" width="145" height="56" alt="Confirma" />
-    </a>
+<header
+	id="header"
+	class="absolute inset-x-0 top-0 z-50 h-16 border-b border-deep-green text-white transition-colors duration-[180ms] lg:h-[72px]"
+>
+	<div class="mx-auto flex h-full max-w-[1440px] items-center justify-between gap-5 px-5 lg:grid lg:grid-cols-[1fr_auto_1fr] lg:gap-6 lg:px-8 xl:gap-8 xl:px-12">
+		<a
+			class="inline-flex min-h-11 shrink-0 items-center justify-self-start"
+			href="#inicio"
+			aria-label="Confirma — início"
+		>
+			<img
+				src="/confirma-logo-branco.svg"
+				width="145"
+				height="56"
+				alt="Confirma"
+			/>
+		</a>
 
-    <nav class="hidden items-center gap-8 lg:flex xl:gap-10" aria-label="Principal">
-      {primaryNavigation.map((item) => <NavLink {...item} />)}
-    </nav>
+		<nav
+			class="hidden items-center gap-8 lg:flex xl:gap-10"
+			aria-label="Principal"
+		>
+			{primaryNavigation.map((item) => (
+				<NavLink {...item} />
+			))}
+		</nav>
 
-    <div class="hidden items-center justify-self-end gap-8 lg:flex">
-      {utilityNavigation.map((item) => <NavLink {...item} />)}
-    </div>
+		<div class="hidden items-center justify-self-end gap-8 lg:flex">
+			{utilityNavigation.map((item) => (
+				<NavLink {...item} />
+			))}
+		</div>
 
-    <button
-      id="menu-toggle"
-      class="flex h-11 w-11 items-center justify-center rounded-[10px] border border-muted-green/60 bg-gradient-to-b from-dark-green to-night text-white shadow-[inset_0_1px_0_rgb(255_255_255_/_0.08),0_1px_2px_rgb(4_12_10_/_0.6)] transition-shadow duration-[180ms] active:shadow-[inset_0_2px_4px_rgb(4_12_10_/_0.7)] lg:hidden"
-      type="button"
-      aria-label="Abrir menu"
-      aria-controls="mobile-menu"
-      aria-expanded="false"
-    >
-      <span class="relative block h-3 w-[18px] border-y-[1.5px] border-current transition-transform duration-[220ms]" aria-hidden="true"></span>
-    </button>
-  </div>
+		<button
+			id="menu-toggle"
+			class="flex h-11 w-11 items-center justify-center rounded-[10px] border border-muted-green/60 bg-gradient-to-b from-dark-green to-night text-white shadow-[inset_0_1px_0_rgb(255_255_255_/_0.08),0_1px_2px_rgb(4_12_10_/_0.6)] transition-shadow duration-[180ms] active:shadow-[inset_0_2px_4px_rgb(4_12_10_/_0.7)] lg:hidden"
+			type="button"
+			aria-label="Abrir menu"
+			aria-controls="mobile-menu"
+			aria-expanded="false"
+		>
+			<span
+				class="relative block h-3 w-[18px] border-y-[1.5px] border-current transition-transform duration-[220ms]"
+				aria-hidden="true"
+			></span>
+		</button>
+	</div>
 </header>
 
 <MobileMenu />
 
 <noscript>
-  <nav class="flex flex-wrap gap-x-5 gap-y-2 bg-night px-5 py-2 text-white lg:hidden" aria-label="Navegação sem JavaScript">
-    {primaryNavigation.map((item) => <a class="inline-flex min-h-11 items-center text-sm font-medium" href={item.href}>{item.label}</a>)}
-    {utilityNavigation.map((item) => <a class="inline-flex min-h-11 items-center text-sm font-medium text-mint" href={item.href} target="_blank" rel="noreferrer">{item.label} <span class="ml-1" aria-hidden="true">↗</span></a>)}
-  </nav>
+	<nav
+		class="flex flex-wrap gap-x-5 gap-y-2 bg-night px-5 py-2 text-white lg:hidden"
+		aria-label="Navegação sem JavaScript"
+	>
+		{primaryNavigation.map((item) => (
+			<a
+				class="inline-flex min-h-11 items-center text-sm font-medium"
+				href={item.href}
+			>
+				{item.label}
+			</a>
+		))}
+		{utilityNavigation.map((item) => (
+			<a
+				class="inline-flex min-h-11 items-center text-sm font-medium text-mint"
+				href={item.href}
+				target="_blank"
+				rel="noreferrer"
+			>
+				{item.label}{' '}
+				<span class="ml-1" aria-hidden="true">
+					↗
+				</span>
+			</a>
+		))}
+	</nav>
 </noscript>
 
 <script is:inline>
-  (() => {
-    const header = document.querySelector('#header');
-    const toggle = document.querySelector('#menu-toggle');
-    const menu = document.querySelector('#mobile-menu');
-    const main = document.querySelector('main');
-    if (!(header instanceof HTMLElement) || !(toggle instanceof HTMLButtonElement) || !(menu instanceof HTMLElement)) return;
+	(() => {
+		const header = document.querySelector('#header');
+		const toggle = document.querySelector('#menu-toggle');
+		const menu = document.querySelector('#mobile-menu');
+		const main = document.querySelector('main');
+		if (
+			!(header instanceof HTMLElement) ||
+			!(toggle instanceof HTMLButtonElement) ||
+			!(menu instanceof HTMLElement)
+		)
+			return;
 
-    document.documentElement.classList.add('js');
-    const desktop = window.matchMedia('(min-width: 1024px)');
-    const menuLinks = () => [...menu.querySelectorAll('a')];
-    const setInert = (value) => {
-      if (main instanceof HTMLElement) main.inert = value;
-    };
+		document.documentElement.classList.add('js');
+		const desktop = window.matchMedia('(min-width: 1024px)');
+		const menuLinks = () => [...menu.querySelectorAll('a')];
+		const setInert = (value) => {
+			if (main instanceof HTMLElement) main.inert = value;
+		};
 
-    const closeMenu = (returnFocus = true) => {
-      menu.hidden = true;
-      toggle.setAttribute('aria-expanded', 'false');
-      toggle.setAttribute('aria-label', 'Abrir menu');
-      document.body.classList.remove('menu-open');
-      setInert(false);
-      if (returnFocus) toggle.focus({ preventScroll: true });
-    };
+		const closeMenu = (returnFocus = true) => {
+			menu.hidden = true;
+			toggle.setAttribute('aria-expanded', 'false');
+			toggle.setAttribute('aria-label', 'Abrir menu');
+			document.body.classList.remove('menu-open');
+			setInert(false);
+			if (returnFocus) toggle.focus({ preventScroll: true });
+		};
 
-    const openMenu = () => {
-      menu.hidden = false;
-      toggle.setAttribute('aria-expanded', 'true');
-      toggle.setAttribute('aria-label', 'Fechar menu');
-      document.body.classList.add('menu-open');
-      setInert(true);
-      menuLinks()[0]?.focus({ preventScroll: true });
-    };
+		const openMenu = () => {
+			menu.hidden = false;
+			toggle.setAttribute('aria-expanded', 'true');
+			toggle.setAttribute('aria-label', 'Fechar menu');
+			document.body.classList.add('menu-open');
+			setInert(true);
+			menuLinks()[0]?.focus({ preventScroll: true });
+		};
 
-    const onToggle = () => (menu.hidden ? openMenu() : closeMenu());
-    const onScroll = () => header.classList.toggle('bg-night', window.scrollY > 8);
-    const onDesktopChange = (event) => {
-      if (event.matches && !menu.hidden) closeMenu(false);
-    };
-    const onKeydown = (event) => {
-      if (menu.hidden) return;
-      if (event.key === 'Escape') {
-        event.preventDefault();
-        closeMenu();
-        return;
-      }
-      if (event.key !== 'Tab') return;
-      const focusable = [toggle, ...menuLinks()];
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
-      if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault();
-        last.focus();
-      } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault();
-        first.focus();
-      }
-    };
-    const onMenuClick = (event) => {
-      if (event.target instanceof Element && event.target.closest('a')) closeMenu(false);
-    };
-    const cleanup = () => {
-      toggle.removeEventListener('click', onToggle);
-      window.removeEventListener('scroll', onScroll);
-      desktop.removeEventListener('change', onDesktopChange);
-      document.removeEventListener('keydown', onKeydown);
-      menu.removeEventListener('click', onMenuClick);
-      closeMenu(false);
-    };
+		const onToggle = () => (menu.hidden ? openMenu() : closeMenu());
+		const onScroll = () =>
+			header.classList.toggle('bg-night', window.scrollY > 8);
+		const onDesktopChange = (event) => {
+			if (event.matches && !menu.hidden) closeMenu(false);
+		};
+		const onKeydown = (event) => {
+			if (menu.hidden) return;
+			if (event.key === 'Escape') {
+				event.preventDefault();
+				closeMenu();
+				return;
+			}
+			if (event.key !== 'Tab') return;
+			const focusable = [toggle, ...menuLinks()];
+			const first = focusable[0];
+			const last = focusable[focusable.length - 1];
+			if (event.shiftKey && document.activeElement === first) {
+				event.preventDefault();
+				last.focus();
+			} else if (!event.shiftKey && document.activeElement === last) {
+				event.preventDefault();
+				first.focus();
+			}
+		};
+		const onMenuClick = (event) => {
+			if (event.target instanceof Element && event.target.closest('a'))
+				closeMenu(false);
+		};
+		const cleanup = () => {
+			toggle.removeEventListener('click', onToggle);
+			window.removeEventListener('scroll', onScroll);
+			desktop.removeEventListener('change', onDesktopChange);
+			document.removeEventListener('keydown', onKeydown);
+			menu.removeEventListener('click', onMenuClick);
+			closeMenu(false);
+		};
 
-    toggle.addEventListener('click', onToggle);
-    window.addEventListener('scroll', onScroll, { passive: true });
-    desktop.addEventListener('change', onDesktopChange);
-    document.addEventListener('keydown', onKeydown);
-    menu.addEventListener('click', onMenuClick);
-    window.addEventListener('pagehide', cleanup, { once: true });
-    onScroll();
-  })();
+		toggle.addEventListener('click', onToggle);
+		window.addEventListener('scroll', onScroll, { passive: true });
+		desktop.addEventListener('change', onDesktopChange);
+		document.addEventListener('keydown', onKeydown);
+		menu.addEventListener('click', onMenuClick);
+		window.addEventListener('pagehide', cleanup, { once: true });
+		onScroll();
+	})();
 </script>
 
 <style is:global>
-  @keyframes menu-in {
-    from { opacity: 0; transform: translateY(-12px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+	@keyframes menu-in {
+		from {
+			opacity: 0;
+			transform: translateY(-12px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
 
-  body.menu-open { overflow: hidden; }
+	body.menu-open {
+		overflow: hidden;
+	}
 
-  .js #header { position: fixed; }
+	.js #header {
+		position: fixed;
+	}
 
-  .menu-open #header { background: var(--confirma-marca-noite); }
+	.menu-open #header {
+		background: var(--confirma-marca-noite);
+	}
 
-  #menu-toggle[aria-expanded='true'] > span {
-    height: 18px;
-    border: 0;
-    transform: rotate(45deg);
-  }
+	#menu-toggle[aria-expanded='true'] > span {
+		height: 18px;
+		border: 0;
+		transform: rotate(45deg);
+	}
 
-  #menu-toggle[aria-expanded='true'] > span::before,
-  #menu-toggle[aria-expanded='true'] > span::after {
-    position: absolute;
-    background: currentColor;
-    content: '';
-  }
+	#menu-toggle[aria-expanded='true'] > span::before,
+	#menu-toggle[aria-expanded='true'] > span::after {
+		position: absolute;
+		background: currentColor;
+		content: '';
+	}
 
-  #menu-toggle[aria-expanded='true'] > span::before {
-    top: 8px;
-    left: 0;
-    width: 18px;
-    height: 1.5px;
-  }
+	#menu-toggle[aria-expanded='true'] > span::before {
+		top: 8px;
+		left: 0;
+		width: 18px;
+		height: 1.5px;
+	}
 
-  #menu-toggle[aria-expanded='true'] > span::after {
-    top: 0;
-    left: 8px;
-    width: 1.5px;
-    height: 18px;
-  }
+	#menu-toggle[aria-expanded='true'] > span::after {
+		top: 0;
+		left: 8px;
+		width: 1.5px;
+		height: 18px;
+	}
 
-  @media (prefers-reduced-motion: reduce) {
-    #mobile-menu { animation: none; }
-  }
+	@media (prefers-reduced-motion: reduce) {
+		#mobile-menu {
+			animation: none;
+		}
+	}
 </style>

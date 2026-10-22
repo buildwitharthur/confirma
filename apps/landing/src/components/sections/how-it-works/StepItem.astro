@@ -2,33 +2,32 @@
 import type { Step } from './steps';
 
 interface Props {
-  step: Step;
+	step: Step;
 }
 
 const { step } = Astro.props;
 ---
 
 <div class="grid grid-cols-[44px_minmax(0,1fr)] items-start gap-x-4">
-  <span
-    class="row-[1/span_3] grid size-11 place-items-center rounded-full border border-light-green-gray bg-mist font-mono text-sm font-medium text-brand"
-    aria-hidden="true"
-  >
-    {step.number}
-  </span>
-  <h3
-    class="col-start-2 pt-[9px] font-display text-xl leading-[1.3] font-semibold tracking-[-0.005em] text-balance"
-  >
-    <span class="sr-only">Etapa {step.number}: </span>{step.title}
-  </h3>
-  <p class="col-start-2 mt-2 text-base leading-[1.55] text-pretty text-dark-green-gray">
-    {
-      step.description.map((part) =>
-        typeof part === 'string' ? (
-          part
-        ) : (
-          <code class="font-mono text-[0.875em] font-medium text-dark-green">{part.code}</code>
-        ),
-      )
-    }
-  </p>
+	<span
+		class="row-[1/span_3] grid size-11 place-items-center rounded-full border border-light-green-gray bg-mist font-mono text-sm font-medium text-brand"
+		aria-hidden="true"
+	>
+		{step.number}
+	</span>
+	<h3 class="col-start-2 pt-[9px] font-display text-xl leading-[1.3] font-semibold tracking-[-0.005em] text-balance">
+		<span class="sr-only">Etapa {step.number}: </span>
+		{step.title}
+	</h3>
+	<p class="col-start-2 mt-2 text-base leading-[1.55] text-pretty text-dark-green-gray">
+		{step.description.map((part) =>
+			typeof part === 'string' ? (
+				part
+			) : (
+				<code class="font-mono text-[0.875em] font-medium text-dark-green">
+					{part.code}
+				</code>
+			),
+		)}
+	</p>
 </div>

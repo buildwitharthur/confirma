@@ -1,23 +1,23 @@
 ---
 interface Props {
-  captionId: string;
-  caption: string;
+	captionId: string;
+	caption: string;
 }
 
 const { captionId, caption } = Astro.props;
 ---
 
 <figure
-  aria-labelledby={captionId}
-  class="flex min-w-0 flex-1 flex-col rounded-[20px] p-3 sm:p-4 lg:p-5 [background:radial-gradient(rgb(157_181_172/0.24)_1px,transparent_1.2px)_0_0/18px_18px,var(--confirma-marca-nevoa)] [box-shadow:inset_0_0_0_1px_var(--confirma-apoio-cinza-verde-claro),inset_0_2px_6px_-2px_rgb(11_31_26/0.1)]"
+	aria-labelledby={captionId}
+	class="flex min-w-0 flex-1 flex-col rounded-[20px] p-3 sm:p-4 lg:p-5 [background:radial-gradient(rgb(157_181_172/0.24)_1px,transparent_1.2px)_0_0/18px_18px,var(--confirma-marca-nevoa)] [box-shadow:inset_0_0_0_1px_var(--confirma-apoio-cinza-verde-claro),inset_0_2px_6px_-2px_rgb(11_31_26/0.1)]"
 >
-  <div class="grid gap-3 sm:gap-0 sm:px-2 sm:pt-2">
-    <slot />
-  </div>
-  <figcaption
-    id={captionId}
-    class="mt-auto max-w-[60ch] px-1 pt-4 pb-0.5 text-[0.8125rem] leading-normal text-pretty text-dark-green-gray"
-  >
-    {caption}
-  </figcaption>
+	<div class="grid gap-3 sm:gap-0 sm:px-2 sm:pt-2">
+		<slot />
+	</div>
+	<figcaption
+		id={captionId}
+		class="mt-auto max-w-[60ch] px-1 pt-4 pb-0.5 text-[0.8125rem] leading-normal text-pretty text-dark-green-gray"
+	>
+		{caption}
+	</figcaption>
 </figure>

@@ -3,46 +3,58 @@ import SystemCard from './SystemCard.astro';
 import SharedCapability from './SharedCapability.astro';
 
 const systems = [
-  { name: 'Sistema da clínica', description: 'Agenda própria', variant: 'default' },
-  { name: 'Sistema do consultório', description: 'Agenda própria', variant: 'default' },
-  { name: 'Próximo projeto', description: 'Sem reconstruir a confirmação', variant: 'next' },
+	{
+		name: 'Sistema da clínica',
+		description: 'Agenda própria',
+		variant: 'default',
+	},
+	{
+		name: 'Sistema do consultório',
+		description: 'Agenda própria',
+		variant: 'default',
+	},
+	{
+		name: 'Próximo projeto',
+		description: 'Sem reconstruir a confirmação',
+		variant: 'next',
+	},
 ] as const;
 
 const surfaceTokens = [
-  '[--aresta-clara:linear-gradient(168deg,rgb(255_255_255/0.95),var(--confirma-apoio-cinza-verde-claro)_42%,color-mix(in_srgb,var(--confirma-apoio-cinza-verde-claro)_70%,var(--confirma-apoio-cinza-verde-medio)))]',
-  '[--brilho-topo:inset_0_1px_0_rgb(255_255_255/0.9)]',
-  '[--elev-2:0_1px_2px_rgb(11_31_26/0.06),1px_8px_18px_-8px_rgb(11_31_26/0.16)]',
+	'[--aresta-clara:linear-gradient(168deg,rgb(255_255_255/0.95),var(--confirma-apoio-cinza-verde-claro)_42%,color-mix(in_srgb,var(--confirma-apoio-cinza-verde-claro)_70%,var(--confirma-apoio-cinza-verde-medio)))]',
+	'[--brilho-topo:inset_0_1px_0_rgb(255_255_255/0.9)]',
+	'[--elev-2:0_1px_2px_rgb(11_31_26/0.06),1px_8px_18px_-8px_rgb(11_31_26/0.16)]',
 ];
 ---
 
 <figure
-  aria-labelledby="reuse-caption"
-  class:list={[
-    'mt-8 rounded-[20px] border border-transparent p-4 sm:p-5 lg:mt-10',
-    '[background:linear-gradient(var(--confirma-apoio-branco),var(--confirma-apoio-branco))_padding-box,var(--aresta-clara)_border-box]',
-    '[box-shadow:var(--brilho-topo),var(--elev-2)]',
-    surfaceTokens,
-  ]}
+	aria-labelledby="reuse-caption"
+	class:list={[
+		'mt-8 rounded-[20px] border border-transparent p-4 sm:p-5 lg:mt-10',
+		'[background:linear-gradient(var(--confirma-apoio-branco),var(--confirma-apoio-branco))_padding-box,var(--aresta-clara)_border-box]',
+		'[box-shadow:var(--brilho-topo),var(--elev-2)]',
+		surfaceTokens,
+	]}
 >
-  <ul class="grid gap-2 sm:grid-cols-3" aria-label="Sistemas ilustrativos">
-    {systems.map((system) => <SystemCard {...system} />)}
-  </ul>
+	<ul class="grid gap-2 sm:grid-cols-3" aria-label="Sistemas ilustrativos">
+		{systems.map((system) => (
+			<SystemCard {...system} />
+		))}
+	</ul>
 
-  <div class="hidden h-5 grid-cols-3 sm:grid" aria-hidden="true">
-    {
-      systems.map(() => (
-        <i class="w-px justify-self-center bg-[repeating-linear-gradient(180deg,var(--confirma-apoio-verde-acinzentado)_0_3px,transparent_3px_6px)]" />
-      ))
-    }
-  </div>
+	<div class="hidden h-5 grid-cols-3 sm:grid" aria-hidden="true">
+		{systems.map(() => (
+			<i class="w-px justify-self-center bg-[repeating-linear-gradient(180deg,var(--confirma-apoio-verde-acinzentado)_0_3px,transparent_3px_6px)]" />
+		))}
+	</div>
 
-  <SharedCapability />
+	<SharedCapability />
 
-  <figcaption
-    id="reuse-caption"
-    class="mt-3.5 text-[0.8125rem] leading-normal font-normal text-dark-green-gray"
-  >
-    Representação conceitual: cada sistema mantém a própria agenda e incorpora a mesma capacidade de
-    confirmação.
-  </figcaption>
+	<figcaption
+		id="reuse-caption"
+		class="mt-3.5 text-[0.8125rem] leading-normal font-normal text-dark-green-gray"
+	>
+		Representação conceitual: cada sistema mantém a própria agenda e incorpora a
+		mesma capacidade de confirmação.
+	</figcaption>
 </figure>

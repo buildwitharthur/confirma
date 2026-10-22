@@ -3,26 +3,24 @@ import WhatsAppContent from './WhatsAppContent.astro';
 import ChatDemo from './demo/ChatDemo.astro';
 
 const surfaceTokens = [
-  '[--aresta-clara:linear-gradient(168deg,rgb(255_255_255/0.95),var(--confirma-apoio-cinza-verde-claro)_42%,color-mix(in_srgb,var(--confirma-apoio-cinza-verde-claro)_70%,var(--confirma-apoio-cinza-verde-medio)))]',
-  '[--aresta-escura:linear-gradient(168deg,rgb(255_255_255/0.13),rgb(157_181_172/0.12)_30%,rgb(11_31_26/0.6))]',
-  '[--brilho-topo:inset_0_1px_0_rgb(255_255_255/0.9)]',
-  '[--brilho-topo-escuro:inset_0_1px_0_rgb(255_255_255/0.07)]',
-  '[--elev-1:0_1px_1px_rgb(11_31_26/0.05),1px_2px_4px_-1px_rgb(11_31_26/0.07)]',
-  '[--elev-2:0_1px_2px_rgb(11_31_26/0.06),1px_8px_18px_-8px_rgb(11_31_26/0.16)]',
-  '[--elev-3:0_1px_2px_rgb(11_31_26/0.06),2px_14px_28px_-12px_rgb(11_31_26/0.16),4px_36px_64px_-28px_rgb(11_31_26/0.18)]',
-  '[--rebaixo:inset_0_1px_2px_rgb(11_31_26/0.07)]',
+	'[--aresta-clara:linear-gradient(168deg,rgb(255_255_255/0.95),var(--confirma-apoio-cinza-verde-claro)_42%,color-mix(in_srgb,var(--confirma-apoio-cinza-verde-claro)_70%,var(--confirma-apoio-cinza-verde-medio)))]',
+	'[--aresta-escura:linear-gradient(168deg,rgb(255_255_255/0.13),rgb(157_181_172/0.12)_30%,rgb(11_31_26/0.6))]',
+	'[--brilho-topo:inset_0_1px_0_rgb(255_255_255/0.9)]',
+	'[--brilho-topo-escuro:inset_0_1px_0_rgb(255_255_255/0.07)]',
+	'[--elev-1:0_1px_1px_rgb(11_31_26/0.05),1px_2px_4px_-1px_rgb(11_31_26/0.07)]',
+	'[--elev-2:0_1px_2px_rgb(11_31_26/0.06),1px_8px_18px_-8px_rgb(11_31_26/0.16)]',
+	'[--elev-3:0_1px_2px_rgb(11_31_26/0.06),2px_14px_28px_-12px_rgb(11_31_26/0.16),4px_36px_64px_-28px_rgb(11_31_26/0.18)]',
+	'[--rebaixo:inset_0_1px_2px_rgb(11_31_26/0.07)]',
 ];
 ---
 
 <section
-  id="whatsapp"
-  aria-labelledby="whatsapp-title"
-  class:list={['scroll-mt-22 py-16 md:py-24 min-[1200px]:py-30', surfaceTokens]}
+	id="whatsapp"
+	aria-labelledby="whatsapp-title"
+	class:list={['scroll-mt-22 py-16 md:py-24 min-[1200px]:py-30', surfaceTokens]}
 >
-  <div
-    class="mx-auto grid w-full max-w-[1280px] items-center gap-10 px-5 md:gap-12 md:px-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16 min-[1200px]:px-12"
-  >
-    <WhatsAppContent />
-    <ChatDemo />
-  </div>
+	<div class="mx-auto grid w-full max-w-[1280px] items-center gap-10 px-5 md:gap-12 md:px-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16 min-[1200px]:px-12">
+		<WhatsAppContent />
+		<ChatDemo />
+	</div>
 </section>

@@ -2,155 +2,156 @@
 @import './tokens.css';
 
 @theme inline {
-  --color-brand: var(--confirma-marca-verde);
-  --color-mint: var(--confirma-marca-menta);
-  --color-night: var(--confirma-marca-noite);
-  --color-mist: var(--confirma-marca-nevoa);
-  --color-white: var(--confirma-apoio-branco);
-  --color-dark-green: var(--confirma-apoio-verde-escuro);
-  --color-light-green: var(--confirma-apoio-verde-claro);
-  --color-dark-green-gray: var(--confirma-apoio-cinza-verde-escuro);
-  --color-medium-green-gray: var(--confirma-apoio-cinza-verde-medio);
-  --color-light-green-gray: var(--confirma-apoio-cinza-verde-claro);
-  --color-deep-green: var(--confirma-apoio-verde-profundo);
-  --color-green-gray: var(--confirma-apoio-cinza-verde);
-  --color-muted-green: var(--confirma-apoio-verde-acinzentado);
-  --color-amber: var(--confirma-acento-ambar);
-  --color-amber-brown: var(--confirma-acento-marrom-ambar);
-  --color-red: var(--confirma-acento-vermelho);
-  --color-coral: var(--confirma-acento-coral);
+	--color-brand: var(--confirma-marca-verde);
+	--color-mint: var(--confirma-marca-menta);
+	--color-night: var(--confirma-marca-noite);
+	--color-mist: var(--confirma-marca-nevoa);
+	--color-white: var(--confirma-apoio-branco);
+	--color-dark-green: var(--confirma-apoio-verde-escuro);
+	--color-light-green: var(--confirma-apoio-verde-claro);
+	--color-dark-green-gray: var(--confirma-apoio-cinza-verde-escuro);
+	--color-medium-green-gray: var(--confirma-apoio-cinza-verde-medio);
+	--color-light-green-gray: var(--confirma-apoio-cinza-verde-claro);
+	--color-deep-green: var(--confirma-apoio-verde-profundo);
+	--color-green-gray: var(--confirma-apoio-cinza-verde);
+	--color-muted-green: var(--confirma-apoio-verde-acinzentado);
+	--color-amber: var(--confirma-acento-ambar);
+	--color-amber-brown: var(--confirma-acento-marrom-ambar);
+	--color-red: var(--confirma-acento-vermelho);
+	--color-coral: var(--confirma-acento-coral);
 
-  --font-sans: 'Manrope', sans-serif;
-  --font-display: 'Bricolage Grotesque', sans-serif;
-  --font-mono: 'Geist Mono', monospace;
+	--font-sans: 'Manrope', sans-serif;
+	--font-display: 'Bricolage Grotesque', sans-serif;
+	--font-mono: 'Geist Mono', monospace;
 }
 
 html {
-  min-width: 320px;
-  background: var(--confirma-marca-nevoa);
-  color: var(--confirma-marca-noite);
-  overflow-x: hidden;
-  scroll-behavior: smooth;
-  scrollbar-color: var(--confirma-apoio-verde-acinzentado) var(--confirma-marca-noite);
-  scrollbar-width: thin;
+	min-width: 320px;
+	background: var(--confirma-marca-nevoa);
+	color: var(--confirma-marca-noite);
+	overflow-x: hidden;
+	scroll-behavior: smooth;
+	scrollbar-color: var(--confirma-apoio-verde-acinzentado)
+		var(--confirma-marca-noite);
+	scrollbar-width: thin;
 }
 
 body {
-  min-width: 320px;
-  margin: 0;
-  background: var(--confirma-marca-nevoa);
-  color: var(--confirma-marca-noite);
-  font-family: 'Manrope', sans-serif;
-  font-optical-sizing: auto;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+	min-width: 320px;
+	margin: 0;
+	background: var(--confirma-marca-nevoa);
+	color: var(--confirma-marca-noite);
+	font-family: 'Manrope', sans-serif;
+	font-optical-sizing: auto;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
 *,
 *::before,
 *::after {
-  box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 ::selection {
-  background: var(--confirma-marca-menta);
-  color: var(--confirma-marca-noite);
+	background: var(--confirma-marca-menta);
+	color: var(--confirma-marca-noite);
 }
 
 :where(a, button, input, select, textarea):focus-visible {
-  outline: 3px solid var(--confirma-marca-menta);
-  outline-offset: 2px;
+	outline: 3px solid var(--confirma-marca-menta);
+	outline-offset: 2px;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-  }
+	*,
+	*::before,
+	*::after {
+		scroll-behavior: auto !important;
+		transition-duration: 0.01ms !important;
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+	}
 }
 
 /* Use .select-wrapper around .select-control for a consistent native arrow. */
 .select-wrapper {
-  position: relative;
-  display: block;
+	position: relative;
+	display: block;
 }
 
 .select-wrapper::after {
-  position: absolute;
-  top: 50%;
-  right: 1rem;
-  width: 0.5rem;
-  height: 0.5rem;
-  border-right: 2px solid currentColor;
-  border-bottom: 2px solid currentColor;
-  color: var(--confirma-apoio-cinza-verde-escuro);
-  content: '';
-  pointer-events: none;
-  transform: translateY(-65%) rotate(45deg);
+	position: absolute;
+	top: 50%;
+	right: 1rem;
+	width: 0.5rem;
+	height: 0.5rem;
+	border-right: 2px solid currentColor;
+	border-bottom: 2px solid currentColor;
+	color: var(--confirma-apoio-cinza-verde-escuro);
+	content: '';
+	pointer-events: none;
+	transform: translateY(-65%) rotate(45deg);
 }
 
 .select-control {
-  width: 100%;
-  min-height: 2.75rem;
-  padding: 0.625rem 2.75rem 0.625rem 0.875rem;
-  appearance: none;
-  -webkit-appearance: none;
-  border: 1px solid var(--confirma-apoio-cinza-verde-claro);
-  border-radius: 0.625rem;
-  background: var(--confirma-apoio-branco);
-  color: var(--confirma-marca-noite);
-  font: inherit;
+	width: 100%;
+	min-height: 2.75rem;
+	padding: 0.625rem 2.75rem 0.625rem 0.875rem;
+	appearance: none;
+	-webkit-appearance: none;
+	border: 1px solid var(--confirma-apoio-cinza-verde-claro);
+	border-radius: 0.625rem;
+	background: var(--confirma-apoio-branco);
+	color: var(--confirma-marca-noite);
+	font: inherit;
 }
 
 .select-control:disabled {
-  cursor: not-allowed;
-  background: var(--confirma-marca-nevoa);
-  color: var(--confirma-apoio-cinza-verde);
-  opacity: 0.75;
+	cursor: not-allowed;
+	background: var(--confirma-marca-nevoa);
+	color: var(--confirma-apoio-cinza-verde);
+	opacity: 0.75;
 }
 
 .select-control[aria-invalid='true'],
 .select-control:user-invalid {
-  border-color: var(--confirma-acento-vermelho);
+	border-color: var(--confirma-acento-vermelho);
 }
 
 .select-control:focus-visible {
-  border-color: var(--confirma-marca-verde);
+	border-color: var(--confirma-marca-verde);
 }
 
 .select-control[multiple] {
-  min-height: 6rem;
-  padding: 0.625rem 0.875rem;
-  appearance: auto;
-  -webkit-appearance: auto;
+	min-height: 6rem;
+	padding: 0.625rem 0.875rem;
+	appearance: auto;
+	-webkit-appearance: auto;
 }
 
 .select-wrapper:has(.select-control[multiple])::after {
-  display: none;
+	display: none;
 }
 
 /* Fallback for engines without scrollbar-color (Safari); elsewhere the standard properties on html apply. */
 @supports not (scrollbar-color: auto) {
-  html::-webkit-scrollbar {
-    width: 0.625rem;
-  }
+	html::-webkit-scrollbar {
+		width: 0.625rem;
+	}
 
-  html::-webkit-scrollbar-track {
-    background: var(--confirma-marca-noite);
-  }
+	html::-webkit-scrollbar-track {
+		background: var(--confirma-marca-noite);
+	}
 
-  html::-webkit-scrollbar-thumb {
-    border: 2px solid var(--confirma-marca-noite);
-    border-radius: 999px;
-    background: var(--confirma-apoio-verde-acinzentado);
-  }
+	html::-webkit-scrollbar-thumb {
+		border: 2px solid var(--confirma-marca-noite);
+		border-radius: 999px;
+		background: var(--confirma-apoio-verde-acinzentado);
+	}
 
-  html::-webkit-scrollbar-thumb:hover {
-    background: var(--confirma-apoio-cinza-verde-medio);
-  }
+	html::-webkit-scrollbar-thumb:hover {
+		background: var(--confirma-apoio-cinza-verde-medio);
+	}
 }

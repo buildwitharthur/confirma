@@ -1,32 +1,30 @@
 {
-  "name": "confirma",
-  "version": "0.0.0",
-  "private": true,
-  "packageManager": "pnpm@12.3.4",
-  "engines": {
-    "node": ">=24.20.0"
-  },
-  "scripts": {
-    "dev": "turbo run dev",
-    "build": "turbo run build",
-    "lint": "eslint . --max-warnings=0",
-    "lint:fix": "eslint . --fix --max-warnings=0",
-    "format": "prettier . --write",
-    "format:check": "prettier . --check",
-    "typecheck": "turbo run typecheck",
-    "check": "pnpm lint && pnpm format:check && pnpm typecheck"
-  },
-  "devDependencies": {
-    "@eslint/js": "^9.39.1",
-    "@types/node": "^24.10.1",
-    "eslint": "^9.39.1",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-astro": "^3.2.1",
-    "globals": "^16.5.0",
-    "prettier": "^3.7.4",
-    "prettier-plugin-astro": "^1.1.1",
-    "turbo": "^2.6.0",
-    "typescript": "^5.9.3",
-    "typescript-eslint": "^8.46.4"
-  }
+	"name": "confirma",
+	"version": "0.0.0",
+	"private": true,
+	"packageManager": "pnpm@12.3.4",
+	"engines": {
+		"node": ">=24.20.0"
+	},
+	"scripts": {
+		"dev": "turbo run dev",
+		"build": "turbo run build",
+		"lint": "eslint . --max-warnings=0",
+		"format": "prettier . --write",
+		"typecheck": "turbo run typecheck",
+		"check": "pnpm lint && prettier . --check && pnpm typecheck"
+	},
+	"devDependencies": {
+		"@eslint/js": "^9.39.1",
+		"@types/node": "^24.10.1",
+		"eslint": "^9.39.1",
+		"eslint-config-prettier": "^10.1.8",
+		"eslint-plugin-astro": "^3.2.1",
+		"globals": "^16.5.0",
+		"prettier": "^3.7.4",
+		"prettier-plugin-astro": "^1.1.1",
+		"turbo": "^2.6.0",
+		"typescript": "^5.9.3",
+		"typescript-eslint": "^8.46.4"
+	}
 }

@@ -2,16 +2,32 @@
 import FooterNavigation from './FooterNavigation.astro';
 ---
 
-<footer id="rodape" class="border-t border-deep-green bg-night pt-14 pb-6 text-white lg:pt-20">
-  <div class="mx-auto w-full max-w-[1120px] px-5 md:px-8 min-[1200px]:px-12">
-    <div class="flex flex-wrap justify-between gap-8">
-      <div>
-        <a class="inline-flex min-h-11 items-center" href="#inicio" aria-label="Confirma — voltar ao início">
-          <img class="block h-14 w-[145px] max-w-full" src="/confirma-logo-branco.svg" width="145" height="56" alt="Confirma" loading="lazy" />
-        </a>
-        <p class="text-sm leading-[1.6] text-medium-green-gray">Agendou, confirmou.</p>
-      </div>
-      <FooterNavigation />
-    </div>
-  </div>
+<footer
+	id="rodape"
+	class="border-t border-deep-green bg-night pt-14 pb-6 text-white lg:pt-20"
+>
+	<div class="mx-auto w-full max-w-[1120px] px-5 md:px-8 min-[1200px]:px-12">
+		<div class="flex flex-wrap justify-between gap-8">
+			<div>
+				<a
+					class="inline-flex min-h-11 items-center"
+					href="#inicio"
+					aria-label="Confirma — voltar ao início"
+				>
+					<img
+						class="block h-14 w-[145px] max-w-full"
+						src="/confirma-logo-branco.svg"
+						width="145"
+						height="56"
+						alt="Confirma"
+						loading="lazy"
+					/>
+				</a>
+				<p class="text-sm leading-[1.6] text-medium-green-gray">
+					Agendou, confirmou.
+				</p>
+			</div>
+			<FooterNavigation />
+		</div>
+	</div>
 </footer>

@@ -1,9 +1,11 @@
 {
-  "tabWidth": 2,
-  "useTabs": false,
-  "singleQuote": true,
-  "semi": true,
-  "trailingComma": "all",
-  "printWidth": 100,
-  "endOfLine": "lf"
+	"$schema": "https://json.schemastore.org/prettierrc",
+	"singleQuote": true,
+	"plugins": ["prettier-plugin-astro"],
+	"overrides": [
+		{
+			"files": "*.astro",
+			"options": { "parser": "astro" }
+		}
+	]
 }

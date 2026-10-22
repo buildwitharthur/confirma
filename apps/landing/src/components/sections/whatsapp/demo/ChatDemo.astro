@@ -3,40 +3,43 @@ import ChatWindow from './ChatWindow.astro';
 import ChatEvent from './ChatEvent.astro';
 ---
 
-<figure aria-labelledby="chat-caption" class="relative mx-auto w-full max-w-[560px] min-w-0">
-  <div class="relative isolate">
-    <ChatWindow />
-  </div>
-  <ChatEvent />
-  <figcaption
-    id="chat-caption"
-    class="mt-4 max-w-[60ch] text-[0.8125rem] leading-normal text-pretty text-dark-green-gray"
-  >
-    Exemplo ilustrativo da conversa. As respostas são mensagens de texto; não há botões nem
-    interpretação livre.
-  </figcaption>
+<figure
+	aria-labelledby="chat-caption"
+	class="relative mx-auto w-full max-w-[560px] min-w-0"
+>
+	<div class="relative isolate">
+		<ChatWindow />
+	</div>
+	<ChatEvent />
+	<figcaption
+		id="chat-caption"
+		class="mt-4 max-w-[60ch] text-[0.8125rem] leading-normal text-pretty text-dark-green-gray"
+	>
+		Exemplo ilustrativo da conversa. As respostas são mensagens de texto; não há
+		botões nem interpretação livre.
+	</figcaption>
 </figure>
 
 <style is:global>
-  @keyframes whatsapp-step {
-    from {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-  }
+	@keyframes whatsapp-step {
+		from {
+			opacity: 0;
+			transform: translateY(10px);
+		}
+	}
 
-  @keyframes whatsapp-pop {
-    from {
-      opacity: 0;
-      transform: translateY(8px) scale(0.96);
-    }
-  }
+	@keyframes whatsapp-pop {
+		from {
+			opacity: 0;
+			transform: translateY(8px) scale(0.96);
+		}
+	}
 
-  @keyframes whatsapp-confirm {
-    from {
-      background-color: var(--confirma-apoio-branco);
-      border-color: var(--confirma-apoio-cinza-verde-claro);
-      color: var(--confirma-apoio-cinza-verde-escuro);
-    }
-  }
+	@keyframes whatsapp-confirm {
+		from {
+			background-color: var(--confirma-apoio-branco);
+			border-color: var(--confirma-apoio-cinza-verde-claro);
+			color: var(--confirma-apoio-cinza-verde-escuro);
+		}
+	}
 </style>

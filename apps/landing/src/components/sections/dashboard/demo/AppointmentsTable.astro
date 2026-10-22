@@ -3,58 +3,64 @@ import AppointmentRow from './AppointmentRow.astro';
 import type { Props as Appointment } from './AppointmentRow.astro';
 
 const thBase =
-  'border-b border-light-green-gray px-2 py-2.5 text-left text-[0.6875rem] font-semibold tracking-[0.06em] whitespace-nowrap text-dark-green-gray uppercase [background:linear-gradient(180deg,transparent_40%,color-mix(in_srgb,var(--confirma-marca-nevoa)_60%,transparent))] sm:px-3';
+	'border-b border-light-green-gray px-2 py-2.5 text-left text-[0.6875rem] font-semibold tracking-[0.06em] whitespace-nowrap text-dark-green-gray uppercase [background:linear-gradient(180deg,transparent_40%,color-mix(in_srgb,var(--confirma-marca-nevoa)_60%,transparent))] sm:px-3';
 
 const appointments: Omit<Appointment, 'at'>[] = [
-  {
-    id: 'agenda-8472',
-    time: '20/10 · 14:00',
-    state: 'confirmed',
-    event: 'appointment.confirmed',
-    highlighted: true,
-  },
-  { id: 'agenda-8473', time: '20/10 · 14:30', state: 'sent' },
-  { id: 'agenda-8474', time: '20/10 · 15:00', state: 'scheduled' },
-  {
-    id: 'agenda-8475',
-    time: '21/10 · 09:00',
-    state: 'canceled',
-    event: 'appointment.canceled',
-    meta: 'canceled_by: contact',
-  },
-  {
-    id: 'agenda-8476',
-    time: '21/10 · 10:00',
-    state: 'no_response',
-    event: 'appointment.no_response',
-  },
-  {
-    id: 'agenda-8477',
-    time: '21/10 · 11:00',
-    state: 'failed',
-    event: 'appointment.failed',
-    meta: 'invalid_number',
-  },
+	{
+		id: 'agenda-8472',
+		time: '20/10 · 14:00',
+		state: 'confirmed',
+		event: 'appointment.confirmed',
+		highlighted: true,
+	},
+	{ id: 'agenda-8473', time: '20/10 · 14:30', state: 'sent' },
+	{ id: 'agenda-8474', time: '20/10 · 15:00', state: 'scheduled' },
+	{
+		id: 'agenda-8475',
+		time: '21/10 · 09:00',
+		state: 'canceled',
+		event: 'appointment.canceled',
+		meta: 'canceled_by: contact',
+	},
+	{
+		id: 'agenda-8476',
+		time: '21/10 · 10:00',
+		state: 'no_response',
+		event: 'appointment.no_response',
+	},
+	{
+		id: 'agenda-8477',
+		time: '21/10 · 11:00',
+		state: 'failed',
+		event: 'appointment.failed',
+		meta: 'invalid_number',
+	},
 ];
 ---
 
 <table class="mt-4 w-full border-collapse text-sm">
-  <caption class="sr-only">
-    Exemplo conceitual de agendamentos, um para cada estado documentado
-  </caption>
-  <thead>
-    <tr>
-      <th scope="col" class:list={[thBase, 'pl-1']}>Agendamento</th>
-      <th scope="col" class:list={[thBase, 'hidden sm:table-cell']}>Horário</th>
-      <th scope="col" class={thBase}>Estado</th>
-      <th scope="col" class:list={[thBase, 'hidden pr-1 sm:table-cell']}>Evento enviado</th>
-    </tr>
-  </thead>
-  <tbody>
-    {
-      appointments.map((appointment, index) => (
-        <AppointmentRow {...appointment} at={`${200 + index * 70}ms`} />
-      ))
-    }
-  </tbody>
+	<caption class="sr-only">
+		Exemplo conceitual de agendamentos, um para cada estado documentado
+	</caption>
+	<thead>
+		<tr>
+			<th scope="col" class:list={[thBase, 'pl-1']}>
+				Agendamento
+			</th>
+			<th scope="col" class:list={[thBase, 'hidden sm:table-cell']}>
+				Horário
+			</th>
+			<th scope="col" class={thBase}>
+				Estado
+			</th>
+			<th scope="col" class:list={[thBase, 'hidden pr-1 sm:table-cell']}>
+				Evento enviado
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		{appointments.map((appointment, index) => (
+			<AppointmentRow {...appointment} at={`${200 + index * 70}ms`} />
+		))}
+	</tbody>
 </table>

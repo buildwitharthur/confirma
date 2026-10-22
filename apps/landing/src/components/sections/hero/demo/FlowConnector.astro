@@ -1,8 +1,8 @@
 ---
 interface Props {
-  label: string;
-  direction: 'to-chat' | 'to-result';
-  delay: string;
+	label: string;
+	direction: 'to-chat' | 'to-result';
+	delay: string;
 }
 
 const { label, direction, delay } = Astro.props;
@@ -10,25 +10,25 @@ const isToChat = direction === 'to-chat';
 ---
 
 <div
-  aria-hidden="true"
-  class:list={[
-    'relative h-14 w-full justify-self-center lg:h-10 lg:w-auto lg:self-center lg:justify-self-stretch',
-    "before:absolute before:top-0 before:bottom-0 before:left-1/2 before:w-px before:content-[''] before:[background:repeating-linear-gradient(180deg,var(--confirma-apoio-verde-acinzentado)_0_4px,transparent_4px_8px)]",
-    'lg:before:top-1/2 lg:before:right-0 lg:before:bottom-auto lg:before:left-0 lg:before:h-px lg:before:w-auto lg:before:[background:repeating-linear-gradient(90deg,var(--confirma-apoio-verde-acinzentado)_0_4px,transparent_4px_8px)]',
-    isToChat ? 'lg:mr-[-20px] lg:ml-[-1px]' : 'lg:mr-[-1px] lg:ml-[-20px]',
-  ]}
+	aria-hidden="true"
+	class:list={[
+		'relative h-14 w-full justify-self-center lg:h-10 lg:w-auto lg:self-center lg:justify-self-stretch',
+		"before:absolute before:top-0 before:bottom-0 before:left-1/2 before:w-px before:content-[''] before:[background:repeating-linear-gradient(180deg,var(--confirma-apoio-verde-acinzentado)_0_4px,transparent_4px_8px)]",
+		'lg:before:top-1/2 lg:before:right-0 lg:before:bottom-auto lg:before:left-0 lg:before:h-px lg:before:w-auto lg:before:[background:repeating-linear-gradient(90deg,var(--confirma-apoio-verde-acinzentado)_0_4px,transparent_4px_8px)]',
+		isToChat ? 'lg:mr-[-20px] lg:ml-[-1px]' : 'lg:mr-[-1px] lg:ml-[-20px]',
+	]}
 >
-  <i
-    style={`--at: ${delay}`}
-    class="absolute top-0 bottom-0 left-1/2 ml-[-0.25px] w-[1.5px] origin-top animate-[hero-draw-y_520ms_cubic-bezier(0.2,0.8,0.2,1)_var(--at)_backwards] bg-[linear-gradient(180deg,rgb(61_220_151/0),var(--confirma-marca-menta))] not-italic after:absolute after:bottom-px after:left-1/2 after:ml-[-3.5px] after:size-[7px] after:rotate-45 after:border-r-[1.5px] after:border-b-[1.5px] after:border-mint after:content-[''] motion-reduce:animate-none lg:top-1/2 lg:right-0 lg:bottom-auto lg:left-0 lg:mt-[-0.25px] lg:ml-0 lg:h-[1.5px] lg:w-auto lg:origin-left lg:animate-[hero-draw-x_520ms_cubic-bezier(0.2,0.8,0.2,1)_var(--at)_backwards] lg:bg-[linear-gradient(90deg,rgb(61_220_151/0),var(--confirma-marca-menta))] lg:after:top-1/2 lg:after:right-px lg:after:bottom-auto lg:after:left-auto lg:after:mt-[-3.5px] lg:after:ml-0 lg:after:-rotate-45 lg:motion-reduce:animate-none"
-  ></i>
-  <span
-    class:list={[
-      'absolute top-1/2 left-[calc(50%+14px)] -translate-y-1/2 rounded-full border border-deep-green bg-night px-2 py-[5px] font-mono text-[0.6875rem] leading-none font-medium whitespace-nowrap text-light-green-gray',
-      'lg:top-auto lg:bottom-[calc(50%+10px)] lg:left-1/2 lg:-translate-x-1/2 lg:translate-y-0',
-      isToChat ? 'lg:ml-[-10px]' : 'lg:ml-[10px]',
-    ]}
-  >
-    {label}
-  </span>
+	<i
+		style={`--at: ${delay}`}
+		class="absolute top-0 bottom-0 left-1/2 ml-[-0.25px] w-[1.5px] origin-top animate-[hero-draw-y_520ms_cubic-bezier(0.2,0.8,0.2,1)_var(--at)_backwards] bg-[linear-gradient(180deg,rgb(61_220_151/0),var(--confirma-marca-menta))] not-italic after:absolute after:bottom-px after:left-1/2 after:ml-[-3.5px] after:size-[7px] after:rotate-45 after:border-r-[1.5px] after:border-b-[1.5px] after:border-mint after:content-[''] motion-reduce:animate-none lg:top-1/2 lg:right-0 lg:bottom-auto lg:left-0 lg:mt-[-0.25px] lg:ml-0 lg:h-[1.5px] lg:w-auto lg:origin-left lg:animate-[hero-draw-x_520ms_cubic-bezier(0.2,0.8,0.2,1)_var(--at)_backwards] lg:bg-[linear-gradient(90deg,rgb(61_220_151/0),var(--confirma-marca-menta))] lg:after:top-1/2 lg:after:right-px lg:after:bottom-auto lg:after:left-auto lg:after:mt-[-3.5px] lg:after:ml-0 lg:after:-rotate-45 lg:motion-reduce:animate-none"
+	></i>
+	<span
+		class:list={[
+			'absolute top-1/2 left-[calc(50%+14px)] -translate-y-1/2 rounded-full border border-deep-green bg-night px-2 py-[5px] font-mono text-[0.6875rem] leading-none font-medium whitespace-nowrap text-light-green-gray',
+			'lg:top-auto lg:bottom-[calc(50%+10px)] lg:left-1/2 lg:-translate-x-1/2 lg:translate-y-0',
+			isToChat ? 'lg:ml-[-10px]' : 'lg:ml-[10px]',
+		]}
+	>
+		{label}
+	</span>
 </div>

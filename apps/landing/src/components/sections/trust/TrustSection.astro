@@ -3,43 +3,41 @@ import TrustCard from './TrustCard.astro';
 ---
 
 <section
-  id="confiabilidade"
-  aria-labelledby="trust-title"
-  class="scroll-mt-22 py-16 md:py-24 min-[1200px]:py-30"
+	id="confiabilidade"
+	aria-labelledby="trust-title"
+	class="scroll-mt-22 py-16 md:py-24 min-[1200px]:py-30"
 >
-  <div class="mx-auto w-full max-w-[1120px] px-5 md:px-8 min-[1200px]:px-12">
-    <div class="max-w-[720px]">
-      <p
-        class="mb-4 flex items-center gap-2.5 text-xs leading-[1.2] font-semibold tracking-[0.09em] text-brand uppercase"
-      >
-        Confiabilidade e privacidade
-      </p>
-      <h2
-        id="trust-title"
-        class="max-w-[24ch] font-display text-[clamp(1.875rem,1.35rem+2.3vw,2.5rem)] leading-[1.12] font-semibold tracking-[-0.012em] text-balance md:text-[clamp(2.25rem,1.3rem+2vw,2.875rem)]"
-      >
-        Controle sobre cada etapa da operação.
-      </h2>
-      <p
-        class="mt-4 max-w-[65ch] text-[1.0625rem] leading-[1.6] text-pretty text-dark-green-gray md:mt-5 md:text-[1.125rem]"
-      >
-        Como o Confirma separa contas, evita duplicidades e lida com falhas de envio.
-      </p>
-    </div>
+	<div class="mx-auto w-full max-w-[1120px] px-5 md:px-8 min-[1200px]:px-12">
+		<div class="max-w-[720px]">
+			<p class="mb-4 flex items-center gap-2.5 text-xs leading-[1.2] font-semibold tracking-[0.09em] text-brand uppercase">
+				Confiabilidade e privacidade
+			</p>
+			<h2
+				id="trust-title"
+				class="max-w-[24ch] font-display text-[clamp(1.875rem,1.35rem+2.3vw,2.5rem)] leading-[1.12] font-semibold tracking-[-0.012em] text-balance md:text-[clamp(2.25rem,1.3rem+2vw,2.875rem)]"
+			>
+				Controle sobre cada etapa da operação.
+			</h2>
+			<p class="mt-4 max-w-[65ch] text-[1.0625rem] leading-[1.6] text-pretty text-dark-green-gray md:mt-5 md:text-[1.125rem]">
+				Como o Confirma separa contas, evita duplicidades e lida com falhas de
+				envio.
+			</p>
+		</div>
 
-    <div class="mt-10 grid gap-4 md:mt-12 md:gap-6 lg:grid-cols-3">
-      <TrustCard title="Isolamento e privacidade">
-        Dados separados por conta, prazos definidos de retenção e exclusão, e bloqueio de novas
-        mensagens quando o contato envia <code>PARAR</code>.
-      </TrustCard>
-      <TrustCard title="Reenvios sem duplicidade">
-        Reenviar o mesmo <code>external_id</code> na conta não cria um segundo agendamento. Cada
-        evento traz identificador e <code>sequence</code> para ordenar os estados.
-      </TrustCard>
-      <TrustCard title="Novas tentativas registradas">
-        Mensagens e webhooks que falham recebem novas tentativas em intervalos crescentes, e cada
-        tentativa fica no histórico.
-      </TrustCard>
-    </div>
-  </div>
+		<div class="mt-10 grid gap-4 md:mt-12 md:gap-6 lg:grid-cols-3">
+			<TrustCard title="Isolamento e privacidade">
+				Dados separados por conta, prazos definidos de retenção e exclusão, e
+				bloqueio de novas mensagens quando o contato envia <code>PARAR</code>.
+			</TrustCard>
+			<TrustCard title="Reenvios sem duplicidade">
+				Reenviar o mesmo <code>external_id</code> na conta não cria um segundo
+				agendamento. Cada evento traz identificador e <code>sequence</code> para
+				ordenar os estados.
+			</TrustCard>
+			<TrustCard title="Novas tentativas registradas">
+				Mensagens e webhooks que falham recebem novas tentativas em intervalos
+				crescentes, e cada tentativa fica no histórico.
+			</TrustCard>
+		</div>
+	</div>
 </section>
