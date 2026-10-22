@@ -3,10 +3,9 @@ import DemoFrame from './DemoFrame.astro';
 import FlowHead from './FlowHead.astro';
 
 const fields = [
-	['external_id', 'test-001'],
+	['external_id', 'agenda-8472'],
 	['status', 'confirmed'],
 	['sequence', '3'],
-	['test', 'true'],
 ] as const;
 
 const alternativeEvents = [
@@ -23,7 +22,7 @@ const codeChip =
 
 <DemoFrame
 	captionId="how-caption-webhook"
-	caption="Trecho ilustrativo do evento de teste, não o payload completo."
+	caption="Trecho ilustrativo do evento, não o payload completo."
 >
 	<article
 		aria-label="Evento de resultado enviado por webhook"

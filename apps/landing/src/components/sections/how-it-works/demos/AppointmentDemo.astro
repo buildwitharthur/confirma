@@ -3,22 +3,21 @@ import DemoFrame from './DemoFrame.astro';
 import FlowHead from './FlowHead.astro';
 
 const request = [
-	['external_id', 'test-001'],
+	['external_id', 'agenda-8472'],
 	['contact.name', 'Integração'],
 	['contact.phone', '+5511999999999'],
 	['scheduled_at', '2026-10-20T14:00:00-03:00'],
-	['test', 'true'],
 ] as const;
 
 const response = [
-	['external_id', 'test-001'],
+	['external_id', 'agenda-8472'],
 	['status', 'scheduled'],
 ] as const;
 ---
 
 <DemoFrame
 	captionId="how-caption-appointment"
-	caption="Requisição simplificada de um agendamento de teste, com dados fictícios."
+	caption="Requisição simplificada de um agendamento, com dados fictícios."
 >
 	<article
 		aria-label="Requisição do sistema cliente"
