@@ -1,6 +1,6 @@
 # Confirma
 
-Monorepo do Confirma, preparado para receber as aplicações e pacotes definidos na documentação de desenvolvimento.
+Monorepo do Confirma, preparado para receber aplicações e pacotes de acordo com as especificações vigentes do produto.
 
 ## Pré-requisitos
 
@@ -41,7 +41,7 @@ pnpm check
 ```text
 apps/       # aplicações futuras
 packages/   # pacotes compartilhados futuros
-docs/       # documentação do produto e da engenharia
+docs/       # especificações do produto e referências visuais
 ```
 
 As configurações compartilhadas ficam na raiz: pnpm, Turborepo, TypeScript, ESLint, Prettier e EditorConfig.
