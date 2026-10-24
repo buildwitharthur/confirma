@@ -19,6 +19,22 @@ A sessão é um JWT assinado, guardado em cookie seguro, host-only, `HttpOnly` e
 
 **Erros:** `401 unauthorized`.
 
+### GET /auth/session
+
+**O que faz:** retorna a identidade do usuário da sessão atual.
+
+**Autenticação:** sessão.
+
+**Entrada:** sem corpo.
+
+**Passo a passo:**
+1. Valide a sessão atual.
+2. Retorne o ID e o e-mail do usuário autenticado.
+
+**Resposta:** `200` com `{"user":{"id":"<UUID>","email":"marina@example.com"}}`.
+
+**Erros:** `401 unauthorized`.
+
 ### POST /auth/logout
 
 **O que faz:** encerra a sessão atual.

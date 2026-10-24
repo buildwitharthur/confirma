@@ -30,9 +30,11 @@ O Confirma é um SaaS B2B que confirma agendamentos por WhatsApp. Sistemas exter
 
 - **Escopo:** faça somente o que a tarefa pede, em alterações pequenas e verificáveis. Não refatore partes sem relação nem crie abstrações para possibilidades futuras.
 - **Camadas:** a entrada (HTTP, fila, interface) valida e traduz; regras de negócio ficam em operações de aplicação reutilizáveis; serviços externos ficam atrás de adaptadores. A interface não decide regra de negócio.
+- **Middlewares HTTP:** autenticação e autorização são aplicadas na camada HTTP, antes dos controllers. Nunca chame middleware nem importe Express em use cases.
 - **Entradas:** valide em runtime todo dado externo e rejeite propriedades desconhecidas. Tipos e validações seguem os contratos, sem contornar a tipagem.
 - **Erros:** respostas de erro seguem o formato e os códigos de `api.md` e `domain.md`.
 - **Conta e acesso:** a conta vem da sessão autenticada ou da credencial de API, nunca do corpo da requisição. Nunca exponha dados de uma conta a outra.
+- **Acesso ao painel:** aplique o middleware de sessão antes do middleware de acesso à conta. O segundo confirma que o usuário da sessão está vinculado a uma conta ativa e disponibiliza o `accountId` validado para a requisição.
 - **Durabilidade:** o armazenamento persistente é a fonte de verdade. Filas distribuem trabalho, mas não substituem transações. Registre a decisão antes de produzir o efeito externo.
 - **Efeitos externos:** reserve cada tentativa antes da chamada e revalide as condições no processamento assíncrono. Não presuma execução única. Nunca repita automaticamente uma ação cujo aceite externo seja incerto.
 - **Idempotência e concorrência:** cumpra as garantias descritas em cada rota.

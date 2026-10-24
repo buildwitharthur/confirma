@@ -5,6 +5,7 @@ Todas as caixas começam desmarcadas. Marque uma rota somente quando houver evid
 ## Auth
 
 - [ ] POST /auth/login
+- [ ] GET /auth/session
 - [ ] POST /auth/logout
 - [ ] POST /auth/password/forgot
 - [ ] POST /auth/password/reset

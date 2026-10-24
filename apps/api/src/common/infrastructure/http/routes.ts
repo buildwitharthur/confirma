@@ -1,9 +1,10 @@
 import { Router } from 'express';
 import { authRoutes } from '../../../modules/auth/infrastructure/http/routes/auth.routes.js';
-import { authenticateSessionMiddleware } from '../../../modules/auth/infrastructure/http/middlewares/authenticate-session.middleware.js';
+import { authenticateSessionMiddleware } from './middlewares/authenticate-session.middleware.js';
 import { accountRoutes } from '../../../modules/accounts/infrastructure/http/routes/account.routes.js';
 import { accessRoutes } from '../../../modules/access/infrastructure/http/routes/access.routes.js';
 import { contactRoutes } from '../../../modules/contacts/infrastructure/http/routes/contact.routes.js';
+import { requireAccountAccessMiddleware } from './middlewares/require-account-access.middleware.js';
 
 const routes = Router();
 
@@ -13,6 +14,7 @@ routes.get('/health', (_, res) => {
 
 routes.use('/auth', authRoutes);
 routes.use('/panel', authenticateSessionMiddleware);
+routes.use('/panel', requireAccountAccessMiddleware);
 routes.use('/panel', accountRoutes);
 routes.use('/panel', contactRoutes);
 routes.use('/site', accessRoutes);

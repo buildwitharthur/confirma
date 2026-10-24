@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
 
-import { UnauthorizedError } from '../../../../../common/domain/errors/unauthorized.js';
-import { env } from '../../../../../common/infrastructure/env/index.js';
-import { ExpressCookieProvider } from '../../../../../common/infrastructure/providers/cookie-provider/express-cookie.provider.js';
-import { JsonWebTokenProvider } from '../../../../../common/infrastructure/providers/jwt-provider/jsonwebtoken-jwt.provider.js';
-import { AuthRepository } from '../../../domain/repositories/auth.repository.js';
+import { UnauthorizedError } from '../../../domain/errors/unauthorized.js';
+import { SessionUserProvider } from '../../../domain/providers/session-user.provider.js';
+import { env } from '../../env/index.js';
+import { ExpressCookieProvider } from '../../providers/cookie-provider/express-cookie.provider.js';
+import { JsonWebTokenProvider } from '../../providers/jwt-provider/jsonwebtoken-jwt.provider.js';
 
 type SessionJwtPayload = {
   sub: string;
@@ -12,18 +12,19 @@ type SessionJwtPayload = {
   reauthenticatedUntil?: string;
 };
 
-type SessionRequest = Request & {
+export type SessionRequest = Request & {
   userId?: string;
+  userEmail?: string;
   reauthenticatedUntil?: string;
 };
 
 export async function authenticateSessionMiddleware(
   request: SessionRequest,
-  _response: Response,
+  response: Response,
   next: NextFunction,
 ): Promise<void> {
   try {
-    const cookieProvider = new ExpressCookieProvider(request, _response);
+    const cookieProvider = new ExpressCookieProvider(request, response);
     const token = cookieProvider.get(env.SESSION_COOKIE_NAME);
     if (!token) {
       throw new UnauthorizedError();
@@ -37,8 +38,9 @@ export async function authenticateSessionMiddleware(
       throw new UnauthorizedError();
     }
 
-    const authRepository = request.app.locals.authRepository as AuthRepository;
-    const user = await authRepository.findById(payload.sub);
+    const sessionUserProvider = request.app.locals
+      .authRepository as SessionUserProvider;
+    const user = await sessionUserProvider.findById(payload.sub);
 
     if (
       !user ||
@@ -50,6 +52,7 @@ export async function authenticateSessionMiddleware(
     }
 
     request.userId = user.id;
+    request.userEmail = user.email;
     request.reauthenticatedUntil = payload.reauthenticatedUntil;
     next();
   } catch (error) {

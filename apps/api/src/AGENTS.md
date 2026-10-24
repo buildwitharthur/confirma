@@ -142,6 +142,15 @@ export const exampleRoutes = Router();
 exampleRoutes.post('/example', exampleController);
 ```
 
+## Middlewares HTTP e acesso à conta
+
+- Middlewares são associados às rotas HTTP ou aos roteadores que protegem; não são chamados por use cases.
+- Para rotas de sessão, aplique `authenticateSessionMiddleware` antes do controller.
+- Para rotas do painel, aplique `authenticateSessionMiddleware` primeiro e `requireAccountAccessMiddleware` em seguida, antes dos roteadores dos módulos.
+- Mantenha a validação de sessão em `common/infrastructure/http/middlewares/` porque ela é compartilhada por Auth e pelo painel.
+- O middleware de conta verifica o vínculo entre o usuário autenticado e uma conta ativa. Ele define `accountId` na requisição; controllers podem traduzir essa identidade para a entrada dos use cases.
+- Não leia `accountId` do corpo para decidir a conta do painel. Use o valor validado pelo middleware ou derive a conta pelo usuário autenticado quando o contrato do caso de uso pedir isso.
+
 ## Validação e erros
 
 Use `common/infrastructure/validation/zod/data-validation.ts` para validação de entradas externas.
