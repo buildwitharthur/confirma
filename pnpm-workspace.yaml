@@ -2,8 +2,8 @@ packages:
   - 'apps/*'
   - 'packages/*'
 allowBuilds:
-  bcrypt: set this to true or false
-  esbuild: set this to true or false
+  bcrypt: true
+  esbuild: true
 minimumReleaseAgeExclude:
   - '@astrojs/check@0.9.11'
   - astro@7.4.1
