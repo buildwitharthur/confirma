@@ -1,7 +1,6 @@
 import { app } from './app.js';
+import { env } from '../env/index.js';
 
-const PORT = 3333;
-
-app.listen(PORT, () => {
-	console.log(`Confirma API listening on port ${PORT}`);
+app.listen(env.PORT, () => {
+	console.log(`Confirma API listening on port ${env.PORT}`);
 });
