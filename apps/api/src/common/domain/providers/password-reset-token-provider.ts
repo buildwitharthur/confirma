@@ -1,9 +1,9 @@
 export type GeneratedPasswordResetToken = {
-	token: string;
-	tokenHash: string;
+  token: string;
+  tokenHash: string;
 };
 
 export interface PasswordResetTokenProvider {
-	generate(): GeneratedPasswordResetToken;
-	hash(token: string): string;
+  generate(): GeneratedPasswordResetToken;
+  hash(token: string): string;
 }

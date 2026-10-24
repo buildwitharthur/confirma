@@ -13,38 +13,38 @@ import { ReauthenticateUserUseCase } from '../../../application/usecases/reauthe
 type AuthenticatedRequest = Request & { userId?: string };
 
 export const reauthenticateUserController = async (
-	request: AuthenticatedRequest,
-	response: Response,
+  request: AuthenticatedRequest,
+  response: Response,
 ): Promise<Response> => {
-	const bodySchema = z
-		.object({
-			password: z.string().min(1),
-		})
-		.strict();
-	const parsedBody = dataValidation(bodySchema, request.body);
+  const bodySchema = z
+    .object({
+      password: z.string().min(1),
+    })
+    .strict();
+  const parsedBody = dataValidation(bodySchema, request.body);
 
-	if (!request.userId) {
-		throw new UnauthorizedError();
-	}
+  if (!request.userId) {
+    throw new UnauthorizedError();
+  }
 
-	const authRepository = request.app.locals.authRepository as AuthRepository;
-	const hashProvider = new BcryptHashProvider();
-	const jwtProvider = new JsonWebTokenProvider(env.JWT_SECRET);
-	const cookieProvider = new ExpressCookieProvider(request, response);
-	const useCase = new ReauthenticateUserUseCase(
-		authRepository,
-		hashProvider,
-		jwtProvider,
-		cookieProvider,
-		env.SESSION_COOKIE_NAME,
-	);
+  const authRepository = request.app.locals.authRepository as AuthRepository;
+  const hashProvider = new BcryptHashProvider();
+  const jwtProvider = new JsonWebTokenProvider(env.JWT_SECRET);
+  const cookieProvider = new ExpressCookieProvider(request, response);
+  const useCase = new ReauthenticateUserUseCase(
+    authRepository,
+    hashProvider,
+    jwtProvider,
+    cookieProvider,
+    env.SESSION_COOKIE_NAME,
+  );
 
-	const result = await useCase.execute({
-		userId: request.userId,
-		password: parsedBody.password,
-	});
+  const result = await useCase.execute({
+    userId: request.userId,
+    password: parsedBody.password,
+  });
 
-	return response.status(200).json({
-		reauthenticated_until: result.reauthenticatedUntil.toISOString(),
-	});
+  return response.status(200).json({
+    reauthenticated_until: result.reauthenticatedUntil.toISOString(),
+  });
 };

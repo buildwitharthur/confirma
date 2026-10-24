@@ -10,32 +10,32 @@ import { dataValidation } from '../../../../../common/infrastructure/validation/
 import { AuthenticateUserUseCase } from '../../../application/usecases/authenticate-user.usecase.js';
 
 export const authenticateUserController = async (
-	request: Request,
-	response: Response,
+  request: Request,
+  response: Response,
 ): Promise<Response> => {
-	const bodySchema = z
-		.object({
-			email: z.string().email(),
-			password: z.string().min(1),
-		})
-		.strict();
-	const parsedBody = dataValidation(bodySchema, request.body);
+  const bodySchema = z
+    .object({
+      email: z.string().email(),
+      password: z.string().min(1),
+    })
+    .strict();
+  const parsedBody = dataValidation(bodySchema, request.body);
 
-	const authRepository = request.app.locals.authRepository as AuthRepository;
+  const authRepository = request.app.locals.authRepository as AuthRepository;
 
-	const hashProvider = new BcryptHashProvider();
-	const jwtProvider = new JsonWebTokenProvider(env.JWT_SECRET);
-	const cookieProvider = new ExpressCookieProvider(request, response);
+  const hashProvider = new BcryptHashProvider();
+  const jwtProvider = new JsonWebTokenProvider(env.JWT_SECRET);
+  const cookieProvider = new ExpressCookieProvider(request, response);
 
-	const useCase = new AuthenticateUserUseCase(
-		authRepository,
-		hashProvider,
-		jwtProvider,
-		cookieProvider,
-		env.SESSION_COOKIE_NAME,
-	);
+  const useCase = new AuthenticateUserUseCase(
+    authRepository,
+    hashProvider,
+    jwtProvider,
+    cookieProvider,
+    env.SESSION_COOKIE_NAME,
+  );
 
-	await useCase.execute(parsedBody);
+  await useCase.execute(parsedBody);
 
-	return response.status(204).send();
+  return response.status(204).send();
 };

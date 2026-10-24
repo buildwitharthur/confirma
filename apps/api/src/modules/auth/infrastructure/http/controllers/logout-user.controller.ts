@@ -5,16 +5,16 @@ import { ExpressCookieProvider } from '../../../../../common/infrastructure/prov
 import { LogoutUserUseCase } from '../../../application/usecases/logout-user.usecase.js';
 
 export const logoutUserController = async (
-	request: Request,
-	response: Response,
+  request: Request,
+  response: Response,
 ): Promise<Response> => {
-	const cookieProvider = new ExpressCookieProvider(request, response);
-	const useCase = new LogoutUserUseCase(
-		cookieProvider,
-		env.SESSION_COOKIE_NAME,
-	);
+  const cookieProvider = new ExpressCookieProvider(request, response);
+  const useCase = new LogoutUserUseCase(
+    cookieProvider,
+    env.SESSION_COOKIE_NAME,
+  );
 
-	await useCase.execute({});
+  await useCase.execute({});
 
-	return response.status(204).send();
+  return response.status(204).send();
 };

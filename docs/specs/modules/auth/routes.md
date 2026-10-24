@@ -29,7 +29,6 @@ A sessão é um JWT assinado, guardado em cookie seguro, host-only, `HttpOnly` e
 
 **Passo a passo:**
 1. Remova o cookie da sessão.
-2. Não exija aceite de termos para sair.
 
 **Resposta:** `204`, sem corpo.
 
@@ -85,7 +84,6 @@ A sessão é um JWT assinado, guardado em cookie seguro, host-only, `HttpOnly` e
 1. Valide a senha do usuário da sessão.
 2. Em caso de sucesso, emita novo JWT no cookie com o instante da reautenticação, válido para esse fim por 5 minutos.
 3. Use a reautenticação somente para `DELETE /panel/account`; ela não amplia outras permissões.
-4. Não exija aceite de termos.
 
 **Resposta:** `200` com `{"reauthenticated_until":"2026-10-19T12:05:00Z"}`.
 

@@ -5,55 +5,55 @@ import { JwtProvider } from '../../../../common/domain/providers/jwt-provider.js
 import { CookieProvider } from '../../../../common/domain/providers/cookie-provider.js';
 
 export type ReauthenticateUserInput = {
-	userId: string;
-	password: string;
+  userId: string;
+  password: string;
 };
 
 export type ReauthenticateUserOutput = {
-	userId: string;
-	reauthenticatedUntil: Date;
+  userId: string;
+  reauthenticatedUntil: Date;
 };
 
 export class ReauthenticateUserUseCase {
-	constructor(
-		private readonly authRepository: AuthRepository,
-		private readonly hashProvider: HashProvider,
-		private readonly jwtProvider: JwtProvider,
-		private readonly cookieProvider: CookieProvider,
-		private readonly sessionCookieName: string,
-	) {}
+  constructor(
+    private readonly authRepository: AuthRepository,
+    private readonly hashProvider: HashProvider,
+    private readonly jwtProvider: JwtProvider,
+    private readonly cookieProvider: CookieProvider,
+    private readonly sessionCookieName: string,
+  ) {}
 
-	async execute(
-		input: ReauthenticateUserInput,
-	): Promise<ReauthenticateUserOutput> {
-		const user = await this.authRepository.findById(input.userId);
+  async execute(
+    input: ReauthenticateUserInput,
+  ): Promise<ReauthenticateUserOutput> {
+    const user = await this.authRepository.findById(input.userId);
 
-		if (!user || user.disabledAt) {
-			throw new UnauthorizedError('Credenciais inválidas.');
-		}
+    if (!user || user.disabledAt) {
+      throw new UnauthorizedError('Credenciais inválidas.');
+    }
 
-		const passwordMatches = await this.hashProvider.compare(
-			input.password,
-			user.passwordHash,
-		);
+    const passwordMatches = await this.hashProvider.compare(
+      input.password,
+      user.passwordHash,
+    );
 
-		if (!passwordMatches) {
-			throw new UnauthorizedError('Credenciais inválidas.');
-		}
+    if (!passwordMatches) {
+      throw new UnauthorizedError('Credenciais inválidas.');
+    }
 
-		const reauthenticatedUntil = new Date(Date.now() + 5 * 60 * 1000);
+    const reauthenticatedUntil = new Date(Date.now() + 5 * 60 * 1000);
 
-		const token = this.jwtProvider.generateToken(
-			{
-				sub: user.id,
-				reauthenticatedUntil: reauthenticatedUntil.toISOString(),
-			},
-			12 * 60 * 60,
-		);
-		this.cookieProvider.set(this.sessionCookieName, token, {
-			maxAge: 12 * 60 * 60 * 1000,
-		});
+    const token = this.jwtProvider.generateToken(
+      {
+        sub: user.id,
+        reauthenticatedUntil: reauthenticatedUntil.toISOString(),
+      },
+      12 * 60 * 60,
+    );
+    this.cookieProvider.set(this.sessionCookieName, token, {
+      maxAge: 12 * 60 * 60 * 1000,
+    });
 
-		return { userId: user.id, reauthenticatedUntil };
-	}
+    return { userId: user.id, reauthenticatedUntil };
+  }
 }

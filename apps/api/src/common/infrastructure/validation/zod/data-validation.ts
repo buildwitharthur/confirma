@@ -10,19 +10,19 @@ import { AppError } from '../../../domain/errors/app-error.js';
  * @returns os dados validados e tipados pelo schema
  */
 export function dataValidation<TSchema extends z.ZodType>(
-	schema: TSchema,
-	body: unknown,
+  schema: TSchema,
+  body: unknown,
 ): z.infer<TSchema> {
-	const validatedData = schema.safeParse(body);
+  const validatedData = schema.safeParse(body);
 
-	if (!validatedData.success) {
-		console.error('Invalid data', validatedData.error.format());
-		throw new AppError(
-			validatedData.error.issues
-				.map((issue) => `${issue.path.join('.')} -> ${issue.message}`)
-				.join(', '),
-		);
-	}
+  if (!validatedData.success) {
+    console.error('Invalid data', validatedData.error.format());
+    throw new AppError(
+      validatedData.error.issues
+        .map((issue) => `${issue.path.join('.')} -> ${issue.message}`)
+        .join(', '),
+    );
+  }
 
-	return validatedData.data;
+  return validatedData.data;
 }

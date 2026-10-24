@@ -24,7 +24,6 @@ Detalhes: [Convites](modules/invites/routes.md).
 - [ ] GET /panel/account
 - [ ] PATCH /panel/account
 - [ ] DELETE /panel/account
-- [ ] POST /panel/account/terms-acceptance
 - [ ] GET /panel/account/usage
 - [ ] GET /panel/account/template
 - [ ] PUT /panel/account/template

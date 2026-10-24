@@ -5,49 +5,49 @@ import { JwtProvider } from '../../../../common/domain/providers/jwt-provider.js
 import { CookieProvider } from '../../../../common/domain/providers/cookie-provider.js';
 
 export type AuthenticateUserInput = {
-	email: string;
-	password: string;
+  email: string;
+  password: string;
 };
 
 export type AuthenticateUserOutput = {
-	userId: string;
+  userId: string;
 };
 
 export class AuthenticateUserUseCase {
-	constructor(
-		private readonly authRepository: AuthRepository,
-		private readonly hashProvider: HashProvider,
-		private readonly jwtProvider: JwtProvider,
-		private readonly cookieProvider: CookieProvider,
-		private readonly sessionCookieName: string,
-	) {}
+  constructor(
+    private readonly authRepository: AuthRepository,
+    private readonly hashProvider: HashProvider,
+    private readonly jwtProvider: JwtProvider,
+    private readonly cookieProvider: CookieProvider,
+    private readonly sessionCookieName: string,
+  ) {}
 
-	async execute(input: AuthenticateUserInput): Promise<AuthenticateUserOutput> {
-		const email = input.email.trim().toLowerCase();
-		const user = await this.authRepository.findByEmail(email);
+  async execute(input: AuthenticateUserInput): Promise<AuthenticateUserOutput> {
+    const email = input.email.trim().toLowerCase();
+    const user = await this.authRepository.findByEmail(email);
 
-		if (!user || user.disabledAt) {
-			throw new UnauthorizedError('Credenciais inválidas.');
-		}
+    if (!user || user.disabledAt) {
+      throw new UnauthorizedError('Credenciais inválidas.');
+    }
 
-		const passwordMatches = await this.hashProvider.compare(
-			input.password,
-			user.passwordHash,
-		);
+    const passwordMatches = await this.hashProvider.compare(
+      input.password,
+      user.passwordHash,
+    );
 
-		if (!passwordMatches) {
-			throw new UnauthorizedError('Credenciais inválidas.');
-		}
+    if (!passwordMatches) {
+      throw new UnauthorizedError('Credenciais inválidas.');
+    }
 
-		const token = this.jwtProvider.generateToken(
-			{ sub: user.id },
-			12 * 60 * 60,
-		);
+    const token = this.jwtProvider.generateToken(
+      { sub: user.id },
+      12 * 60 * 60,
+    );
 
-		this.cookieProvider.set(this.sessionCookieName, token, {
-			maxAge: 12 * 60 * 60 * 1000,
-		});
+    this.cookieProvider.set(this.sessionCookieName, token, {
+      maxAge: 12 * 60 * 60 * 1000,
+    });
 
-		return { userId: user.id };
-	}
+    return { userId: user.id };
+  }
 }

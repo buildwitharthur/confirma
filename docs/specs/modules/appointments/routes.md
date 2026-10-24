@@ -93,7 +93,7 @@ Obrigatórios: `external_id` (1–191 caracteres), `contact.name` (1–160), `co
 
 ## Rotas do painel
 
-Exigem sessão, conta ativa e aceite dos termos vigentes. A conta vem da sessão. Registros anonimizados, excluídos ou fora do prazo consultável não aparecem.
+Exigem sessão e conta ativa. A conta vem da sessão. Registros anonimizados, excluídos ou fora do prazo consultável não aparecem.
 
 ### GET /panel/appointments
 

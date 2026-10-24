@@ -1,6 +1,6 @@
 # Integrações
 
-Exigem sessão, conta ativa e aceite dos termos vigentes. Segredos e credenciais nunca aparecem em consultas.
+Exigem sessão e conta ativa. Segredos e credenciais nunca aparecem em consultas.
 
 ### GET /panel/integrations/whatsapp
 
@@ -28,7 +28,7 @@ Exigem sessão, conta ativa e aceite dos termos vigentes. Segredos e credenciais
 **Entrada:** `{"instance_identifier":"agenda-clinica","sender_phone":"+5511999999999","send_credentials":"...","receive_secret":"..."}`.
 
 **Passo a passo:**
-1. Exija conta ativa e aceite dos termos.
+1. Exija conta ativa.
 2. Teste a conexão e consulte a versão com timeout de 10 segundos.
 3. Se o teste falhar, preserve toda a configuração anterior.
 4. Salve a nova conexão com a versão lida e o instante do teste, sem retornar credenciais.
@@ -68,7 +68,7 @@ Exigem sessão, conta ativa e aceite dos termos vigentes. Segredos e credenciais
 **Entrada:** `{"url":"https://cliente.example/webhooks/confirma"}`.
 
 **Passo a passo:**
-1. Exija conta ativa e aceite dos termos.
+1. Exija conta ativa.
 2. Exija URL HTTPS sem credenciais embutidas.
 3. Rejeite endereços locais ou privados e resolução proibida.
 4. Rejeite redirecionamento para destino proibido.
@@ -88,7 +88,7 @@ Exigem sessão, conta ativa e aceite dos termos vigentes. Segredos e credenciais
 **Entrada:** sem corpo.
 
 **Passo a passo:**
-1. Exija endpoint configurado, conta ativa e aceite dos termos.
+1. Exija endpoint configurado e conta ativa.
 2. Recuse se já houver segredo; a troca usa a rotação.
 3. Gere o segredo e guarde-o protegido.
 4. Exiba o valor completo somente nesta resposta.
@@ -107,7 +107,7 @@ Exigem sessão, conta ativa e aceite dos termos vigentes. Segredos e credenciais
 **Entrada:** sem corpo.
 
 **Passo a passo:**
-1. Exija endpoint e segredo configurados, conta ativa e aceite dos termos.
+1. Exija endpoint e segredo configurados e conta ativa.
 2. Recuse com `409 conflict` enquanto o segredo anterior de uma rotação ainda estiver no período de 24 horas; nunca mantenha mais de um segredo anterior ativo.
 3. Gere segredo novo.
 4. Exiba o valor completo somente nesta resposta.

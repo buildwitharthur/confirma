@@ -11,7 +11,7 @@ As rotas são do painel autenticado.
 **Entrada:** `{"phone":"+5511999999999"}`. O telefone vai no corpo para não aparecer em URLs e logs de acesso.
 
 **Passo a passo:**
-1. Exija conta ativa e aceite dos termos vigentes.
+1. Exija conta ativa.
 2. Valide o telefone em E.164.
 3. Localize o bloqueio pelo HMAC do telefone na conta da sessão.
 4. Não crie contato, bloqueio nem evento.
@@ -30,7 +30,7 @@ As rotas são do painel autenticado.
 **Entrada:** `{"phone":"+5511999999999","consent_method":"in_person","consent_at":"2026-10-19T12:00:00Z"}`.
 
 **Passo a passo:**
-1. Exija conta ativa e aceite dos termos vigentes.
+1. Exija conta ativa.
 2. Valide o telefone, método e instante do consentimento.
 3. Recuse data futura ou anterior ao último `PARAR`.
 4. Confirme a entrada no registro externo antes de criar o pedido local.

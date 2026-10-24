@@ -9,6 +9,7 @@ Cada módulo deve ficar em `src/modules/<modulo>/` e seguir, quando necessário,
 ```text
 <modulo>/
 ├── application/
+│   ├── helpers/
 │   └── usecases/
 ├── domain/
 │   ├── models/
@@ -16,6 +17,7 @@ Cada módulo deve ficar em `src/modules/<modulo>/` e seguir, quando necessário,
 └── infrastructure/
     └── http/
         ├── controllers/
+        ├── helpers/
         └── routes/
 ```
 
@@ -36,6 +38,13 @@ common/
 
 Não coloque regra específica de um módulo em `common` apenas para facilitar o acesso. Extraia código para o compartilhado somente quando houver uma responsabilidade realmente transversal.
 
+## Helpers
+
+- Helpers usados por casos de uso ficam em `application/helpers/`.
+- Helpers de HTTP, como tipos estendidos de `Request` e leitura de dados adicionados pelo middleware, ficam em `infrastructure/http/helpers/`.
+- A camada `application` não pode importar helpers de `infrastructure`; mantenha dependências apontando para dentro da arquitetura.
+- Mantenha cada helper na camada que conhece os tipos e as responsabilidades que ele manipula. Não crie uma pasta genérica de utilitários para juntar helpers de camadas diferentes.
+
 ## Modelos de domínio
 
 Modelos ficam em `domain/models/` e são interfaces ou tipos que representam entidades do domínio.
@@ -49,8 +58,8 @@ Exemplo:
 
 ```ts
 export interface ExampleModel {
-	id: string;
-	createdAt: Date;
+  id: string;
+  createdAt: Date;
 }
 ```
 
@@ -78,19 +87,19 @@ Os casos de uso ficam em `application/usecases/` e são classes exportadas.
 
 ```ts
 export type ExampleInput = {
-	value: string;
+  value: string;
 };
 
 export type ExampleOutput = {
-	id: string;
+  id: string;
 };
 
 export class ExampleUseCase {
-	constructor(private readonly repository: ExampleRepository) {}
+  constructor(private readonly repository: ExampleRepository) {}
 
-	async execute(input: ExampleInput): Promise<ExampleOutput> {
-		// regras de negócio
-	}
+  async execute(input: ExampleInput): Promise<ExampleOutput> {
+    // regras de negócio
+  }
 }
 ```
 

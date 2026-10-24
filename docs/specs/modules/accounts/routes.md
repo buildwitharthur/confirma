@@ -1,6 +1,6 @@
 # Contas, configurações e chaves
 
-As rotas deste módulo são do painel. Exigem sessão, conta ativa e aceite de termos, salvo saída e exclusão da conta. A identidade da conta vem da sessão.
+As rotas deste módulo são do painel. Exigem sessão e conta ativa, salvo saída e exclusão da conta. A identidade da conta vem da sessão.
 
 ### GET /panel/account
 
@@ -27,7 +27,7 @@ As rotas deste módulo são do painel. Exigem sessão, conta ativa e aceite de t
 **Entrada:** `{"name":"Clínica Exemplo","timezone":"America/Sao_Paulo","first_send_lead_minutes":1440,"send_window_start":"08:00","send_window_end":"20:00"}`.
 
 **Passo a passo:**
-1. Exija sessão, conta ativa e aceite dos termos.
+1. Exija sessão e conta ativa.
 2. Valide nome não vazio e fuso IANA reconhecido.
 3. Exija antecedência maior que o corte de resposta.
 4. Exija janela não vazia.
@@ -63,7 +63,7 @@ As rotas deste módulo são do painel. Exigem sessão, conta ativa e aceite de t
 **Entrada:** `{"body":"Olá {{nome}}, confirme seu horário de {{data}} às {{hora}} com {{profissional}}."}`.
 
 **Passo a passo:**
-1. Exija conta ativa e aceite dos termos.
+1. Exija conta ativa.
 2. Exija texto não vazio.
 3. Aceite somente `{{nome}}`, `{{profissional}}`, `{{data}}` e `{{hora}}`.
 4. Se houver erro, preserve o template atual.
@@ -100,7 +100,7 @@ As rotas deste módulo são do painel. Exigem sessão, conta ativa e aceite de t
 **Entrada:** sem corpo.
 
 **Passo a passo:**
-1. Exija conta ativa e aceite dos termos.
+1. Exija conta ativa.
 2. Gere a chave e guarde somente seu hash.
 3. Retorne o segredo completo uma única vez.
 
@@ -117,7 +117,7 @@ As rotas deste módulo são do painel. Exigem sessão, conta ativa e aceite de t
 **Entrada:** `key_id` no caminho; sem corpo.
 
 **Passo a passo:**
-1. Exija conta ativa, aceite dos termos e registro externo confirmado.
+1. Exija conta ativa e registro externo confirmado.
 2. Confirme a revogação no registro externo antes de alterar a chave.
 3. Se a confirmação falhar, mantenha a chave ativa.
 4. Revogue a chave da conta da sessão.
@@ -126,25 +126,6 @@ As rotas deste módulo são do painel. Exigem sessão, conta ativa e aceite de t
 **Resposta:** `204`, sem corpo.
 
 **Erros:** `401 unauthorized`, `403 forbidden`, `404 not_found`, `503 service_unavailable`.
-
-### POST /panel/account/terms-acceptance
-
-**O que faz:** registra aceite das versões vigentes.
-
-**Autenticação:** sessão.
-
-**Entrada:** `{"terms_version":"2026-10-01","privacy_version":"2026-10-01"}`.
-
-**Passo a passo:**
-1. Verifique as duas versões vigentes.
-2. Recuse versão desconhecida ou desatualizada.
-3. Registre o aceite e a data/hora.
-4. Libere comandos do painel sujeitos ao aceite.
-5. Não bloqueie API `/v1`, logout ou exclusão de conta por falta de aceite.
-
-**Resposta:** `201` com `{"terms_version":"2026-10-01","privacy_version":"2026-10-01","accepted_at":"2026-10-19T12:00:00Z"}`.
-
-**Erros:** `401 unauthorized`, `409 terms_version_outdated`.
 
 ### GET /panel/account/usage
 

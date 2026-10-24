@@ -14,9 +14,6 @@ Representa o acesso responsável. Campos: `id: UUID`, `email: string`, `password
 ### Invitation
 Convite para criar acesso. Campos: `id: UUID`, `email: string`, `tokenHash: bytes`, `expiresAt: datetime`, `usedAt: datetime | null`, `createdAt: datetime`. É válido por sete dias. Conta e vínculo são criados na aceitação.
 
-### TermsAcceptance
-Aceite de termos e privacidade. Campos: `id: UUID`, `termsVersion: date`, `privacyVersion: date`, `acceptedAt: datetime`, `accountUserId: UUID`.
-
 ### AccessRequest
 Pedido público de acesso. Campos: `id: UUID`, `name: string`, `email: string`, `companyOrProject: string`, `whatsappProvider: evolution_api | other | none_yet`, `intendedUse: string | null`, `status: pending | invited | rejected`, `consentAt: datetime`, `receivedAt: datetime`, `updatedAt: datetime`. E-mail normalizado é único. Pedido não cria conta.
 
@@ -79,7 +76,6 @@ Uso mensal de agendamentos aceitos. Campos: `periodStart: date`, `timezone: IANA
 
 - `invitation_invalid`: convite inexistente, vencido ou usado. A resposta é uniforme.
 - `weak_password`: senha fora de 10–128 caracteres ou presente na lista de senhas comuns.
-- `terms_version_outdated`: versões aceitas não são as vigentes.
 - `account_not_configured`: falta configuração exigida para criar ou simular agendamento.
 - `idempotency_conflict`: mesmo `external_id` foi enviado com conteúdo normalizado diferente.
 - `appointment_started`: tentativa da origem de cancelar após o início da consulta.

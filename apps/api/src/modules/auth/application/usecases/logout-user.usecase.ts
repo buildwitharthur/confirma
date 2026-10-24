@@ -5,13 +5,13 @@ export type LogoutUserInput = Record<string, never>;
 export type LogoutUserOutput = void;
 
 export class LogoutUserUseCase {
-	constructor(
-		private readonly cookieProvider: CookieProvider,
-		private readonly sessionCookieName: string,
-	) {}
+  constructor(
+    private readonly cookieProvider: CookieProvider,
+    private readonly sessionCookieName: string,
+  ) {}
 
-	async execute(input: LogoutUserInput): Promise<LogoutUserOutput> {
-		void input;
-		this.cookieProvider.clear(this.sessionCookieName);
-	}
+  async execute(input: LogoutUserInput): Promise<LogoutUserOutput> {
+    void input;
+    this.cookieProvider.clear(this.sessionCookieName);
+  }
 }

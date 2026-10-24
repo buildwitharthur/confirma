@@ -1,6 +1,6 @@
 ﻿# Acesso ao piloto e administração
 
-O envio público é a única rota deste módulo. A administração dos pedidos pela equipe é interna e fica fora da API até que se defina o acesso da equipe. A publicação de novas versões de termos e privacidade não faz parte da API.
+O envio público é a única rota deste módulo. A administração dos pedidos pela equipe é interna e fica fora da API até que se defina o acesso da equipe.
 
 ### POST /site/access-requests
 

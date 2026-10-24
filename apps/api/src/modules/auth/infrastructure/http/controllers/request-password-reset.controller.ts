@@ -10,33 +10,33 @@ import { dataValidation } from '../../../../../common/infrastructure/validation/
 import { RequestPasswordResetUseCase } from '../../../application/usecases/request-password-reset.usecase.js';
 
 export const requestPasswordResetController = async (
-	request: Request,
-	response: Response,
+  request: Request,
+  response: Response,
 ): Promise<Response> => {
-	const bodySchema = z
-		.object({
-			email: z.string().email(),
-		})
-		.strict();
-	const parsedBody = dataValidation(bodySchema, request.body);
+  const bodySchema = z
+    .object({
+      email: z.string().email(),
+    })
+    .strict();
+  const parsedBody = dataValidation(bodySchema, request.body);
 
-	const authRepository = request.app.locals.authRepository as AuthRepository;
-	const passwordResetTokenRepository = request.app.locals
-		.passwordResetTokenRepository as PasswordResetTokenRepository;
-	const passwordResetTokenProvider = new CryptoPasswordResetTokenProvider();
-	const mailProvider = new ResendMailProvider(
-		env.RESEND_API_KEY,
-		env.MAIL_FROM,
-	);
-	const useCase = new RequestPasswordResetUseCase(
-		authRepository,
-		passwordResetTokenRepository,
-		passwordResetTokenProvider,
-		mailProvider,
-		env.PASSWORD_RESET_URL,
-	);
+  const authRepository = request.app.locals.authRepository as AuthRepository;
+  const passwordResetTokenRepository = request.app.locals
+    .passwordResetTokenRepository as PasswordResetTokenRepository;
+  const passwordResetTokenProvider = new CryptoPasswordResetTokenProvider();
+  const mailProvider = new ResendMailProvider(
+    env.RESEND_API_KEY,
+    env.MAIL_FROM,
+  );
+  const useCase = new RequestPasswordResetUseCase(
+    authRepository,
+    passwordResetTokenRepository,
+    passwordResetTokenProvider,
+    mailProvider,
+    env.PASSWORD_RESET_URL,
+  );
 
-	await useCase.execute(parsedBody);
+  await useCase.execute(parsedBody);
 
-	return response.status(202).send();
+  return response.status(202).send();
 };

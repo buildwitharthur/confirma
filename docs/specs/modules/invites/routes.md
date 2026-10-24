@@ -26,18 +26,17 @@ O convite dura sete dias e só pode ser consumido uma vez.
 
 **Autenticação:** pública com token.
 
-**Entrada:** `{"token":"...","password":"...","account_name":"Clínica Exemplo","accepted_terms":true,"terms_version":"2026-10-01","privacy_version":"2026-10-01"}`.
+**Entrada:** `{"token":"...","password":"...","account_name":"Clínica Exemplo"}`.
 
 **Passo a passo:**
 1. Valide convite não usado e dentro dos sete dias.
 2. Exija senha de 10 a 128 caracteres fora da lista de senhas comuns.
-3. Exija `accepted_terms: true` e versões vigentes.
-4. Se já existir identidade com o e-mail normalizado do convite, retorne `409 conflict` sem criar nada, sem consumir o convite e sem vincular o usuário existente a outra conta.
-5. Crie conta ativa, acesso, senha e aceite inicial.
-6. Consuma o convite na mesma operação.
-7. Garanta que aceitações concorrentes permitam uma única conclusão.
-8. Abra uma sessão.
+3. Se já existir identidade com o e-mail normalizado do convite, retorne `409 conflict` sem criar nada, sem consumir o convite e sem vincular o usuário existente a outra conta.
+4. Crie conta ativa e acesso.
+5. Consuma o convite na mesma operação.
+6. Garanta que aceitações concorrentes permitam uma única conclusão.
+7. Abra uma sessão.
 
 **Resposta:** `201` com `{"account_id":"<UUID>","status":"active"}` e cookie de sessão.
 
-**Erros:** `404 invitation_invalid`, `422 weak_password`, `409 terms_version_outdated` ou `conflict`.
+**Erros:** `404 invitation_invalid`, `422 weak_password`, `409 conflict`.

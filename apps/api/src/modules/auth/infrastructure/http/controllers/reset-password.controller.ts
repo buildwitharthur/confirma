@@ -9,30 +9,30 @@ import { dataValidation } from '../../../../../common/infrastructure/validation/
 import { ResetPasswordUseCase } from '../../../application/usecases/reset-password.usecase.js';
 
 export const resetPasswordController = async (
-	request: Request,
-	response: Response,
+  request: Request,
+  response: Response,
 ): Promise<Response> => {
-	const bodySchema = z
-		.object({
-			token: z.string().min(1),
-			password: z.string().min(1),
-		})
-		.strict();
-	const parsedBody = dataValidation(bodySchema, request.body);
+  const bodySchema = z
+    .object({
+      token: z.string().min(1),
+      password: z.string().min(1),
+    })
+    .strict();
+  const parsedBody = dataValidation(bodySchema, request.body);
 
-	const authRepository = request.app.locals.authRepository as AuthRepository;
-	const passwordResetTokenRepository = request.app.locals
-		.passwordResetTokenRepository as PasswordResetTokenRepository;
-	const hashProvider = new BcryptHashProvider();
-	const passwordResetTokenProvider = new CryptoPasswordResetTokenProvider();
-	const useCase = new ResetPasswordUseCase(
-		authRepository,
-		passwordResetTokenRepository,
-		hashProvider,
-		passwordResetTokenProvider,
-	);
+  const authRepository = request.app.locals.authRepository as AuthRepository;
+  const passwordResetTokenRepository = request.app.locals
+    .passwordResetTokenRepository as PasswordResetTokenRepository;
+  const hashProvider = new BcryptHashProvider();
+  const passwordResetTokenProvider = new CryptoPasswordResetTokenProvider();
+  const useCase = new ResetPasswordUseCase(
+    authRepository,
+    passwordResetTokenRepository,
+    hashProvider,
+    passwordResetTokenProvider,
+  );
 
-	await useCase.execute(parsedBody);
+  await useCase.execute(parsedBody);
 
-	return response.status(204).send();
+  return response.status(204).send();
 };
