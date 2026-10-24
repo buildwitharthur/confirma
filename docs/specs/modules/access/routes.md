@@ -21,15 +21,12 @@ O envio público é a única rota deste módulo. A administração dos pedidos p
 2. Normalize o e-mail para identificar pedidos.
 3. Crie pedido `pending` se não houver pedido.
 4. Atualize pedido `pending` existente; não altere pedidos `invited` ou `rejected`.
-5. Crie aviso interno durável somente para pedido novo.
-6. Garanta que envios concorrentes não dupliquem o pedido nem o aviso.
-7. Limite a cinco solicitações por hora por origem.
-8. Não registre rejeições antispam nem revele decisão interna.
-9. Não espere o envio do e-mail para responder.
+5. Garanta que envios concorrentes não dupliquem o pedido.
+6. Não registre rejeições antispam nem revele decisão interna.
 
-**Resposta:** `202` uniforme para novo, atualizado ou ignorado: `{"status":"received","message":"Recebemos sua solicitação. Se houver convite para o piloto, ele será enviado por e-mail."}`.
+**Resposta:** `202` uniforme para novo, atualizado ou ignorado: `{"status":"received","message":"Recebemos sua solicitação."}`.
 
-**Erros:** `400 bad_request`, `415 bad_request`, `422 validation_error` ou `submission_rejected`, `429 too_many_requests`, `500 internal_error`, `503 service_unavailable`.
+**Erros:** `400 bad_request`, `415 bad_request`, `422 validation_error` ou `submission_rejected`, `500 internal_error`, `503 service_unavailable`.
 
 ## Administração interna
 
