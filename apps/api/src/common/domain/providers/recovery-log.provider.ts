@@ -1,4 +1,5 @@
-export type RecoveryOperation = 'api_key_revocation' | 'account_deletion';
+export type RecoveryOperation =
+  'api_key_revocation' | 'account_deletion' | 'contact_unblock';
 
 export type ConfirmRecoveryOperationInput = {
   operation: RecoveryOperation;

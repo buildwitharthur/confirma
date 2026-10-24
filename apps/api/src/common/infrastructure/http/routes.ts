@@ -3,6 +3,7 @@ import { authRoutes } from '../../../modules/auth/infrastructure/http/routes/aut
 import { authenticateSessionMiddleware } from '../../../modules/auth/infrastructure/http/middlewares/authenticate-session.middleware.js';
 import { accountRoutes } from '../../../modules/accounts/infrastructure/http/routes/account.routes.js';
 import { accessRoutes } from '../../../modules/access/infrastructure/http/routes/access.routes.js';
+import { contactRoutes } from '../../../modules/contacts/infrastructure/http/routes/contact.routes.js';
 
 const routes = Router();
 
@@ -11,7 +12,9 @@ routes.get('/health', (_, res) => {
 });
 
 routes.use('/auth', authRoutes);
-routes.use('/panel', authenticateSessionMiddleware, accountRoutes);
+routes.use('/panel', authenticateSessionMiddleware);
+routes.use('/panel', accountRoutes);
+routes.use('/panel', contactRoutes);
 routes.use('/site', accessRoutes);
 
 export { routes };
