@@ -1,36 +1,36 @@
 ﻿# Checklist de desenvolvimento da API
 
-Todas as caixas começam desmarcadas. Marque uma rota somente quando houver evidência de que ela foi implementada.
+Marque uma rota quando houver rota HTTP, controller e caso de uso implementados no código. Persistência e adapters externos são acompanhados conforme seus próprios requisitos.
 
 ## Auth
 
-- [ ] POST /auth/login
-- [ ] GET /auth/session
-- [ ] POST /auth/logout
-- [ ] POST /auth/password/forgot
-- [ ] POST /auth/password/reset
-- [ ] POST /auth/reauthenticate
+- [x] POST /auth/login
+- [x] GET /auth/session
+- [x] POST /auth/logout
+- [x] POST /auth/password/forgot
+- [x] POST /auth/password/reset
+- [x] POST /auth/reauthenticate
 
 Detalhes: [Auth](modules/auth/routes.md).
 
 ## Invites
 
-- [ ] GET /auth/invitations/inspect
-- [ ] POST /auth/invitations/accept
+- [x] GET /auth/invitations/inspect
+- [x] POST /auth/invitations/accept
 
 Detalhes: [Convites](modules/invites/routes.md).
 
 ## Accounts
 
-- [ ] GET /panel/account
-- [ ] PATCH /panel/account
-- [ ] DELETE /panel/account
-- [ ] GET /panel/account/usage
-- [ ] GET /panel/account/template
-- [ ] PUT /panel/account/template
-- [ ] GET /panel/account/api-keys
-- [ ] POST /panel/account/api-keys
-- [ ] DELETE /panel/account/api-keys/{key_id}
+- [x] GET /panel/account
+- [x] PATCH /panel/account
+- [x] DELETE /panel/account
+- [x] GET /panel/account/usage
+- [x] GET /panel/account/template
+- [x] PUT /panel/account/template
+- [x] GET /panel/account/api-keys
+- [x] POST /panel/account/api-keys
+- [x] DELETE /panel/account/api-keys/{key_id}
 
 Detalhes: [Contas](modules/accounts/routes.md).
 
@@ -48,8 +48,8 @@ Detalhes: [Agendamentos](modules/appointments/routes.md).
 
 ## Contacts
 
-- [ ] POST /panel/contacts/lookup
-- [ ] POST /panel/contacts/unblocks
+- [x] POST /panel/contacts/lookup
+- [x] POST /panel/contacts/unblocks
 
 Detalhes: [Contatos](modules/contacts/routes.md).
 
@@ -70,7 +70,7 @@ Detalhes: [Integrações](modules/integrations/routes.md).
 
 ## Access
 
-- [ ] POST /site/access-requests
+- [x] POST /site/access-requests
 
 Detalhes: [Acesso](modules/access/routes.md).
 

@@ -1894,7 +1894,8 @@ V.login = {
 };
 function loginSuccess() {
   S.session = { email: DEMO_EMAIL }; S.notice = null; delete S.forms.login;
-  const t = S.intent || homeTarget(); S.intent = null;
+  // /boas-vindas só aparece após aceitar o convite; o login segue para a entrada recorrente.
+  const t = S.intent && S.intent !== '/boas-vindas' ? S.intent : homeTarget(); S.intent = null;
   toast({ tone: 'ok', title: 'Sessão iniciada', body: 'Bem-vindo de volta.' }); go(t);
 }
 function submitLogin(form, btn) {
@@ -1915,24 +1916,20 @@ V.invite = {
     const tok = ctx.token || '';
     if (!S.invite[tok]) {
       S.invite[tok] = 'loading';
-      setTimeout(() => { S.invite[tok] = tok === 'demo-valido' && !S.invite.used ? 'valid' : 'invalid'; if (parseHash().path === '/convite') refresh({ focus: '#page-title' }); }, 700);
+      // GET /auth/invitations/inspect?token=… → 200 {"email"} ou 404 invitation_invalid. A tela usa somente o e-mail retornado.
+      setTimeout(() => { S.invite[tok] = tok === 'demo-valido' && !S.invite.used ? { email: DEMO_EMAIL } : 'invalid'; if (parseHash().path === '/convite') refresh({ focus: '#page-title' }); }, 700);
     }
     const st = S.invite[tok];
     if (st === 'loading') return `${authHead('Verificando convite')}${skeleton(3, 'Verificando o convite…')}`;
     if (st === 'invalid') return `<div class="stack">${authHead('Este convite não pode ser usado', 'O link pode ter expirado, já ter sido usado ou estar incompleto. Convites valem por 7 dias. Peça um novo convite à equipe do Confirma.')}${alertBox({ tone: 'err', title: 'Convite inválido', body: '<code>invitation_invalid</code>' })}<a class="btn btn-lg" href="#/entrar">Ir para a entrada</a></div>`;
-    const f = F('invite'), shown = S.sim.inviteMode === 'outdated' && !S.invite.refreshed ? TERMS_OLD : TERMS_CURRENT;
+    const f = F('invite');
     return `${authHead('Criar sua conta', 'Você foi convidado para o piloto do Confirma.')}
-      <div class="subtle-box"><span class="meta">E-mail do convite</span><br><span class="strong">${esc(DEMO_EMAIL)}</span> <span class="meta">· definido pelo convite</span></div>
-      ${f.errors._form ? alertBox({ tone: 'warn', id: 'invite-formerr', title: S.invite.conflict ? 'Já existe um acesso com este e-mail' : 'Os documentos foram atualizados', body: f.errors._form, live: true }) : ''}
+      <div class="subtle-box"><span class="meta">E-mail do convite</span><br><span class="strong">${esc(st.email)}</span> <span class="meta">· definido pelo convite</span></div>
+      ${f.errors._form ? alertBox({ tone: 'warn', id: 'invite-formerr', title: 'Já existe um acesso com este e-mail', body: f.errors._form, live: true }) : ''}
       <form class="auth-form" data-form="invite" novalidate>
         ${errorSummary(f.errors, 'invite')}
-        ${field({ form: 'invite', name: 'account_name', label: 'Nome da conta', value: f.values.account_name ?? 'Clínica Aurora', error: f.errors.account_name, required: true, placeholder: 'Ex.: Clínica Exemplo', help: 'Sugestão do seu pedido de acesso (empresa ou projeto). Você pode alterar depois.', attrs: 'autocomplete="organization"' })}
-        ${field({ form: 'invite', name: 'password', label: 'Senha', type: 'password', error: f.errors.password, required: true, placeholder: 'Crie uma senha', help: 'De 10 a 128 caracteres. Senhas muito comuns são recusadas.', attrs: 'autocomplete="new-password" minlength="10" maxlength="128"' })}
-        <div class="field ${f.errors.accepted ? 'has-error' : ''}">
-          <label class="check" for="invite-accepted"><input type="checkbox" id="invite-accepted" name="accepted" ${f.errors.accepted ? 'aria-invalid="true" aria-describedby="invite-accepted-err"' : ''}><span>Li e aceito os <a href="${TERMS_URL}" target="_blank" rel="noopener">Termos de uso</a> e a <a href="${PRIVACY_URL}" target="_blank" rel="noopener">Política de Privacidade</a>.</span></label>
-          ${f.errors.accepted ? `<p class="field-error" id="invite-accepted-err">${icon('error')}<span>${esc(f.errors.accepted)}</span></p>` : ''}
-          <p class="meta">Versões: termos <code>${shown.terms}</code> · política <code>${shown.privacy}</code></p>
-        </div>
+        ${field({ form: 'invite', name: 'account_name', label: 'Nome da conta', value: f.values.account_name ?? '', error: f.errors.account_name, required: true, placeholder: 'Ex.: Clínica Exemplo', help: 'Empresa ou projeto. Você pode alterar depois.', attrs: 'autocomplete="organization"' })}
+        ${field({ form: 'invite', name: 'password', label: 'Senha', type: 'password', error: f.errors.password, required: true, placeholder: 'Crie uma senha', help: 'De 10 a 128 caracteres.', attrs: 'autocomplete="new-password" minlength="10" maxlength="128"' })}
         <button type="submit" class="btn btn-primary btn-lg" data-busy="Criando conta…">Criar conta e entrar</button>
         <a href="#/entrar">Já tenho acesso</a>
       </form>`;
@@ -1942,22 +1939,17 @@ function submitInvite(form, btn) {
   const v = readForm(form), e = {};
   if (!v.account_name.trim()) e.account_name = 'Informe o nome da conta.';
   if (v.password.length < 10 || v.password.length > 128) e.password = 'A senha precisa ter de 10 a 128 caracteres.';
-  else if (COMMON_PW.includes(v.password.toLowerCase())) e.password = 'Esta senha é muito comum. Escolha outra.';
-  if (!v.accepted) e.accepted = 'Para criar a conta, aceite os Termos de uso e a Política de Privacidade.';
   if (Object.keys(e).length) return failForm('invite', { account_name: v.account_name }, e);
+  // POST /auth/invitations/accept somente com estes campos → 201 {"account_id","status"} + cookie de sessão.
+  const body = { token: parseHash().token, password: v.password, account_name: v.account_name.trim() };
   command(btn, { busy: 'Criando conta…', ms: 1100 }, () => {
-    if (S.sim.inviteMode === 'outdated' && !S.invite.refreshed) {
-      S.invite.refreshed = true; S.invite.conflict = false;
-      return failForm('invite', { account_name: v.account_name }, { _form: 'As versões mudaram enquanto você preenchia. Leia as versões vigentes, marque o aceite e envie de novo. Sua conta ainda não foi criada.' });
-    }
     if (S.sim.inviteMode === 'conflict') {
-      S.invite.conflict = true;
       return failForm('invite', { account_name: v.account_name }, { _form: 'A conta não foi criada e o convite continua válido. Entre com o acesso que você já tem.' });
     }
     if (S.sim.inviteMode === 'race') { S.invite['demo-valido'] = 'invalid'; S.invite.used = true; refresh({ focus: '#page-title' }); return announce('Convite inválido'); }
-    const name = v.account_name.trim(); S = SCENARIOS.novo.build(); S.account.name = name; S.invite = { used: true, 'demo-valido': 'invalid' };
+    S = SCENARIOS.novo.build(); S.account.name = body.account_name; S.invite = { used: true, 'demo-valido': 'invalid' };
     S.account.createdAt = nowLocal(); go('/boas-vindas');
-    toast({ tone: 'ok', title: 'Conta criada', body: 'Sessão aberta e aceite registrado.' });
+    toast({ tone: 'ok', title: 'Conta criada', body: 'Sessão aberta.' });
   });
 }
 
@@ -2695,7 +2687,7 @@ function renderDemo() {
     <div><h3>Respostas simuladas</h3><div class="dp-grid">
       ${sel('providerResult', 'Teste de conexão do WhatsApp', [['ok', 'Sucesso'], ['network_error', 'network_error'], ['authentication_failed', 'authentication_failed'], ['instance_not_found', 'instance_not_found'], ['instance_not_connected', 'instance_not_connected']])}
       ${sel('providerVersion', 'Versão retornada pela Evolution API', [[TARGET_VERSION, `${TARGET_VERSION} (versão-alvo, homologação pendente)`], ['2.4.0', '2.4.0 (diferente da versão-alvo)']])}
-      ${sel('inviteMode', 'Próximo aceite de convite', [['normal', 'Normal'], ['outdated', 'Versões desatualizadas (409)'], ['conflict', 'E-mail já tem acesso (409)'], ['race', 'Aceite concorrente']])}
+      ${sel('inviteMode', 'Próximo aceite de convite', [['normal', 'Normal'], ['conflict', 'E-mail já tem acesso (409)'], ['race', 'Aceite concorrente']])}
       ${chk('receiverFails', 'Receptor de webhook falha (testes e reenvios)')}
       ${chk('webhookRedirect', 'URL de webhook redireciona para destino proibido')}
       ${chk('recoveryDown', 'Registro externo de recuperação indisponível')}
