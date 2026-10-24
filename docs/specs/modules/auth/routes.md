@@ -63,7 +63,7 @@ A sessão é um JWT assinado, guardado em cookie seguro, host-only, `HttpOnly` e
 
 **Passo a passo:**
 1. Valide o token e seu prazo de uma hora.
-2. Exija senha de 10 a 128 caracteres fora da lista de senhas comuns.
+2. Exija senha de 10 a 128 caracteres.
 3. Consuma o token uma única vez.
 4. Salve a nova senha e registre o instante da troca em `passwordChangedAt`.
 5. Todos os JWTs emitidos antes da troca deixam de autenticar.

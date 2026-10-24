@@ -75,7 +75,7 @@ Uso mensal de agendamentos aceitos. Campos: `periodStart: date`, `timezone: IANA
 ## Erros de negócio
 
 - `invitation_invalid`: convite inexistente, vencido ou usado. A resposta é uniforme.
-- `weak_password`: senha fora de 10–128 caracteres ou presente na lista de senhas comuns.
+- `weak_password`: senha fora de 10–128 caracteres.
 - `account_not_configured`: falta configuração exigida para criar ou simular agendamento.
 - `idempotency_conflict`: mesmo `external_id` foi enviado com conteúdo normalizado diferente.
 - `appointment_started`: tentativa da origem de cancelar após o início da consulta.

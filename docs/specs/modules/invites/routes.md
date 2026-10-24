@@ -30,7 +30,7 @@ O convite dura sete dias e só pode ser consumido uma vez.
 
 **Passo a passo:**
 1. Valide convite não usado e dentro dos sete dias.
-2. Exija senha de 10 a 128 caracteres fora da lista de senhas comuns.
+2. Exija senha de 10 a 128 caracteres.
 3. Se já existir identidade com o e-mail normalizado do convite, retorne `409 conflict` sem criar nada, sem consumir o convite e sem vincular o usuário existente a outra conta.
 4. Crie conta ativa e acesso.
 5. Consuma o convite na mesma operação.
