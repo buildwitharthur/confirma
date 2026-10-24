@@ -1,6 +1,7 @@
 import cors from 'cors';
 import express from 'express';
 import { routes } from './routes.js';
+import { errorHandler } from './middlewares/errorHandler.js';
 
 const app = express();
 
@@ -13,5 +14,6 @@ app.use(
 );
 
 app.use(routes);
+app.use(errorHandler);
 
 export { app };
