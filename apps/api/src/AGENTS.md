@@ -142,6 +142,43 @@ export const exampleRoutes = Router();
 exampleRoutes.post('/example', exampleController);
 ```
 
+### Documentação Swagger
+
+O Swagger é configurado em `common/infrastructure/http/app.ts` com `swagger-jsdoc` e `swagger-ui-express`. A configuração lê as anotações `@swagger` dos arquivos em `infrastructure/http/routes/`:
+
+```ts
+apis: ['./src/**/infrastructure/http/routes/*.ts'];
+```
+
+Documente cada rota no próprio arquivo de rotas, junto da declaração do método HTTP. Use os caminhos completos, incluindo o prefixo montado pelo roteador, e mantenha a documentação alinhada a `docs/specs/` e aos schemas Zod reais. Não documente rotas, campos, estados, respostas ou códigos que ainda não estejam implementados ou definidos nas especificações.
+
+Inclua no bloco `@swagger`:
+
+- `summary` e `tags` para identificar a operação;
+- `requestBody` e `parameters` quando a rota receber dados;
+- `security: [{ sessionCookie: [] }]` nas rotas autenticadas por sessão;
+- respostas HTTP efetivamente retornadas pelo controller;
+- schemas reutilizáveis em `components.schemas` no arquivo de rota responsável pelo recurso.
+
+Exemplo mínimo:
+
+```ts
+/**
+ * @swagger
+ * /panel/example:
+ *   post:
+ *     summary: Executa a operação de exemplo
+ *     tags: [Example]
+ *     security: [{ sessionCookie: [] }]
+ *     responses:
+ *       204:
+ *         description: Operação concluída.
+ */
+exampleRoutes.post('/example', exampleController);
+```
+
+A interface fica disponível em `GET /docs` e o documento OpenAPI em `GET /docs.json` durante a execução da API. A documentação é somente uma representação dos contratos; não substitui a validação de entrada, os middlewares de autenticação ou as regras de negócio.
+
 ## Middlewares HTTP e acesso à conta
 
 - Middlewares são associados às rotas HTTP ou aos roteadores que protegem; não são chamados por use cases.
@@ -171,6 +208,19 @@ Providers são contratos em `common/domain/providers/` e implementações em `co
 - Providers de JWT, hash, e-mail e cookies devem receber segredos e configurações por configuração de ambiente ou construtor.
 - Não use singleton global para dependências de aplicação.
 - Use `new` na composição do controller ou da infraestrutura conforme o ciclo de vida da dependência.
+
+## Persistência com Prisma
+
+O ORM é Prisma 7 com PostgreSQL e driver adapter `@prisma/adapter-pg`. Mantenha schema, configs, client gerado e migrations em `common/infrastructure/prisma/`.
+
+- `schema.prisma` é a fonte do schema; `prisma.config.ts` define `DATABASE_URL` e o caminho `migrations/`.
+- O client é gerado em `common/infrastructure/prisma/generated/client/`. Depois de alterar o schema ou o generator, execute `pnpm prisma:generate` a partir de `apps/api`.
+- A instância de aplicação é exportada por `common/infrastructure/prisma/index.ts`; a conexão usa `DATABASE_URL` e o adapter PostgreSQL.
+- Crie e aplique migrations de desenvolvimento com `pnpm prisma:migrate:dev -- --name <nome>` e aplique migrations existentes com `pnpm prisma:migrate:deploy`, a partir de `apps/api`. Mantenha todo o histórico em `common/infrastructure/prisma/migrations/`.
+- Para validar o schema, use `pnpm prisma:validate` a partir de `apps/api`.
+- Testes usam `common/infrastructure/prisma/testing/`, `DATABASE_URL_TEST` e `NODE_ENV=test`. A configuração e o client de teste verificam `NODE_ENV`; use apenas um banco de teste isolado. Comandos CLI de teste devem apontar para `testing/prisma.testing.config.ts`.
+- Mantenha `DATABASE_URL` e `DATABASE_URL_TEST` no `.env.example`; nunca versione URLs com credenciais reais.
+- Não invente entidades, campos, relações ou restrições no schema; derive-os de `docs/specs/domain.md` e dos contratos relacionados.
 
 ## Ambiente
 

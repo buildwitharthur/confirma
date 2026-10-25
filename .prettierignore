@@ -1,3 +1,4 @@
 # Além do .gitignore, que o Prettier já respeita.
 docs/
 pnpm-lock.yaml
+apps/api/src/common/infrastructure/prisma/generated/
