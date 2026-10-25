@@ -3,4 +3,5 @@ import { env } from '../env/index.js';
 
 app.listen(env.PORT, () => {
   console.log(`Confirma API listening on port ${env.PORT}`);
+  console.log(`Confirma docs running in /docs`);
 });

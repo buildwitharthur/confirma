@@ -8,6 +8,34 @@ import { requireAccountAccessMiddleware } from './middlewares/require-account-ac
 
 const routes = Router();
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Error:
+ *       type: object
+ *       required:
+ *         - code
+ *         - message
+ *       properties:
+ *         code:
+ *           type: string
+ *           example: validation_error
+ *         message:
+ *           type: string
+ *           example: Um ou mais campos são inválidos.
+ */
+
+/**
+ * @swagger
+ * /health:
+ *   get:
+ *     summary: Verifica a disponibilidade da API
+ *     tags: [Health]
+ *     responses:
+ *       200:
+ *         description: API disponível.
+ */
 routes.get('/health', (_, res) => {
   return res.status(200).json({ ok: 'true' });
 });

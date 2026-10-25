@@ -12,12 +12,261 @@ import { updateMessageTemplateController } from '../controllers/update-message-t
 
 export const accountRoutes = Router();
 
+/**
+ * @swagger
+ * tags:
+ *   name: Accounts
+ *   description: Conta, template e chaves de API
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Account:
+ *       type: object
+ *       required: [id, name, timezone, send_window_start, send_window_end, first_send_lead_minutes, updated_at]
+ *       properties:
+ *         id:
+ *           type: string
+ *           format: uuid
+ *         name:
+ *           type: string
+ *         timezone:
+ *           type: string
+ *           example: America/Sao_Paulo
+ *         send_window_start:
+ *           type: string
+ *           example: 08:00
+ *         send_window_end:
+ *           type: string
+ *           example: 20:00
+ *         first_send_lead_minutes:
+ *           type: integer
+ *         updated_at:
+ *           type: string
+ *           format: date-time
+ *     AccountUpdate:
+ *       type: object
+ *       required: [name, timezone, first_send_lead_minutes, send_window_start, send_window_end]
+ *       additionalProperties: false
+ *       properties:
+ *         name:
+ *           type: string
+ *         timezone:
+ *           type: string
+ *         first_send_lead_minutes:
+ *           type: integer
+ *         send_window_start:
+ *           type: string
+ *         send_window_end:
+ *           type: string
+ *     AccountDeletion:
+ *       type: object
+ *       required: [account_name]
+ *       additionalProperties: false
+ *       properties:
+ *         account_name:
+ *           type: string
+ *     MessageTemplate:
+ *       type: object
+ *       required: [body]
+ *       properties:
+ *         body:
+ *           type: string
+ *         is_default:
+ *           type: boolean
+ *         updated_at:
+ *           type: string
+ *           format: date-time
+ *           nullable: true
+ *     ApiKey:
+ *       type: object
+ *       required: [id, prefix, created_at, revoked_at]
+ *       properties:
+ *         id:
+ *           type: string
+ *           format: uuid
+ *         prefix:
+ *           type: string
+ *         created_at:
+ *           type: string
+ *           format: date-time
+ *         revoked_at:
+ *           type: string
+ *           format: date-time
+ *           nullable: true
+ */
+
+/**
+ * @swagger
+ * /panel/account:
+ *   get:
+ *     summary: Consulta a conta
+ *     tags: [Accounts]
+ *     security: [{ sessionCookie: [] }]
+ *     responses:
+ *       200:
+ *         description: Dados da conta.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Account'
+ *       401:
+ *         description: Sessão inválida.
+ *       403:
+ *         description: Acesso negado.
+ *   patch:
+ *     summary: Atualiza a conta
+ *     tags: [Accounts]
+ *     security: [{ sessionCookie: [] }]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/AccountUpdate'
+ *     responses:
+ *       200:
+ *         description: Conta atualizada.
+ *       401:
+ *         description: Sessão inválida.
+ *       403:
+ *         description: Acesso negado.
+ *       422:
+ *         description: Dados inválidos.
+ *   delete:
+ *     summary: Solicita exclusão da conta
+ *     tags: [Accounts]
+ *     security: [{ sessionCookie: [] }]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/AccountDeletion'
+ *     responses:
+ *       202:
+ *         description: Exclusão iniciada.
+ *       401:
+ *         description: Sessão inválida.
+ *       403:
+ *         description: Acesso negado ou reautenticação necessária.
+ *       422:
+ *         description: Dados inválidos.
+ */
 accountRoutes.get('/account', getAccountController);
 accountRoutes.patch('/account', updateAccountController);
 accountRoutes.delete('/account', requestAccountDeletionController);
+
+/**
+ * @swagger
+ * /panel/account/usage:
+ *   get:
+ *     summary: Consulta o uso da conta
+ *     tags: [Accounts]
+ *     security: [{ sessionCookie: [] }]
+ *     responses:
+ *       200:
+ *         description: Uso do período atual.
+ *       401:
+ *         description: Sessão inválida.
+ *       403:
+ *         description: Acesso negado.
+ */
 accountRoutes.get('/account/usage', getAccountUsageController);
+
+/**
+ * @swagger
+ * /panel/account/template:
+ *   get:
+ *     summary: Consulta o template vigente
+ *     tags: [Accounts]
+ *     security: [{ sessionCookie: [] }]
+ *     responses:
+ *       200:
+ *         description: Template vigente.
+ *       401:
+ *         description: Sessão inválida.
+ *       403:
+ *         description: Acesso negado.
+ *   put:
+ *     summary: Atualiza o template
+ *     tags: [Accounts]
+ *     security: [{ sessionCookie: [] }]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/MessageTemplate'
+ *     responses:
+ *       200:
+ *         description: Template atualizado.
+ *       401:
+ *         description: Sessão inválida.
+ *       403:
+ *         description: Acesso negado.
+ *       422:
+ *         description: Template inválido.
+ */
 accountRoutes.get('/account/template', getMessageTemplateController);
 accountRoutes.put('/account/template', updateMessageTemplateController);
+
+/**
+ * @swagger
+ * /panel/account/api-keys:
+ *   get:
+ *     summary: Lista chaves da conta
+ *     tags: [Accounts]
+ *     security: [{ sessionCookie: [] }]
+ *     responses:
+ *       200:
+ *         description: Chaves sem os segredos.
+ *       401:
+ *         description: Sessão inválida.
+ *       403:
+ *         description: Acesso negado.
+ *   post:
+ *     summary: Cria uma chave da conta
+ *     tags: [Accounts]
+ *     security: [{ sessionCookie: [] }]
+ *     responses:
+ *       201:
+ *         description: Chave criada; o segredo é exibido uma vez.
+ *       401:
+ *         description: Sessão inválida.
+ *       403:
+ *         description: Acesso negado.
+ */
 accountRoutes.get('/account/api-keys', listApiKeysController);
 accountRoutes.post('/account/api-keys', createApiKeyController);
+
+/**
+ * @swagger
+ * /panel/account/api-keys/{key_id}:
+ *   delete:
+ *     summary: Revoga uma chave
+ *     tags: [Accounts]
+ *     security: [{ sessionCookie: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: key_id
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         required: true
+ *         description: Identificador da chave.
+ *     responses:
+ *       204:
+ *         description: Chave revogada.
+ *       401:
+ *         description: Sessão inválida.
+ *       403:
+ *         description: Acesso negado.
+ *       404:
+ *         description: Chave não encontrada.
+ *       503:
+ *         description: Confirmação externa indisponível.
+ */
 accountRoutes.delete('/account/api-keys/:key_id', revokeApiKeyController);
