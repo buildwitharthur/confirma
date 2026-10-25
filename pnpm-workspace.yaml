@@ -2,9 +2,11 @@ packages:
   - 'apps/*'
   - 'packages/*'
 allowBuilds:
+  '@prisma/engines': true
   '@scarf/scarf': true
   bcrypt: true
   esbuild: true
+  prisma: true
 minimumReleaseAgeExclude:
   - '@astrojs/check@0.9.11'
   - astro@7.4.1
