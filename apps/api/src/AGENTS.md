@@ -73,6 +73,14 @@ Interfaces de repositório ficam em `domain/repositories/`.
 - Operações de uso único, idempotência e concorrência devem ter garantias atômicas na implementação persistente.
 - Não crie uma implementação falsa ou em memória para fazer uma rota parecer pronta.
 
+### Implementações Prisma
+
+- Mantenha a interface e os tipos de entrada em `domain/repositories/`; não importe Prisma no domínio nem nos casos de uso.
+- Implemente cada interface em `infrastructure/http/prisma/repositories/`, em um arquivo `<recurso>-prisma.repository.ts`, como `auth-prisma.repository.ts` e `password-reset-token-prisma.repository.ts`.
+- Nomeie a classe `<Recurso>PrismaRepository` e faça-a implementar a interface correspondente do domínio.
+- Injete `PrismaClient` no construtor, usando por padrão o client exportado por `common/infrastructure/prisma/index.ts`. Importe o tipo e o client gerado de `common/infrastructure/prisma/generated/client/`.
+- Faça os métodos da classe atenderem ao contrato do repositório e retornarem os modelos de domínio correspondentes.
+
 ## Use cases
 
 Os casos de uso ficam em `application/usecases/` e são classes exportadas.
@@ -125,7 +133,7 @@ const bodySchema = z.object({ value: z.string().min(1) }).strict();
 const body = dataValidation(bodySchema, request.body);
 ```
 
-Repositórios são obtidos da composição da infraestrutura disponível na requisição até que seus adapters concretos sejam definidos. Interfaces não podem ser instanciadas diretamente.
+Controllers recebem repositórios pelas interfaces disponíveis em `request.app.locals`; a composição da infraestrutura fornece suas implementações concretas. Interfaces não podem ser instanciadas diretamente.
 
 ## Rotas
 
