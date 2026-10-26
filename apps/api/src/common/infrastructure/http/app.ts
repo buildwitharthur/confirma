@@ -3,6 +3,7 @@ import cookieParser from 'cookie-parser';
 import express from 'express';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
+import { env } from '../env/index.js';
 import { routes } from './routes.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 
@@ -43,6 +44,10 @@ app.use(cookieParser());
 app.use(
   cors({
     credentials: true,
+    origin:
+      env.NODE_ENV === 'development'
+        ? ['https://app.useconfirma.com.br', 'http://localhost:3000']
+        : 'https://app.useconfirma.com.br',
   }),
 );
 

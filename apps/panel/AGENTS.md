@@ -70,6 +70,13 @@ src/
 - Use o cliente e as dependências já adotadas no pacote. Não armazene segredos ou dados pessoais desnecessários no navegador nem em logs.
 - Mantenha os arquivos de tela dentro do módulo correspondente e os componentes locais dentro da tela que os utiliza.
 
+## Formulários
+
+- Use React Hook Form para estado, submissão e validação dos formulários, com schemas Zod e `zodResolver`. Não use as actions nativas do React como padrão para os formulários do painel.
+- Use `register` para campos HTML nativos não controlados e `Controller` quando o campo ou componente de interface for controlado. Mantenha cada schema junto ao formulário que o utiliza, dentro da pasta da tela, salvo quando houver compartilhamento real.
+- O formulário é uma boa fronteira de componente quando campos, validação e ação de envio compartilham estado ou comportamento. Preserve títulos, descrições e demais partes estáticas da tela em `screen.tsx` quando não precisarem de encapsulamento próprio.
+- A validação no cliente melhora a experiência, mas não substitui as validações e contratos da API.
+
 ## Estilos, tokens e variantes
 
 - `src/styles.css` é reservado à importação do Tailwind, à exportação dos tokens do design system e às configurações realmente globais, como seleção de texto e barra de rolagem. Não coloque estilos de telas ou componentes nesse arquivo.
@@ -80,6 +87,7 @@ src/
 
 ## Componentes primitivos e ícones
 
+- Extraia um trecho para um componente quando ele concentrar comportamento, estado ou regra de negócio, quando formar uma seção visual coesa que precise ser reutilizada, ou quando isso tornar a tela claramente mais fácil de entender. Em formulários, mantenha campos, validação e ação de envio juntos quando compartilharem esse comportamento. Não crie componentes só para envolver elementos estáticos ou dividir a tela em pedaços arbitrários: títulos, descrições e estrutura visual simples podem permanecer direto no `screen.tsx`.
 - Componentes primitivos de interface são construídos sobre o Radix, pelo pacote unificado `radix-ui` (`import { Dialog } from 'radix-ui'`). Antes de criar qualquer componente interativo, verifique se o Radix oferece o primitivo correspondente e use-o. Não reimplemente do zero comportamento que o Radix já cobre, como foco, navegação por teclado, ARIA, portais, camadas e fechamento.
 - Exemplos: diálogos (`Dialog`; `AlertDialog` para confirmações destrutivas), toasts (`Toast`), selects (`Select`), progresso (`Progress`), rótulos (`Label`), checkbox, radio, switch, tabs, tooltip, popover e dropdown menu. Use `Slot` quando um componente precisar renderizar outro elemento (`asChild`), como um botão que navega com `<Link>`.
 - Elementos sem primitivo no Radix, como botão, input, card, badge e tabela, usam HTML semântico nativo estilizado com `tv()`. Não crie comportamento próprio para eles além do necessário.
