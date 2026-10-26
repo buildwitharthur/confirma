@@ -1,4 +1,5 @@
 import type { ComponentProps } from 'react';
+import { Slot } from 'radix-ui';
 import { tv, type VariantProps } from 'tailwind-variants';
 
 const button = tv({
@@ -23,6 +24,8 @@ const button = tv({
 
 type ButtonProps = ComponentProps<'button'> &
 	VariantProps<typeof button> & {
+		/** Renderiza o filho com a aparência de botão, como um `<Link>` de navegação. */
+		asChild?: boolean;
 		/** Bloqueia o botão e mostra o indicador de progresso; `children` deve trazer o rótulo em andamento. */
 		loading?: boolean;
 	};
@@ -30,6 +33,7 @@ type ButtonProps = ComponentProps<'button'> &
 export function Button({
 	variant,
 	size,
+	asChild = false,
 	loading = false,
 	disabled,
 	className,
@@ -37,6 +41,14 @@ export function Button({
 	type = 'button',
 	...props
 }: ButtonProps) {
+	if (asChild) {
+		return (
+			<Slot.Root className={button({ variant, size, className })} {...props}>
+				{children}
+			</Slot.Root>
+		);
+	}
+
 	return (
 		<button
 			type={type}

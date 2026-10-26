@@ -1,4 +1,4 @@
-import { CircleX } from 'lucide-react';
+import { CircleCheck, CircleX } from 'lucide-react';
 import type { ComponentProps, ReactNode } from 'react';
 import { tv, type VariantProps } from 'tailwind-variants';
 
@@ -11,6 +11,11 @@ const alert = tv({
 	},
 	variants: {
 		tone: {
+			ok: {
+				root: 'bg-verde-claro',
+				icon: 'text-verde',
+				title: 'text-verde',
+			},
 			err: {
 				root: 'bg-vermelho/7',
 				icon: 'text-vermelho',
@@ -24,6 +29,7 @@ const alert = tv({
 });
 
 const TONE_ICON = {
+	ok: CircleCheck,
 	err: CircleX,
 };
 

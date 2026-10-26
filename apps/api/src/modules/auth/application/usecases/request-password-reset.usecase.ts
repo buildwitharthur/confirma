@@ -39,13 +39,11 @@ export class RequestPasswordResetUseCase {
 
     const resetLink = `${this.resetUrl}?token=${encodeURIComponent(token)}`;
 
-    void this.mailProvider
-      .send({
-        to: user.email,
-        subject: 'Redefinição de senha do Confirma',
-        html: `<p>Use este link para redefinir sua senha:</p><p><a href="${resetLink}">${resetLink}</a></p>`,
-        text: `Use este link para redefinir sua senha: ${resetLink}`,
-      })
-      .catch(() => undefined);
+    void this.mailProvider.send({
+      to: user.email,
+      subject: 'Redefinição de senha do Confirma',
+      html: `<p>Use este link para redefinir sua senha:</p><p><a href="${resetLink}">${resetLink}</a></p>`,
+      text: `Use este link para redefinir sua senha: ${resetLink}`,
+    });
   }
 }

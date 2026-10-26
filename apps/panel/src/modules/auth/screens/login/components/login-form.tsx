@@ -5,9 +5,10 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Alert } from '@/common/components/ui/alert';
 import { Button } from '@/common/components/ui/button';
-import { Field, fieldErrorId } from '@/common/components/ui/field';
+import { Field, fieldDescribedBy } from '@/common/components/ui/field';
 import { Input } from '@/common/components/ui/input';
 import { PasswordInput } from '@/common/components/ui/password-input';
+import { textLink } from '@/common/components/ui/text-link';
 import { useLogin } from '../hooks/use-login';
 
 const loginSchema = z.object({
@@ -84,9 +85,9 @@ export function LoginForm() {
 					placeholder="nome@empresa.com"
 					aria-required="true"
 					aria-invalid={errors.email ? true : undefined}
-					aria-describedby={
-						errors.email ? fieldErrorId('login-email') : undefined
-					}
+					aria-describedby={fieldDescribedBy('login-email', {
+						error: !!errors.email,
+					})}
 					{...register('email')}
 				/>
 			</Field>
@@ -102,9 +103,9 @@ export function LoginForm() {
 					placeholder="Informe sua senha"
 					aria-required="true"
 					aria-invalid={errors.password ? true : undefined}
-					aria-describedby={
-						errors.password ? fieldErrorId('login-password') : undefined
-					}
+					aria-describedby={fieldDescribedBy('login-password', {
+						error: !!errors.password,
+					})}
 					{...register('password')}
 				/>
 			</Field>
@@ -116,10 +117,7 @@ export function LoginForm() {
 			<Button type="submit" variant="primary" size="lg" loading={isSubmitting}>
 				{isSubmitting ? 'Entrando…' : 'Entrar'}
 			</Button>
-			<Link
-				to="/recuperar-acesso"
-				className="text-verde hover:text-verde-profundo focus-visible:outline-menta justify-self-start rounded-lg underline underline-offset-2 outline-none focus-visible:shadow-[0_0_0_2px_var(--color-verde-escuro)] focus-visible:outline-2 focus-visible:outline-offset-2"
-			>
+			<Link to="/recuperar-acesso" className={textLink()}>
 				Esqueci minha senha
 			</Link>
 		</form>
