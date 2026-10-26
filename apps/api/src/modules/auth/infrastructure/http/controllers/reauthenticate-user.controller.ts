@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { z } from 'zod';
 
-import { AuthRepository } from '../../../domain/repositories/auth.repository.js';
+import { AuthPrismaRepository } from '../prisma/repositories/auth-prisma.repository.js';
 import { UnauthorizedError } from '../../../../../common/domain/errors/unauthorized.js';
 import { BcryptHashProvider } from '../../../../../common/infrastructure/providers/hash-provider/bcrypt-hash.provider.js';
 import { ExpressCookieProvider } from '../../../../../common/infrastructure/providers/cookie-provider/express-cookie.provider.js';
@@ -27,7 +27,7 @@ export const reauthenticateUserController = async (
     throw new UnauthorizedError();
   }
 
-  const authRepository = request.app.locals.authRepository as AuthRepository;
+  const authRepository = new AuthPrismaRepository();
   const hashProvider = new BcryptHashProvider();
   const jwtProvider = new JsonWebTokenProvider(env.JWT_SECRET);
   const cookieProvider = new ExpressCookieProvider(request, response);

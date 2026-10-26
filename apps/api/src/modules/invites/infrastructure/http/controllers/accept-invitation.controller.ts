@@ -5,10 +5,9 @@ import { ExpressCookieProvider } from '../../../../../common/infrastructure/prov
 import { BcryptHashProvider } from '../../../../../common/infrastructure/providers/hash-provider/bcrypt-hash.provider.js';
 import { JsonWebTokenProvider } from '../../../../../common/infrastructure/providers/jwt-provider/jsonwebtoken-jwt.provider.js';
 import { env } from '../../../../../common/infrastructure/env/index.js';
-import { ServiceUnavailableError } from '../../../../../common/domain/errors/service-unavailable.js';
 import { dataValidation } from '../../../../../common/infrastructure/validation/zod/data-validation.js';
 import { AcceptInvitationUseCase } from '../../../application/usecases/accept-invitation.usecase.js';
-import { InvitationRepository } from '../../../domain/repositories/invitation.repository.js';
+import { InvitationPrismaRepository } from '../prisma/repositories/invitation-prisma.repository.js';
 
 export const acceptInvitationController = async (
   request: Request,
@@ -24,11 +23,7 @@ export const acceptInvitationController = async (
       .strict(),
     request.body,
   );
-  const repository = request.app.locals.invitationRepository as
-    InvitationRepository | undefined;
-  if (!repository) {
-    throw new ServiceUnavailableError();
-  }
+  const repository = new InvitationPrismaRepository();
 
   const cookieProvider = new ExpressCookieProvider(request, response);
   const useCase = new AcceptInvitationUseCase(

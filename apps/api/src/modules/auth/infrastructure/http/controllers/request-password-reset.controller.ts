@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import { z } from 'zod';
 
-import { AuthRepository } from '../../../domain/repositories/auth.repository.js';
-import { PasswordResetTokenRepository } from '../../../domain/repositories/password-reset-token.repository.js';
+import { AuthPrismaRepository } from '../prisma/repositories/auth-prisma.repository.js';
+import { PasswordResetTokenPrismaRepository } from '../prisma/repositories/password-reset-token-prisma.repository.js';
 import { CryptoPasswordResetTokenProvider } from '../../../../../common/infrastructure/providers/password-reset-token-provider/crypto-password-reset-token.provider.js';
 import { ResendMailProvider } from '../../../../../common/infrastructure/providers/mail-provider/resend-mail.provider.js';
 import { env } from '../../../../../common/infrastructure/env/index.js';
@@ -20,9 +20,8 @@ export const requestPasswordResetController = async (
     .strict();
   const parsedBody = dataValidation(bodySchema, request.body);
 
-  const authRepository = request.app.locals.authRepository as AuthRepository;
-  const passwordResetTokenRepository = request.app.locals
-    .passwordResetTokenRepository as PasswordResetTokenRepository;
+  const authRepository = new AuthPrismaRepository();
+  const passwordResetTokenRepository = new PasswordResetTokenPrismaRepository();
   const passwordResetTokenProvider = new CryptoPasswordResetTokenProvider();
   const mailProvider = new ResendMailProvider(
     env.RESEND_API_KEY,

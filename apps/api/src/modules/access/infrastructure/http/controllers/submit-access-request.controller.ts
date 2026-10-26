@@ -2,9 +2,8 @@ import { Request, Response } from 'express';
 import { z } from 'zod';
 
 import { AppError } from '../../../../../common/domain/errors/app-error.js';
-import { ServiceUnavailableError } from '../../../../../common/domain/errors/service-unavailable.js';
 import { ValidationError } from '../../../../../common/domain/errors/validation-error.js';
-import { AccessRequestRepository } from '../../../domain/repositories/access-request.repository.js';
+import { AccessRequestPrismaRepository } from '../prisma/repositories/access-request-prisma.repository.js';
 import { SubmitAccessRequestUseCase } from '../../../application/usecases/submit-access-request.usecase.js';
 
 const accessRequestSchema = z
@@ -33,11 +32,7 @@ export const submitAccessRequestController = async (
     throw new ValidationError();
   }
 
-  const repository = request.app.locals.accessRequestRepository as
-    AccessRequestRepository | undefined;
-  if (!repository) {
-    throw new ServiceUnavailableError();
-  }
+  const repository = new AccessRequestPrismaRepository();
 
   const useCase = new SubmitAccessRequestUseCase(repository);
   await useCase.execute({
