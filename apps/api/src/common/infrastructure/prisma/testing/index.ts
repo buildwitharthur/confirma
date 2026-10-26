@@ -8,12 +8,10 @@ if (process.env.NODE_ENV !== 'test') {
   );
 }
 
-const connectionString = process.env.DATABASE_URL_TEST;
+const connectionString = process.env.DATABASE_URL;
 
 if (!connectionString) {
-  throw new Error(
-    'DATABASE_URL_TEST must be configured to use the Prisma testing client.',
-  );
+  throw new Error('DATABASE_URL must be configured to use Prisma testing.');
 }
 
 const adapter = new PrismaPg({ connectionString });

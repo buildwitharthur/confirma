@@ -2,7 +2,7 @@
 
 O schema, a configuração do Prisma, o client gerado e o histórico de migrations ficam nesta pasta. O PostgreSQL usa Prisma ORM 7 com o driver adapter `@prisma/adapter-pg`.
 
-Configure `DATABASE_URL` no ambiente da API. Para testes, configure `DATABASE_URL_TEST` em `apps/api/.env.test`, apontando para um banco de teste isolado, e use `NODE_ENV=test`; o client em `testing/` recusa iniciar fora desse ambiente. Consulte `apps/api/.env.test.example` para os valores locais de referência. O arquivo `.env.test` não deve ser versionado.
+Configure `DATABASE_URL` no ambiente da API. Para testes, use a mesma chave `DATABASE_URL` em `apps/api/.env.test`, apontando para um banco de teste isolado, e defina `NODE_ENV=test`; o client em `testing/` recusa iniciar fora desse ambiente. Consulte `apps/api/.env.test.example` para os valores locais de referência. O arquivo `.env.test` não deve ser versionado.
 
 Comandos a partir de `apps/api`:
 

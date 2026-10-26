@@ -11,6 +11,6 @@ export default defineConfig({
     path: '../migrations',
   },
   datasource: {
-    url: env('DATABASE_URL_TEST'),
+    url: env('DATABASE_URL'),
   },
 });
