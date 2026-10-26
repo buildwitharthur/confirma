@@ -28,6 +28,17 @@ export const invitationRoutes = Router();
  *     responses:
  *       200:
  *         description: Dados públicos do convite.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               required: [email]
+ *               properties:
+ *                 email:
+ *                   type: string
+ *                   format: email
+ *                 account_name:
+ *                   type: string
  *       404:
  *         description: Convite inválido.
  */

@@ -29,7 +29,13 @@ export interface paths {
                     headers: {
                         [name: string]: unknown;
                     };
-                    content?: never;
+                    content: {
+                        "application/json": {
+                            /** Format: email */
+                            email: string;
+                            account_name?: string;
+                        };
+                    };
                 };
                 /** @description Convite inválido. */
                 404: {

@@ -4,8 +4,17 @@ import type { paths } from '@/common/http/generated/openapi';
 type InspectInvitationQuery =
 	paths['/auth/invitations/inspect']['get']['parameters']['query'];
 
-export function inspectInvitation(token: InspectInvitationQuery['token']) {
-	return apiClient.GET('/auth/invitations/inspect', {
+/** Retorna os dados públicos do convite, ou `null` quando ele é inválido (404). */
+export async function inspectInvitation(
+	token: InspectInvitationQuery['token'],
+) {
+	const { data, response } = await apiClient.GET('/auth/invitations/inspect', {
 		params: { query: { token } },
 	});
+
+	if (response.status === 404) return null;
+	if (!data)
+		throw new Error(`Falha ao consultar o convite (${response.status}).`);
+
+	return data;
 }

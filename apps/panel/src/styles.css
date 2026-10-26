@@ -37,6 +37,12 @@
 	}
 }
 
+@keyframes shimmer {
+	to {
+		background-position: -200% 0;
+	}
+}
+
 @keyframes demo-rise {
 	from {
 		opacity: 0;
