@@ -1,0 +1,67 @@
+@import 'tailwindcss';
+
+@theme {
+	--color-verde: #0a7f50;
+	--color-menta: #3ddc97;
+	--color-noite: #0b1f1a;
+	--color-nevoa: #f3f7f5;
+	--color-branco: #ffffff;
+	--color-verde-escuro: #13302a;
+	--color-verde-claro: #e6f5ee;
+	--color-cinza-verde-escuro: #4a5e57;
+	--color-cinza-verde-medio: #9db5ac;
+	--color-cinza-verde-claro: #d5e1dc;
+	--color-verde-profundo: #24443b;
+	--color-cinza-verde: #738a82;
+	--color-verde-acinzentado: #5e8579;
+	--color-ambar: #f5a524;
+	--color-marrom-ambar: #3a2400;
+	--color-vermelho: #c8262c;
+	--color-coral: #f26b6f;
+	--font-sans: 'IBM Plex Sans', Arial, sans-serif;
+	--font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+}
+
+html {
+	scrollbar-color: var(--color-verde-acinzentado) var(--color-nevoa);
+	scrollbar-width: thin;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+	min-height: 100%;
+}
+
+body {
+	margin: 0;
+}
+
+::selection {
+	background: var(--color-menta);
+	color: var(--color-noite);
+}
+
+@supports not (scrollbar-color: auto) {
+	html::-webkit-scrollbar {
+		width: 0.625rem;
+	}
+
+	html::-webkit-scrollbar-track {
+		background: var(--color-nevoa);
+	}
+
+	html::-webkit-scrollbar-thumb {
+		border: 2px solid var(--color-nevoa);
+		border-radius: 999px;
+		background: var(--color-verde-acinzentado);
+	}
+
+	html::-webkit-scrollbar-thumb:hover {
+		background: var(--color-cinza-verde-medio);
+	}
+}

@@ -38,7 +38,7 @@ function StepDescription({ step }: { step: Step }) {
 		) : (
 			<code
 				key={index}
-				className="font-mono text-[0.875em] font-medium text-dark-green"
+				className="text-dark-green font-mono text-[0.875em] font-medium"
 			>
 				{part.code}
 			</code>
@@ -136,7 +136,7 @@ export default function StepSelector({ steps }: Props) {
 			aria-label="Etapas do fluxo"
 			aria-orientation="vertical"
 			onKeyDown={handleKeyDown}
-			className="grid gap-1 rounded-[22px] bg-mist p-1.5 [box-shadow:inset_0_0_0_1px_var(--confirma-apoio-cinza-verde-claro),var(--rebaixo)]"
+			className="bg-mist grid gap-1 rounded-[22px] p-1.5 [box-shadow:inset_0_0_0_1px_var(--confirma-apoio-cinza-verde-claro),var(--rebaixo)]"
 		>
 			{steps.map((step, index) => {
 				const selected = index === activeStep;
@@ -172,14 +172,14 @@ export default function StepSelector({ steps }: Props) {
 						</span>
 						<span
 							id={tabTitleId(step)}
-							className="col-start-2 block pt-[9px] font-display text-[1.125rem] leading-[1.3] font-semibold tracking-[-0.005em]"
+							className="font-display col-start-2 block pt-[9px] text-[1.125rem] leading-[1.3] font-semibold tracking-[-0.005em]"
 						>
 							<span className="sr-only">Etapa {step.number}: </span>
 							{step.title}
 						</span>
 						<span
 							id={tabDescId(step)}
-							className="col-start-2 mt-2 block text-[0.9375rem] leading-[1.55] text-dark-green-gray"
+							className="text-dark-green-gray col-start-2 mt-2 block text-[0.9375rem] leading-[1.55]"
 						>
 							<StepDescription step={step} />
 						</span>
