@@ -6,3 +6,211 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+enum AccountStatus {
+  active
+  deleting
+  deleted
+
+  @@map("account_status")
+}
+
+enum AccessRequestWhatsAppProvider {
+  evolution_api
+  other
+  none_yet
+
+  @@map("access_request_whatsapp_provider")
+}
+
+enum AccessRequestStatus {
+  pending
+  invited
+  rejected
+
+  @@map("access_request_status")
+}
+
+enum ConsentMethod {
+  whatsapp
+  in_person
+  form
+  other
+
+  @@map("consent_method")
+}
+
+enum ContactPrivacyEventType {
+  blocked
+  unblocked
+
+  @@map("contact_privacy_event_type")
+}
+
+enum ContactPrivacyEventChannel {
+  whatsapp
+  panel
+
+  @@map("contact_privacy_event_channel")
+}
+
+model AccountUser {
+  id                  String                @id @default(uuid()) @db.Uuid
+  email               String                @unique
+  passwordHash        Bytes                 @map("password_hash")
+  passwordChangedAt   DateTime?             @map("password_changed_at") @db.Timestamptz(3)
+  createdAt           DateTime              @default(now()) @map("created_at") @db.Timestamptz(3)
+  disabledAt          DateTime?             @map("disabled_at") @db.Timestamptz(3)
+  account             Account?
+  passwordResetTokens PasswordResetToken[]
+  unblockRequests     UnblockRequest[]
+  privacyEvents       ContactPrivacyEvent[]
+
+  @@map("account_users")
+}
+
+model Account {
+  id                    String                @id @default(uuid()) @db.Uuid
+  name                  String
+  timezone              String                @default("America/Sao_Paulo")
+  sendWindowStart       DateTime              @default(dbgenerated("'08:00:00'::time")) @map("send_window_start") @db.Time(0)
+  sendWindowEnd         DateTime              @default(dbgenerated("'20:00:00'::time")) @map("send_window_end") @db.Time(0)
+  firstSendLeadMinutes  Int                   @default(1440) @map("first_send_lead_minutes")
+  responseCutoffMinutes Int                   @default(120) @map("response_cutoff_minutes")
+  reminderDelayMinutes  Int                   @default(240) @map("reminder_delay_minutes")
+  status                AccountStatus         @default(active)
+  createdAt             DateTime              @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt             DateTime              @updatedAt @map("updated_at") @db.Timestamptz(3)
+  accountUserId         String                @unique @map("account_user_id") @db.Uuid
+  accountUser           AccountUser           @relation(fields: [accountUserId], references: [id], onDelete: Cascade)
+  apiKeys               ApiKey[]
+  messageTemplate       MessageTemplate?
+  monthlyUsages         MonthlyUsage[]
+  contactBlocks         ContactBlock[]
+  contactPrivacyEvents  ContactPrivacyEvent[]
+
+  @@map("accounts")
+}
+
+model Invitation {
+  id        String    @id @default(uuid()) @db.Uuid
+  email     String
+  tokenHash Bytes     @unique @map("token_hash")
+  expiresAt DateTime  @map("expires_at") @db.Timestamptz(3)
+  usedAt    DateTime? @map("used_at") @db.Timestamptz(3)
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  @@map("invitations")
+}
+
+model AccessRequest {
+  id               String                        @id @default(uuid()) @db.Uuid
+  name             String
+  email            String                        @unique
+  companyOrProject String                        @map("company_or_project")
+  whatsappProvider AccessRequestWhatsAppProvider @map("whatsapp_provider")
+  intendedUse      String?                       @map("intended_use")
+  status           AccessRequestStatus           @default(pending)
+  consentAt        DateTime                      @map("consent_at") @db.Timestamptz(3)
+  receivedAt       DateTime                      @default(now()) @map("received_at") @db.Timestamptz(3)
+  updatedAt        DateTime                      @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  @@map("access_requests")
+}
+
+model ApiKey {
+  id         String    @id @default(uuid()) @db.Uuid
+  accountId  String    @map("account_id") @db.Uuid
+  prefix     String
+  secretHash Bytes     @map("secret_hash")
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  revokedAt  DateTime? @map("revoked_at") @db.Timestamptz(3)
+  account    Account   @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@map("api_keys")
+}
+
+model MessageTemplate {
+  accountId String   @id @map("account_id") @db.Uuid
+  body      String
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+  account   Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@map("message_templates")
+}
+
+model MonthlyUsage {
+  accountId            String    @map("account_id") @db.Uuid
+  periodStart          DateTime  @map("period_start") @db.Date
+  timezone             String
+  acceptedAppointments Int       @default(0) @map("accepted_appointments")
+  notified80At         DateTime? @map("notified_80_at") @db.Timestamptz(3)
+  notified100At        DateTime? @map("notified_100_at") @db.Timestamptz(3)
+  account              Account   @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@id([accountId, periodStart])
+  @@map("monthly_usage")
+}
+
+model PasswordResetToken {
+  id            String      @id @default(uuid()) @db.Uuid
+  accountUserId String      @map("account_user_id") @db.Uuid
+  tokenHash     String      @unique @map("token_hash")
+  expiresAt     DateTime    @map("expires_at") @db.Timestamptz(3)
+  usedAt        DateTime?   @map("used_at") @db.Timestamptz(3)
+  createdAt     DateTime    @default(now()) @map("created_at") @db.Timestamptz(3)
+  accountUser   AccountUser @relation(fields: [accountUserId], references: [id], onDelete: Cascade)
+
+  @@map("password_reset_tokens")
+}
+
+model ContactBlock {
+  accountId         String                @map("account_id") @db.Uuid
+  phoneHash         Bytes                 @map("phone_hash")
+  isBlocked         Boolean               @default(false) @map("is_blocked")
+  blockedAt         DateTime?             @map("blocked_at") @db.Timestamptz(3)
+  currentSequence   Int                   @default(0) @map("current_sequence")
+  effectiveSequence Int                   @default(0) @map("effective_sequence")
+  account           Account               @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  pendingUnblock    UnblockRequest?       @relation("PendingUnblock")
+  privacyEvents     ContactPrivacyEvent[]
+
+  @@id([accountId, phoneHash])
+  @@map("contact_blocks")
+}
+
+model UnblockRequest {
+  operationId      String        @id @map("operation_id") @db.Uuid
+  accountId        String        @map("account_id") @db.Uuid
+  phoneHash        Bytes         @map("phone_hash")
+  sequence         Int
+  consentMethod    ConsentMethod @map("consent_method")
+  consentAt        DateTime      @map("consent_at") @db.Timestamptz(3)
+  requestedAt      DateTime      @map("requested_at") @db.Timestamptz(3)
+  recordedByUserId String        @map("recorded_by_user_id") @db.Uuid
+  contactBlock     ContactBlock  @relation("PendingUnblock", fields: [accountId, phoneHash], references: [accountId, phoneHash], onDelete: Cascade)
+  recordedByUser   AccountUser   @relation(fields: [recordedByUserId], references: [id], onDelete: Restrict)
+
+  @@unique([accountId, phoneHash])
+  @@map("unblock_requests")
+}
+
+model ContactPrivacyEvent {
+  id               String                     @id @default(uuid()) @db.Uuid
+  accountId        String                     @map("account_id") @db.Uuid
+  phoneHash        Bytes                      @map("phone_hash")
+  sequence         Int
+  type             ContactPrivacyEventType
+  occurredAt       DateTime                   @map("occurred_at") @db.Timestamptz(3)
+  channel          ContactPrivacyEventChannel
+  consentMethod    ConsentMethod?             @map("consent_method")
+  consentAt        DateTime?                  @map("consent_at") @db.Timestamptz(3)
+  recordedByUserId String?                    @map("recorded_by_user_id") @db.Uuid
+  account          Account                    @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  contactBlock     ContactBlock               @relation(fields: [accountId, phoneHash], references: [accountId, phoneHash], onDelete: Cascade)
+  recordedByUser   AccountUser?               @relation(fields: [recordedByUserId], references: [id], onDelete: SetNull)
+
+  @@unique([accountId, phoneHash, sequence])
+  @@map("contact_privacy_events")
+}
