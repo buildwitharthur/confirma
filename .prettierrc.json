@@ -2,6 +2,7 @@
 	"$schema": "https://json.schemastore.org/prettierrc",
 	"singleQuote": true,
 	"plugins": ["prettier-plugin-astro", "prettier-plugin-tailwindcss"],
+	"tailwindFunctions": ["tv", "cn"],
 	"overrides": [
 		{
 			"files": "*.astro",

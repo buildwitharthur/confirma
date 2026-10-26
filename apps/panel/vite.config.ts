@@ -6,7 +6,11 @@ import viteReact from '@vitejs/plugin-react';
 const config = defineConfig({
 	resolve: { tsconfigPaths: true },
 	plugins: [
-		tanstackRouter({ target: 'react', autoCodeSplitting: true }),
+		tanstackRouter({
+			target: 'react',
+			autoCodeSplitting: true,
+			routeToken: 'layout',
+		}),
 		viteReact(),
 		tailwindcss(),
 	],

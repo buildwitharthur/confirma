@@ -10,33 +10,277 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthLayoutRouteImport } from './routes/_auth/layout'
+import { Route as ProtectedLayoutRouteImport } from './routes/_protected/layout'
+import { Route as AuthConviteRouteImport } from './routes/_auth/convite'
+import { Route as AuthEntrarRouteImport } from './routes/_auth/entrar'
+import { Route as AuthRecuperarAcessoRouteImport } from './routes/_auth/recuperar-acesso'
+import { Route as AuthRedefinirSenhaRouteImport } from './routes/_auth/redefinir-senha'
+import { Route as ProtectedAgendamentosLayoutRouteImport } from './routes/_protected/agendamentos/layout'
+import { Route as ProtectedBoasVindasRouteImport } from './routes/_protected/boas-vindas'
+import { Route as ProtectedPrimeirosPassosRouteImport } from './routes/_protected/primeiros-passos'
+import { Route as ProtectedPrivacidadeRouteImport } from './routes/_protected/privacidade'
+import { Route as ProtectedVisaoGeralRouteImport } from './routes/_protected/visao-geral'
+import { Route as AuthTermosAceiteRouteImport } from './routes/_auth/termos.aceite'
+import { Route as ProtectedAgendamentosIndexRouteImport } from './routes/_protected/agendamentos/index'
+import { Route as ProtectedAgendamentosExternal_idRouteImport } from './routes/_protected/agendamentos/$external_id'
+import { Route as ProtectedConfiguracoesContaRouteImport } from './routes/_protected/configuracoes.conta'
+import { Route as ProtectedConfiguracoesExcluirContaRouteImport } from './routes/_protected/configuracoes.excluir-conta'
+import { Route as ProtectedConfiguracoesMensagensRouteImport } from './routes/_protected/configuracoes.mensagens'
+import { Route as ProtectedIntegracoesChavesApiRouteImport } from './routes/_protected/integracoes.chaves-api'
+import { Route as ProtectedIntegracoesWebhookRouteImport } from './routes/_protected/integracoes.webhook'
+import { Route as ProtectedIntegracoesWhatsappRouteImport } from './routes/_protected/integracoes.whatsapp'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthLayoutRoute = AuthLayoutRouteImport.update({
+  id: '/_auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProtectedLayoutRoute = ProtectedLayoutRouteImport.update({
+  id: '/_protected',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthConviteRoute = AuthConviteRouteImport.update({
+  id: '/convite',
+  path: '/convite',
+  getParentRoute: () => AuthLayoutRoute,
+} as any)
+const AuthEntrarRoute = AuthEntrarRouteImport.update({
+  id: '/entrar',
+  path: '/entrar',
+  getParentRoute: () => AuthLayoutRoute,
+} as any)
+const AuthRecuperarAcessoRoute = AuthRecuperarAcessoRouteImport.update({
+  id: '/recuperar-acesso',
+  path: '/recuperar-acesso',
+  getParentRoute: () => AuthLayoutRoute,
+} as any)
+const AuthRedefinirSenhaRoute = AuthRedefinirSenhaRouteImport.update({
+  id: '/redefinir-senha',
+  path: '/redefinir-senha',
+  getParentRoute: () => AuthLayoutRoute,
+} as any)
+const ProtectedAgendamentosLayoutRoute =
+  ProtectedAgendamentosLayoutRouteImport.update({
+    id: '/agendamentos',
+    path: '/agendamentos',
+    getParentRoute: () => ProtectedLayoutRoute,
+  } as any)
+const ProtectedBoasVindasRoute = ProtectedBoasVindasRouteImport.update({
+  id: '/boas-vindas',
+  path: '/boas-vindas',
+  getParentRoute: () => ProtectedLayoutRoute,
+} as any)
+const ProtectedPrimeirosPassosRoute =
+  ProtectedPrimeirosPassosRouteImport.update({
+    id: '/primeiros-passos',
+    path: '/primeiros-passos',
+    getParentRoute: () => ProtectedLayoutRoute,
+  } as any)
+const ProtectedPrivacidadeRoute = ProtectedPrivacidadeRouteImport.update({
+  id: '/privacidade',
+  path: '/privacidade',
+  getParentRoute: () => ProtectedLayoutRoute,
+} as any)
+const ProtectedVisaoGeralRoute = ProtectedVisaoGeralRouteImport.update({
+  id: '/visao-geral',
+  path: '/visao-geral',
+  getParentRoute: () => ProtectedLayoutRoute,
+} as any)
+const AuthTermosAceiteRoute = AuthTermosAceiteRouteImport.update({
+  id: '/termos/aceite',
+  path: '/termos/aceite',
+  getParentRoute: () => AuthLayoutRoute,
+} as any)
+const ProtectedAgendamentosIndexRoute =
+  ProtectedAgendamentosIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => ProtectedAgendamentosLayoutRoute,
+  } as any)
+const ProtectedAgendamentosExternal_idRoute =
+  ProtectedAgendamentosExternal_idRouteImport.update({
+    id: '/$external_id',
+    path: '/$external_id',
+    getParentRoute: () => ProtectedAgendamentosLayoutRoute,
+  } as any)
+const ProtectedConfiguracoesContaRoute =
+  ProtectedConfiguracoesContaRouteImport.update({
+    id: '/configuracoes/conta',
+    path: '/configuracoes/conta',
+    getParentRoute: () => ProtectedLayoutRoute,
+  } as any)
+const ProtectedConfiguracoesExcluirContaRoute =
+  ProtectedConfiguracoesExcluirContaRouteImport.update({
+    id: '/configuracoes/excluir-conta',
+    path: '/configuracoes/excluir-conta',
+    getParentRoute: () => ProtectedLayoutRoute,
+  } as any)
+const ProtectedConfiguracoesMensagensRoute =
+  ProtectedConfiguracoesMensagensRouteImport.update({
+    id: '/configuracoes/mensagens',
+    path: '/configuracoes/mensagens',
+    getParentRoute: () => ProtectedLayoutRoute,
+  } as any)
+const ProtectedIntegracoesChavesApiRoute =
+  ProtectedIntegracoesChavesApiRouteImport.update({
+    id: '/integracoes/chaves-api',
+    path: '/integracoes/chaves-api',
+    getParentRoute: () => ProtectedLayoutRoute,
+  } as any)
+const ProtectedIntegracoesWebhookRoute =
+  ProtectedIntegracoesWebhookRouteImport.update({
+    id: '/integracoes/webhook',
+    path: '/integracoes/webhook',
+    getParentRoute: () => ProtectedLayoutRoute,
+  } as any)
+const ProtectedIntegracoesWhatsappRoute =
+  ProtectedIntegracoesWhatsappRouteImport.update({
+    id: '/integracoes/whatsapp',
+    path: '/integracoes/whatsapp',
+    getParentRoute: () => ProtectedLayoutRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/agendamentos': typeof ProtectedAgendamentosLayoutRouteWithChildren
+  '/convite': typeof AuthConviteRoute
+  '/entrar': typeof AuthEntrarRoute
+  '/recuperar-acesso': typeof AuthRecuperarAcessoRoute
+  '/redefinir-senha': typeof AuthRedefinirSenhaRoute
+  '/boas-vindas': typeof ProtectedBoasVindasRoute
+  '/primeiros-passos': typeof ProtectedPrimeirosPassosRoute
+  '/privacidade': typeof ProtectedPrivacidadeRoute
+  '/visao-geral': typeof ProtectedVisaoGeralRoute
+  '/termos/aceite': typeof AuthTermosAceiteRoute
+  '/agendamentos/$external_id': typeof ProtectedAgendamentosExternal_idRoute
+  '/configuracoes/conta': typeof ProtectedConfiguracoesContaRoute
+  '/configuracoes/excluir-conta': typeof ProtectedConfiguracoesExcluirContaRoute
+  '/configuracoes/mensagens': typeof ProtectedConfiguracoesMensagensRoute
+  '/integracoes/chaves-api': typeof ProtectedIntegracoesChavesApiRoute
+  '/integracoes/webhook': typeof ProtectedIntegracoesWebhookRoute
+  '/integracoes/whatsapp': typeof ProtectedIntegracoesWhatsappRoute
+  '/agendamentos/': typeof ProtectedAgendamentosIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/convite': typeof AuthConviteRoute
+  '/entrar': typeof AuthEntrarRoute
+  '/recuperar-acesso': typeof AuthRecuperarAcessoRoute
+  '/redefinir-senha': typeof AuthRedefinirSenhaRoute
+  '/boas-vindas': typeof ProtectedBoasVindasRoute
+  '/primeiros-passos': typeof ProtectedPrimeirosPassosRoute
+  '/privacidade': typeof ProtectedPrivacidadeRoute
+  '/visao-geral': typeof ProtectedVisaoGeralRoute
+  '/termos/aceite': typeof AuthTermosAceiteRoute
+  '/agendamentos/$external_id': typeof ProtectedAgendamentosExternal_idRoute
+  '/configuracoes/conta': typeof ProtectedConfiguracoesContaRoute
+  '/configuracoes/excluir-conta': typeof ProtectedConfiguracoesExcluirContaRoute
+  '/configuracoes/mensagens': typeof ProtectedConfiguracoesMensagensRoute
+  '/integracoes/chaves-api': typeof ProtectedIntegracoesChavesApiRoute
+  '/integracoes/webhook': typeof ProtectedIntegracoesWebhookRoute
+  '/integracoes/whatsapp': typeof ProtectedIntegracoesWhatsappRoute
+  '/agendamentos': typeof ProtectedAgendamentosIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_auth': typeof AuthLayoutRouteWithChildren
+  '/_protected': typeof ProtectedLayoutRouteWithChildren
+  '/_protected/agendamentos': typeof ProtectedAgendamentosLayoutRouteWithChildren
+  '/_auth/convite': typeof AuthConviteRoute
+  '/_auth/entrar': typeof AuthEntrarRoute
+  '/_auth/recuperar-acesso': typeof AuthRecuperarAcessoRoute
+  '/_auth/redefinir-senha': typeof AuthRedefinirSenhaRoute
+  '/_protected/boas-vindas': typeof ProtectedBoasVindasRoute
+  '/_protected/primeiros-passos': typeof ProtectedPrimeirosPassosRoute
+  '/_protected/privacidade': typeof ProtectedPrivacidadeRoute
+  '/_protected/visao-geral': typeof ProtectedVisaoGeralRoute
+  '/_auth/termos/aceite': typeof AuthTermosAceiteRoute
+  '/_protected/agendamentos/$external_id': typeof ProtectedAgendamentosExternal_idRoute
+  '/_protected/configuracoes/conta': typeof ProtectedConfiguracoesContaRoute
+  '/_protected/configuracoes/excluir-conta': typeof ProtectedConfiguracoesExcluirContaRoute
+  '/_protected/configuracoes/mensagens': typeof ProtectedConfiguracoesMensagensRoute
+  '/_protected/integracoes/chaves-api': typeof ProtectedIntegracoesChavesApiRoute
+  '/_protected/integracoes/webhook': typeof ProtectedIntegracoesWebhookRoute
+  '/_protected/integracoes/whatsapp': typeof ProtectedIntegracoesWhatsappRoute
+  '/_protected/agendamentos/': typeof ProtectedAgendamentosIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/agendamentos'
+    | '/convite'
+    | '/entrar'
+    | '/recuperar-acesso'
+    | '/redefinir-senha'
+    | '/boas-vindas'
+    | '/primeiros-passos'
+    | '/privacidade'
+    | '/visao-geral'
+    | '/termos/aceite'
+    | '/agendamentos/$external_id'
+    | '/configuracoes/conta'
+    | '/configuracoes/excluir-conta'
+    | '/configuracoes/mensagens'
+    | '/integracoes/chaves-api'
+    | '/integracoes/webhook'
+    | '/integracoes/whatsapp'
+    | '/agendamentos/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/convite'
+    | '/entrar'
+    | '/recuperar-acesso'
+    | '/redefinir-senha'
+    | '/boas-vindas'
+    | '/primeiros-passos'
+    | '/privacidade'
+    | '/visao-geral'
+    | '/termos/aceite'
+    | '/agendamentos/$external_id'
+    | '/configuracoes/conta'
+    | '/configuracoes/excluir-conta'
+    | '/configuracoes/mensagens'
+    | '/integracoes/chaves-api'
+    | '/integracoes/webhook'
+    | '/integracoes/whatsapp'
+    | '/agendamentos'
+  id:
+    | '__root__'
+    | '/'
+    | '/_auth'
+    | '/_protected'
+    | '/_protected/agendamentos'
+    | '/_auth/convite'
+    | '/_auth/entrar'
+    | '/_auth/recuperar-acesso'
+    | '/_auth/redefinir-senha'
+    | '/_protected/boas-vindas'
+    | '/_protected/primeiros-passos'
+    | '/_protected/privacidade'
+    | '/_protected/visao-geral'
+    | '/_auth/termos/aceite'
+    | '/_protected/agendamentos/$external_id'
+    | '/_protected/configuracoes/conta'
+    | '/_protected/configuracoes/excluir-conta'
+    | '/_protected/configuracoes/mensagens'
+    | '/_protected/integracoes/chaves-api'
+    | '/_protected/integracoes/webhook'
+    | '/_protected/integracoes/whatsapp'
+    | '/_protected/agendamentos/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthLayoutRoute: typeof AuthLayoutRouteWithChildren
+  ProtectedLayoutRoute: typeof ProtectedLayoutRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +292,224 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_auth': {
+      id: '/_auth'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthLayoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_protected': {
+      id: '/_protected'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof ProtectedLayoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_auth/convite': {
+      id: '/_auth/convite'
+      path: '/convite'
+      fullPath: '/convite'
+      preLoaderRoute: typeof AuthConviteRouteImport
+      parentRoute: typeof AuthLayoutRoute
+    }
+    '/_auth/entrar': {
+      id: '/_auth/entrar'
+      path: '/entrar'
+      fullPath: '/entrar'
+      preLoaderRoute: typeof AuthEntrarRouteImport
+      parentRoute: typeof AuthLayoutRoute
+    }
+    '/_auth/recuperar-acesso': {
+      id: '/_auth/recuperar-acesso'
+      path: '/recuperar-acesso'
+      fullPath: '/recuperar-acesso'
+      preLoaderRoute: typeof AuthRecuperarAcessoRouteImport
+      parentRoute: typeof AuthLayoutRoute
+    }
+    '/_auth/redefinir-senha': {
+      id: '/_auth/redefinir-senha'
+      path: '/redefinir-senha'
+      fullPath: '/redefinir-senha'
+      preLoaderRoute: typeof AuthRedefinirSenhaRouteImport
+      parentRoute: typeof AuthLayoutRoute
+    }
+    '/_protected/agendamentos': {
+      id: '/_protected/agendamentos'
+      path: '/agendamentos'
+      fullPath: '/agendamentos'
+      preLoaderRoute: typeof ProtectedAgendamentosLayoutRouteImport
+      parentRoute: typeof ProtectedLayoutRoute
+    }
+    '/_protected/boas-vindas': {
+      id: '/_protected/boas-vindas'
+      path: '/boas-vindas'
+      fullPath: '/boas-vindas'
+      preLoaderRoute: typeof ProtectedBoasVindasRouteImport
+      parentRoute: typeof ProtectedLayoutRoute
+    }
+    '/_protected/primeiros-passos': {
+      id: '/_protected/primeiros-passos'
+      path: '/primeiros-passos'
+      fullPath: '/primeiros-passos'
+      preLoaderRoute: typeof ProtectedPrimeirosPassosRouteImport
+      parentRoute: typeof ProtectedLayoutRoute
+    }
+    '/_protected/privacidade': {
+      id: '/_protected/privacidade'
+      path: '/privacidade'
+      fullPath: '/privacidade'
+      preLoaderRoute: typeof ProtectedPrivacidadeRouteImport
+      parentRoute: typeof ProtectedLayoutRoute
+    }
+    '/_protected/visao-geral': {
+      id: '/_protected/visao-geral'
+      path: '/visao-geral'
+      fullPath: '/visao-geral'
+      preLoaderRoute: typeof ProtectedVisaoGeralRouteImport
+      parentRoute: typeof ProtectedLayoutRoute
+    }
+    '/_auth/termos/aceite': {
+      id: '/_auth/termos/aceite'
+      path: '/termos/aceite'
+      fullPath: '/termos/aceite'
+      preLoaderRoute: typeof AuthTermosAceiteRouteImport
+      parentRoute: typeof AuthLayoutRoute
+    }
+    '/_protected/agendamentos/': {
+      id: '/_protected/agendamentos/'
+      path: '/'
+      fullPath: '/agendamentos/'
+      preLoaderRoute: typeof ProtectedAgendamentosIndexRouteImport
+      parentRoute: typeof ProtectedAgendamentosLayoutRoute
+    }
+    '/_protected/agendamentos/$external_id': {
+      id: '/_protected/agendamentos/$external_id'
+      path: '/$external_id'
+      fullPath: '/agendamentos/$external_id'
+      preLoaderRoute: typeof ProtectedAgendamentosExternal_idRouteImport
+      parentRoute: typeof ProtectedAgendamentosLayoutRoute
+    }
+    '/_protected/configuracoes/conta': {
+      id: '/_protected/configuracoes/conta'
+      path: '/configuracoes/conta'
+      fullPath: '/configuracoes/conta'
+      preLoaderRoute: typeof ProtectedConfiguracoesContaRouteImport
+      parentRoute: typeof ProtectedLayoutRoute
+    }
+    '/_protected/configuracoes/excluir-conta': {
+      id: '/_protected/configuracoes/excluir-conta'
+      path: '/configuracoes/excluir-conta'
+      fullPath: '/configuracoes/excluir-conta'
+      preLoaderRoute: typeof ProtectedConfiguracoesExcluirContaRouteImport
+      parentRoute: typeof ProtectedLayoutRoute
+    }
+    '/_protected/configuracoes/mensagens': {
+      id: '/_protected/configuracoes/mensagens'
+      path: '/configuracoes/mensagens'
+      fullPath: '/configuracoes/mensagens'
+      preLoaderRoute: typeof ProtectedConfiguracoesMensagensRouteImport
+      parentRoute: typeof ProtectedLayoutRoute
+    }
+    '/_protected/integracoes/chaves-api': {
+      id: '/_protected/integracoes/chaves-api'
+      path: '/integracoes/chaves-api'
+      fullPath: '/integracoes/chaves-api'
+      preLoaderRoute: typeof ProtectedIntegracoesChavesApiRouteImport
+      parentRoute: typeof ProtectedLayoutRoute
+    }
+    '/_protected/integracoes/webhook': {
+      id: '/_protected/integracoes/webhook'
+      path: '/integracoes/webhook'
+      fullPath: '/integracoes/webhook'
+      preLoaderRoute: typeof ProtectedIntegracoesWebhookRouteImport
+      parentRoute: typeof ProtectedLayoutRoute
+    }
+    '/_protected/integracoes/whatsapp': {
+      id: '/_protected/integracoes/whatsapp'
+      path: '/integracoes/whatsapp'
+      fullPath: '/integracoes/whatsapp'
+      preLoaderRoute: typeof ProtectedIntegracoesWhatsappRouteImport
+      parentRoute: typeof ProtectedLayoutRoute
+    }
   }
 }
 
+interface AuthLayoutRouteChildren {
+  AuthConviteRoute: typeof AuthConviteRoute
+  AuthEntrarRoute: typeof AuthEntrarRoute
+  AuthRecuperarAcessoRoute: typeof AuthRecuperarAcessoRoute
+  AuthRedefinirSenhaRoute: typeof AuthRedefinirSenhaRoute
+  AuthTermosAceiteRoute: typeof AuthTermosAceiteRoute
+}
+
+const AuthLayoutRouteChildren: AuthLayoutRouteChildren = {
+  AuthConviteRoute: AuthConviteRoute,
+  AuthEntrarRoute: AuthEntrarRoute,
+  AuthRecuperarAcessoRoute: AuthRecuperarAcessoRoute,
+  AuthRedefinirSenhaRoute: AuthRedefinirSenhaRoute,
+  AuthTermosAceiteRoute: AuthTermosAceiteRoute,
+}
+
+const AuthLayoutRouteWithChildren = AuthLayoutRoute._addFileChildren(
+  AuthLayoutRouteChildren,
+)
+
+interface ProtectedAgendamentosLayoutRouteChildren {
+  ProtectedAgendamentosExternal_idRoute: typeof ProtectedAgendamentosExternal_idRoute
+  ProtectedAgendamentosIndexRoute: typeof ProtectedAgendamentosIndexRoute
+}
+
+const ProtectedAgendamentosLayoutRouteChildren: ProtectedAgendamentosLayoutRouteChildren =
+  {
+    ProtectedAgendamentosExternal_idRoute:
+      ProtectedAgendamentosExternal_idRoute,
+    ProtectedAgendamentosIndexRoute: ProtectedAgendamentosIndexRoute,
+  }
+
+const ProtectedAgendamentosLayoutRouteWithChildren =
+  ProtectedAgendamentosLayoutRoute._addFileChildren(
+    ProtectedAgendamentosLayoutRouteChildren,
+  )
+
+interface ProtectedLayoutRouteChildren {
+  ProtectedAgendamentosLayoutRoute: typeof ProtectedAgendamentosLayoutRouteWithChildren
+  ProtectedBoasVindasRoute: typeof ProtectedBoasVindasRoute
+  ProtectedPrimeirosPassosRoute: typeof ProtectedPrimeirosPassosRoute
+  ProtectedPrivacidadeRoute: typeof ProtectedPrivacidadeRoute
+  ProtectedVisaoGeralRoute: typeof ProtectedVisaoGeralRoute
+  ProtectedConfiguracoesContaRoute: typeof ProtectedConfiguracoesContaRoute
+  ProtectedConfiguracoesExcluirContaRoute: typeof ProtectedConfiguracoesExcluirContaRoute
+  ProtectedConfiguracoesMensagensRoute: typeof ProtectedConfiguracoesMensagensRoute
+  ProtectedIntegracoesChavesApiRoute: typeof ProtectedIntegracoesChavesApiRoute
+  ProtectedIntegracoesWebhookRoute: typeof ProtectedIntegracoesWebhookRoute
+  ProtectedIntegracoesWhatsappRoute: typeof ProtectedIntegracoesWhatsappRoute
+}
+
+const ProtectedLayoutRouteChildren: ProtectedLayoutRouteChildren = {
+  ProtectedAgendamentosLayoutRoute:
+    ProtectedAgendamentosLayoutRouteWithChildren,
+  ProtectedBoasVindasRoute: ProtectedBoasVindasRoute,
+  ProtectedPrimeirosPassosRoute: ProtectedPrimeirosPassosRoute,
+  ProtectedPrivacidadeRoute: ProtectedPrivacidadeRoute,
+  ProtectedVisaoGeralRoute: ProtectedVisaoGeralRoute,
+  ProtectedConfiguracoesContaRoute: ProtectedConfiguracoesContaRoute,
+  ProtectedConfiguracoesExcluirContaRoute:
+    ProtectedConfiguracoesExcluirContaRoute,
+  ProtectedConfiguracoesMensagensRoute: ProtectedConfiguracoesMensagensRoute,
+  ProtectedIntegracoesChavesApiRoute: ProtectedIntegracoesChavesApiRoute,
+  ProtectedIntegracoesWebhookRoute: ProtectedIntegracoesWebhookRoute,
+  ProtectedIntegracoesWhatsappRoute: ProtectedIntegracoesWhatsappRoute,
+}
+
+const ProtectedLayoutRouteWithChildren = ProtectedLayoutRoute._addFileChildren(
+  ProtectedLayoutRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthLayoutRoute: AuthLayoutRouteWithChildren,
+  ProtectedLayoutRoute: ProtectedLayoutRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
