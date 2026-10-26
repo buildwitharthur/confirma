@@ -16,3 +16,4 @@ temp/
 *.local
 .DS_Store
 Thumbs.db
+!.env.test.example

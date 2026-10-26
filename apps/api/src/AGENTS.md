@@ -226,8 +226,9 @@ O ORM é Prisma 7 com PostgreSQL e driver adapter `@prisma/adapter-pg`. Mantenha
 - A instância de aplicação é exportada por `common/infrastructure/prisma/index.ts`; a conexão usa `DATABASE_URL` e o adapter PostgreSQL.
 - Crie e aplique migrations de desenvolvimento com `pnpm prisma:migrate:dev -- --name <nome>` e aplique migrations existentes com `pnpm prisma:migrate:deploy`, a partir de `apps/api`. Mantenha todo o histórico em `common/infrastructure/prisma/migrations/`.
 - Para validar o schema, use `pnpm prisma:validate` a partir de `apps/api`.
-- Testes usam `common/infrastructure/prisma/testing/`, `DATABASE_URL_TEST` e `NODE_ENV=test`. A configuração e o client de teste verificam `NODE_ENV`; use apenas um banco de teste isolado. Comandos CLI de teste devem apontar para `testing/prisma.testing.config.ts`.
-- Mantenha `DATABASE_URL` e `DATABASE_URL_TEST` no `.env.example`; nunca versione URLs com credenciais reais.
+- Testes usam Vitest, ficam junto do código testado e terminam em `.specs.ts`. A configuração em `apps/api/vitest.config.ts` busca esses arquivos e executa as suítes sequencialmente para evitar conflitos no banco compartilhado.
+- Testes usam `common/infrastructure/prisma/testing/`, `DATABASE_URL_TEST` e `NODE_ENV=test`. A configuração e o client de teste verificam `NODE_ENV`; use apenas um banco de teste isolado. Os scripts `test`, `test:watch` e `prisma:test:migrate:deploy` carregam `.env.test` via CLI do `dotenv`; mantenha `.env.test.example` versionado e `.env.test` ignorado pelo Git.
+- Mantenha `DATABASE_URL` no `.env.example` e `DATABASE_URL_TEST` no `.env.test.example`; nunca versione URLs com credenciais reais.
 - Não invente entidades, campos, relações ou restrições no schema; derive-os de `docs/specs/domain.md` e dos contratos relacionados.
 
 ## Ambiente
