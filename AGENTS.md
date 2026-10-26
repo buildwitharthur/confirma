@@ -44,7 +44,7 @@ O Confirma é um SaaS B2B que confirma agendamentos por WhatsApp. Sistemas exter
 
 ## Validação
 
-- Depois de implementar cada feature, execute antes do commit todas as verificações dos jobs do CI definidos em `.github/workflows/` e confirme que passaram. Atualmente, isso inclui `pnpm install --frozen-lockfile`, `pnpm check` e a construção da imagem da landing com `docker build -f apps/landing/Dockerfile -t confirma-landing:ci .`. Se uma verificação não puder ser executada, informe o motivo e não declare que o CI está passando.
+- Depois de implementar cada feature, execute antes do commit todas as verificações dos jobs do CI definidos em `.github/workflows/` e confirme que passaram. Atualmente, isso inclui `pnpm install --frozen-lockfile`, `pnpm check`, migrations de teste, `pnpm --filter api test:ci`, `pnpm --filter api build` e a construção da imagem da landing com `docker build -f apps/landing/Dockerfile -t confirma-landing:ci .`. Se uma verificação não puder ser executada, informe o motivo e não declare que o CI está passando.
 - Escreva testes proporcionais ao risco: regras isoladas, operações com persistência, contratos de rotas e webhooks, além de concorrência, idempotência e falhas onde se aplicam.
 - Teste comportamento, não a implementação.
 - Não declare testes ou verificações que não executou.

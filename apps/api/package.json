@@ -8,12 +8,14 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "test": "dotenv run --override -f .env.test -- vitest run",
+    "test:ci": "vitest run",
     "test:watch": "dotenv run --override -f .env.test -- vitest",
     "prisma:validate": "prisma validate --config src/common/infrastructure/prisma/prisma.config.ts",
     "prisma:generate": "prisma generate --config src/common/infrastructure/prisma/prisma.config.ts",
     "prisma:migrate:dev": "prisma migrate dev --config src/common/infrastructure/prisma/prisma.config.ts",
     "prisma:migrate:deploy": "prisma migrate deploy --config src/common/infrastructure/prisma/prisma.config.ts",
-    "prisma:test:migrate:deploy": "dotenv run --override -f .env.test -- prisma migrate deploy --config src/common/infrastructure/prisma/testing/prisma.testing.config.ts"
+    "prisma:test:migrate:deploy": "dotenv run --override -f .env.test -- prisma migrate deploy --config src/common/infrastructure/prisma/testing/prisma.testing.config.ts",
+    "prisma:test:migrate:deploy:ci": "prisma migrate deploy --config src/common/infrastructure/prisma/testing/prisma.testing.config.ts"
   },
   "keywords": [],
   "author": "",
