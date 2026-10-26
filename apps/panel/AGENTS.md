@@ -51,6 +51,16 @@ src/
 - Os tipos OpenAPI são gerados por `pnpm --filter @confirma/panel api:types`, lendo `http://localhost:3333/docs.json`. Mantenha a API local em execução ao regenerá-los e não edite a saída manualmente.
 - A proteção de navegação no frontend melhora o fluxo da interface, mas não substitui autenticação e autorização aplicadas pela API.
 
+### Dados carregados pelas rotas
+
+- Use o loader para páginas em que os dados são uma carga inicial e não têm interatividade própria depois de exibidos. O loader deve concluir a busca e entregar os dados prontos para a screen, que os lê com `Route.useLoaderData()` ou `getRouteApi()` em componentes extraídos.
+- Não use esse padrão para tabelas e listagens com filtros, paginação, ordenação, atualização ou outras interações que mudem os dados exibidos. Trate esses dados como interativos e defina o padrão de consulta apropriado para a feature.
+- Quando a rota receber parâmetros de busca, valide-os com `validateSearch`; não leia `window.location` diretamente. Use `loaderDeps` para declarar quais valores validados devem invalidar o loader.
+- O `queryClient` é fornecido no contexto do TanStack Router em `common/providers/app-providers.tsx`. No loader, use `context.queryClient.ensureQueryData()` com uma `queryKey` estável que inclua os parâmetros relevantes e um `queryFn` que chame a função HTTP da tela. Isso compartilha o resultado com o cache do TanStack Query.
+- Mantenha chamadas HTTP em `http/` e a configuração de carregamento junto ao arquivo de rota; não crie hooks de consulta apenas para encaminhar uma chamada feita pelo loader.
+- Defina `pendingComponent` para o carregamento e `errorComponent` para falhas inesperadas, como rede indisponível. Em `openapi-fetch`, respostas HTTP não exitosas são retornadas como `{ error, response }` e não rejeitam automaticamente a promise: o `queryFn` deve tratar os códigos esperados pelo fluxo, como convite inválido, sem confundi-los com falhas inesperadas.
+- Não transforme todo erro HTTP em erro genérico do Router. Preserve estados de negócio esperados na tela e permita tentar novamente falhas transitórias invalidando o loader quando apropriado.
+
 ## Chamadas HTTP e tipos OpenAPI
 
 - `openapi-typescript` gera `src/common/http/generated/openapi.d.ts` a partir do documento OpenAPI da API. Regere os tipos com `pnpm --filter @confirma/panel api:types`; não mantenha cópias manuais dos tipos de request e response documentados.
