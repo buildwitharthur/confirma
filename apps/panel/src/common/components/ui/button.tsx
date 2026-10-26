@@ -12,6 +12,7 @@ const button = tv({
 				'border-verde-profundo bg-verde from-branco/8 text-branco hover:bg-verde-profundo hover:from-branco/6 active:bg-verde-profundo bg-linear-to-b to-transparent to-60% shadow-[inset_0_1px_0_--alpha(var(--color-branco)/16%),0_2px_5px_--alpha(var(--color-noite)/8%)] active:bg-none active:shadow-[inset_0_2px_3px_--alpha(var(--color-noite)/30%)]',
 		},
 		size: {
+			sm: 'min-h-8.5 gap-1.5 px-3 text-[13px] [&_svg]:size-4',
 			md: '',
 			lg: 'min-h-10.5 px-5',
 		},

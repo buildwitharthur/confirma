@@ -1,44 +1,6 @@
-import {
-	Check,
-	LinkIcon,
-	List,
-	MessageCircle,
-	Send,
-	type LucideIcon,
-} from 'lucide-react';
+import { Check, LinkIcon, List, MessageCircle, Send } from 'lucide-react';
 import { tv } from 'tailwind-variants';
-
-const pill = tv({
-	slots: {
-		base: 'inline-flex min-h-5.5 items-center gap-1.5 rounded-full py-px pr-2 pl-1.5 text-xs leading-[18px] font-medium whitespace-nowrap',
-		icon: 'size-3.5',
-	},
-	variants: {
-		tone: {
-			info: { base: 'bg-branco text-verde-profundo' },
-			ok: { base: 'bg-verde-claro text-verde' },
-		},
-	},
-});
-
-function Pill({
-	tone,
-	icon: Icon,
-	label,
-}: {
-	tone: 'info' | 'ok';
-	icon: LucideIcon;
-	label: string;
-}) {
-	const styles = pill({ tone });
-
-	return (
-		<span className={styles.base()}>
-			<Icon strokeWidth={2.2} className={styles.icon()} />
-			{label}
-		</span>
-	);
-}
+import { Pill } from '@/common/components/ui/pill';
 
 const surface =
 	'rounded-2xl border border-cinza-verde-claro bg-branco shadow-[inset_0_1px_0_var(--color-branco),0_1px_2px_--alpha(var(--color-noite)/8%),0_12px_28px_-12px_--alpha(var(--color-noite)/18%)]';

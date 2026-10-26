@@ -56,6 +56,22 @@ authRoutes.post('/login', authenticateUserController);
  *     responses:
  *       200:
  *         description: Identidade autenticada.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               required: [user]
+ *               properties:
+ *                 user:
+ *                   type: object
+ *                   required: [id, email]
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                       format: uuid
+ *                     email:
+ *                       type: string
+ *                       format: email
  *       401:
  *         description: Sessão inválida.
  */

@@ -56,6 +56,13 @@
 	}
 }
 
+@keyframes demo-pop {
+	from {
+		opacity: 0;
+		transform: scale(0.6);
+	}
+}
+
 @keyframes demo-out {
 	from {
 		opacity: 1;

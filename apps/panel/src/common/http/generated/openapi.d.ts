@@ -328,7 +328,16 @@ export interface paths {
                     headers: {
                         [name: string]: unknown;
                     };
-                    content?: never;
+                    content: {
+                        "application/json": {
+                            user: {
+                                /** Format: uuid */
+                                id: string;
+                                /** Format: email */
+                                email: string;
+                            };
+                        };
+                    };
                 };
                 /** @description Sessão inválida. */
                 401: {
