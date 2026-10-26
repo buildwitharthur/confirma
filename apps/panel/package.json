@@ -7,12 +7,15 @@
 		"dev": "vite --port 3000",
 		"build": "vite build",
 		"preview": "vite preview",
+		"api:types": "openapi-typescript http://localhost:3333/docs.json -o src/common/http/generated/openapi.d.ts",
 		"typecheck": "tsc --noEmit"
 	},
 	"dependencies": {
 		"@tanstack/react-router": "1.170.46",
 		"clsx": "^2.1.1",
 		"lucide-react": "^1.61.0",
+		"openapi-fetch": "^0.17.0",
+		"radix-ui": "^1.8.1",
 		"react": "^19.3.1",
 		"react-dom": "^19.3.1",
 		"tailwind-merge": "^3.7.0",
@@ -25,6 +28,7 @@
 		"@types/react": "^19.3.0",
 		"@types/react-dom": "^19.3.0",
 		"@vitejs/plugin-react": "^6.0.1",
+		"openapi-typescript": "^7.13.0",
 		"tailwindcss": "^4.3.3",
 		"typescript": "^5.9.3",
 		"vite": "^8.0.0"

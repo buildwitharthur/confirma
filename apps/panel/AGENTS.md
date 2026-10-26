@@ -37,8 +37,8 @@ src/
 
 - `modules/` agrupa telas por área funcional; uma rota não precisa ser um módulo separado. Cada tela mantém seus componentes, hooks, chamadas HTTP e utilitários locais em sua própria pasta.
 - Promova código para a raiz do módulo quando mais de uma tela daquele módulo realmente o compartilhar. Use `common/` somente para responsabilidades compartilhadas entre módulos.
-- `common/components/ui/` contém componentes visuais reutilizáveis. `common/components/layouts/` contém layouts compartilhados pelas rotas.
-- `common/http/` contém o transporte comum. As chamadas específicas de uma tela ficam em `modules/<modulo>/screens/<tela>/http/`.
+- `common/components/ui/` contém componentes visuais reutilizáveis, construídos sobre primitivos do Radix quando existirem. `common/components/layouts/` contém layouts compartilhados pelas rotas.
+- `common/http/` contém o cliente e o transporte comum. Os tipos OpenAPI em `common/http/generated/` são gerados; não os edite manualmente. As chamadas específicas de uma tela ficam em `modules/<modulo>/screens/<tela>/http/`.
 - `common/utils/` contém utilitários compartilhados, incluindo `cn()` para combinar classes Tailwind.
 - Não crie abstrações, arquivos ou dependências para possibilidades futuras. Mantenha a estrutura pequena enquanto o produto evolui.
 
@@ -48,7 +48,18 @@ src/
 - Arquivos em `routes/` declaram as rotas e conectam cada rota ao `screen.tsx` correspondente. Mantenha neles apenas a configuração necessária do TanStack Router.
 - `layout.tsx` é o arquivo de layout da rota e deve renderizar `<Outlet />` para as rotas filhas. Preserve os caminhos demonstrados no protótipo enquanto não houver decisão ou especificação aprovada para alterá-los.
 - `routeTree.gen.ts` é gerado pelo TanStack Router. Não edite esse arquivo manualmente.
+- Os tipos OpenAPI são gerados por `pnpm --filter @confirma/panel api:types`, lendo `http://localhost:3333/docs.json`. Mantenha a API local em execução ao regenerá-los e não edite a saída manualmente.
 - A proteção de navegação no frontend melhora o fluxo da interface, mas não substitui autenticação e autorização aplicadas pela API.
+
+## Chamadas HTTP e tipos OpenAPI
+
+- `openapi-typescript` gera `src/common/http/generated/openapi.d.ts` a partir do documento OpenAPI da API. Regere os tipos com `pnpm --filter @confirma/panel api:types`; não mantenha cópias manuais dos tipos de request e response documentados.
+- `openapi-fetch` é o cliente tipado compartilhado em `src/common/http/api-client.ts`. Configure nele apenas transporte comum, como a URL base e credenciais de sessão.
+- Implemente cada operação HTTP explicitamente na pasta `http/` da tela que a usa. Por exemplo, `src/modules/account/screens/account-settings/http/get-account.ts` contém a chamada de consulta da tela de conta.
+- Use `apiClient` com método e caminho definidos no OpenAPI. Deixe o TypeScript inferir parâmetros, corpo, resposta e erro; não escreva um segundo cliente gerado nem replique os tipos da especificação.
+- Funções em `http/` cuidam da requisição e entregam dados tipados. Hooks da tela podem orquestrar carregamento, cache e estado de interface sem esconder o contrato da operação.
+- Só use operações documentadas em `/docs.json`. Rotas pendentes ou ausentes do OpenAPI ainda não têm tipos nem chamadas disponíveis; não as invente.
+- O cliente envia cookies com `credentials: 'include'`. Mutations devem cumprir as exigências de `Origin` e CSRF dos contratos. Não invente o nome nem o formato de cabeçalhos de segurança.
 
 ## Interface e integração
 
@@ -66,6 +77,16 @@ src/
 - Importe `cn()` de `common/utils/cn.ts` quando precisar combinar classes condicionais ou resolver conflitos de classes.
 - Defina variantes de componentes com `tv()` de `tailwind-variants`. Mantenha as classes de base e variantes junto ao componente que as utiliza.
 - O Prettier está configurado para ordenar classes também nas chamadas `cn()` e `tv()`.
+
+## Componentes primitivos e ícones
+
+- Componentes primitivos de interface são construídos sobre o Radix, pelo pacote unificado `radix-ui` (`import { Dialog } from 'radix-ui'`). Antes de criar qualquer componente interativo, verifique se o Radix oferece o primitivo correspondente e use-o. Não reimplemente do zero comportamento que o Radix já cobre, como foco, navegação por teclado, ARIA, portais, camadas e fechamento.
+- Exemplos: diálogos (`Dialog`; `AlertDialog` para confirmações destrutivas), toasts (`Toast`), selects (`Select`), progresso (`Progress`), rótulos (`Label`), checkbox, radio, switch, tabs, tooltip, popover e dropdown menu. Use `Slot` quando um componente precisar renderizar outro elemento (`asChild`), como um botão que navega com `<Link>`.
+- Elementos sem primitivo no Radix, como botão, input, card, badge e tabela, usam HTML semântico nativo estilizado com `tv()`. Não crie comportamento próprio para eles além do necessário.
+- O Radix fornece somente comportamento e acessibilidade. Aplique o design do Confirma com classes Tailwind, tokens de `src/styles.css` e variantes em `tv()`, reproduzindo o protótipo. Não use estilos, temas ou componentes prontos de outras bibliotecas.
+- Componentes reutilizáveis ficam em `common/components/ui/`, um por arquivo. Crie cada componente quando uma tela precisar dele, com as variantes que o protótipo demonstra; não monte o kit inteiro antecipadamente.
+- Ícones vêm de `lucide-react`. Não desenhe SVGs de ícone à mão; escolha o ícone do Lucide equivalente ao do protótipo e ajuste tamanho e `strokeWidth` para reproduzi-lo.
+- Não adicione outra biblioteca de componentes ou de ícones.
 
 ## Validação
 

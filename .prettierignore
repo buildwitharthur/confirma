@@ -3,3 +3,4 @@ docs/
 pnpm-lock.yaml
 apps/api/src/common/infrastructure/prisma/generated/
 apps/panel/src/routeTree.gen.ts
+apps/panel/src/common/http/generated/

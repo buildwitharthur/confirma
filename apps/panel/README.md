@@ -16,3 +16,11 @@ pnpm --filter @confirma/panel dev
 pnpm --filter @confirma/panel typecheck
 pnpm --filter @confirma/panel build
 ```
+
+## Tipos da API
+
+Com a API local disponível em `http://localhost:3333`, atualize os tipos OpenAPI com:
+
+```sh
+pnpm --filter @confirma/panel api:types
+```

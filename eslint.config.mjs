@@ -12,6 +12,7 @@ export default defineConfig(
 		'**/.turbo/',
 		'**/coverage/',
 		'docs/',
+		'apps/panel/src/common/http/generated/',
 	]),
 	{
 		languageOptions: {
