@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 import { RecoveryLogProvider } from '../../../../../common/domain/providers/recovery-log.provider.js';
 import { dataValidation } from '../../../../../common/infrastructure/validation/zod/data-validation.js';
-import { AccountRepository } from '../../../domain/repositories/account.repository.js';
+import { AccountPrismaRepository } from '../prisma/repositories/account-prisma.repository.js';
 import { RequestAccountDeletionUseCase } from '../../../application/usecases/request-account-deletion.usecase.js';
 import {
   AccountRequest,
@@ -21,7 +21,7 @@ export const requestAccountDeletionController = async (
   );
   const accountRequest = request as AccountRequest;
   const useCase = new RequestAccountDeletionUseCase(
-    request.app.locals.accountRepository as AccountRepository,
+    new AccountPrismaRepository(),
     request.app.locals.recoveryLogProvider as RecoveryLogProvider,
   );
   const result = await useCase.execute({

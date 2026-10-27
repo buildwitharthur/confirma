@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 
-import { AccountRepository } from '../../../domain/repositories/account.repository.js';
+import { AccountPrismaRepository } from '../prisma/repositories/account-prisma.repository.js';
 import { GetMessageTemplateUseCase } from '../../../application/usecases/get-message-template.usecase.js';
 import {
   AccountRequest,
@@ -11,9 +11,7 @@ export const getMessageTemplateController = async (
   request: Request,
   response: Response,
 ): Promise<Response> => {
-  const useCase = new GetMessageTemplateUseCase(
-    request.app.locals.accountRepository as AccountRepository,
-  );
+  const useCase = new GetMessageTemplateUseCase(new AccountPrismaRepository());
   const result = await useCase.execute({
     accountUserId: requireAccountUserId(request as AccountRequest),
   });

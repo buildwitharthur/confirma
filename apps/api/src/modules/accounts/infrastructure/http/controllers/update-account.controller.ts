@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { z } from 'zod';
 
 import { dataValidation } from '../../../../../common/infrastructure/validation/zod/data-validation.js';
-import { AccountRepository } from '../../../domain/repositories/account.repository.js';
+import { AccountPrismaRepository } from '../prisma/repositories/account-prisma.repository.js';
 import { UpdateAccountUseCase } from '../../../application/usecases/update-account.usecase.js';
 import {
   AccountRequest,
@@ -25,9 +25,7 @@ export const updateAccountController = async (
       .strict(),
     request.body,
   );
-  const useCase = new UpdateAccountUseCase(
-    request.app.locals.accountRepository as AccountRepository,
-  );
+  const useCase = new UpdateAccountUseCase(new AccountPrismaRepository());
   const result = await useCase.execute({
     accountUserId: requireAccountUserId(request as AccountRequest),
     name: body.name,

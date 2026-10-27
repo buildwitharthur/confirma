@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { RecoveryLogProvider } from '../../../../../common/domain/providers/recovery-log.provider.js';
 import { ServiceUnavailableError } from '../../../../../common/domain/errors/service-unavailable.js';
 import { dataValidation } from '../../../../../common/infrastructure/validation/zod/data-validation.js';
-import { AccountRepository } from '../../../../accounts/domain/repositories/account.repository.js';
+import { AccountPrismaRepository } from '../../../../accounts/infrastructure/http/prisma/repositories/account-prisma.repository.js';
 import { ContactRepository } from '../../../domain/repositories/contact.repository.js';
 import { RequestContactUnblockUseCase } from '../../../application/usecases/request-contact-unblock.usecase.js';
 import {
@@ -27,18 +27,16 @@ export const requestContactUnblockController = async (
   const body = dataValidation(bodySchema, request.body);
   const contactRepository = request.app.locals.contactRepository as
     ContactRepository | undefined;
-  const accountRepository = request.app.locals.accountRepository as
-    AccountRepository | undefined;
   const recoveryLogProvider = request.app.locals.recoveryLogProvider as
     RecoveryLogProvider | undefined;
-  if (!contactRepository || !accountRepository || !recoveryLogProvider) {
+  if (!contactRepository || !recoveryLogProvider) {
     throw new ServiceUnavailableError();
   }
 
   const authenticatedRequest = request as ContactRequest;
   const userId = requireContactUserId(authenticatedRequest);
   await new RequestContactUnblockUseCase(
-    accountRepository,
+    new AccountPrismaRepository(),
     contactRepository,
     recoveryLogProvider,
   ).execute({

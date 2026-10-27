@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 
 import { RecoveryLogProvider } from '../../../../../common/domain/providers/recovery-log.provider.js';
-import { AccountRepository } from '../../../domain/repositories/account.repository.js';
+import { AccountPrismaRepository } from '../prisma/repositories/account-prisma.repository.js';
 import { RevokeApiKeyUseCase } from '../../../application/usecases/revoke-api-key.usecase.js';
 import { dataValidation } from '../../../../../common/infrastructure/validation/zod/data-validation.js';
 import { z } from 'zod';
@@ -15,7 +15,7 @@ export const revokeApiKeyController = async (
   response: Response,
 ): Promise<Response> => {
   const useCase = new RevokeApiKeyUseCase(
-    request.app.locals.accountRepository as AccountRepository,
+    new AccountPrismaRepository(),
     request.app.locals.recoveryLogProvider as RecoveryLogProvider,
   );
   const { keyId } = dataValidation(z.object({ keyId: z.string().uuid() }), {

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 
-import { AccountRepository } from '../../../domain/repositories/account.repository.js';
+import { AccountPrismaRepository } from '../prisma/repositories/account-prisma.repository.js';
 import { GetAccountUseCase } from '../../../application/usecases/get-account.usecase.js';
 import {
   AccountRequest,
@@ -12,9 +12,7 @@ export const getAccountController = async (
   response: Response,
 ): Promise<Response> => {
   const accountRequest = request as AccountRequest;
-  const useCase = new GetAccountUseCase(
-    request.app.locals.accountRepository as AccountRepository,
-  );
+  const useCase = new GetAccountUseCase(new AccountPrismaRepository());
   const result = await useCase.execute({
     accountUserId: requireAccountUserId(accountRequest),
   });

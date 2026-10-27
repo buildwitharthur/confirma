@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 import { ServiceUnavailableError } from '../../../../../common/domain/errors/service-unavailable.js';
 import { dataValidation } from '../../../../../common/infrastructure/validation/zod/data-validation.js';
-import { AccountRepository } from '../../../../accounts/domain/repositories/account.repository.js';
+import { AccountPrismaRepository } from '../../../../accounts/infrastructure/http/prisma/repositories/account-prisma.repository.js';
 import { ContactRepository } from '../../../domain/repositories/contact.repository.js';
 import { LookupContactUseCase } from '../../../application/usecases/lookup-contact.usecase.js';
 import {
@@ -22,14 +22,12 @@ export const lookupContactController = async (
   const body = dataValidation(bodySchema, request.body);
   const contactRepository = request.app.locals.contactRepository as
     ContactRepository | undefined;
-  const accountRepository = request.app.locals.accountRepository as
-    AccountRepository | undefined;
-  if (!contactRepository || !accountRepository) {
+  if (!contactRepository) {
     throw new ServiceUnavailableError();
   }
 
   const result = await new LookupContactUseCase(
-    accountRepository,
+    new AccountPrismaRepository(),
     contactRepository,
   ).execute({
     accountUserId: requireContactUserId(request as ContactRequest),

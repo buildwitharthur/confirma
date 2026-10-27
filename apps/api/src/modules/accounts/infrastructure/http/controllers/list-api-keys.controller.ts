@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 
-import { AccountRepository } from '../../../domain/repositories/account.repository.js';
+import { AccountPrismaRepository } from '../prisma/repositories/account-prisma.repository.js';
 import { ListApiKeysUseCase } from '../../../application/usecases/list-api-keys.usecase.js';
 import {
   AccountRequest,
@@ -11,9 +11,7 @@ export const listApiKeysController = async (
   request: Request,
   response: Response,
 ): Promise<Response> => {
-  const useCase = new ListApiKeysUseCase(
-    request.app.locals.accountRepository as AccountRepository,
-  );
+  const useCase = new ListApiKeysUseCase(new AccountPrismaRepository());
   const result = await useCase.execute({
     accountUserId: requireAccountUserId(request as AccountRequest),
   });
