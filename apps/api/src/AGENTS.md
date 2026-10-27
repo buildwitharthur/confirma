@@ -15,10 +15,12 @@ Cada módulo deve ficar em `src/modules/<modulo>/` e seguir, quando necessário,
 │   ├── models/
 │   └── repositories/
 └── infrastructure/
-    └── http/
-        ├── controllers/
-        ├── helpers/
-        └── routes/
+    ├── http/
+    │   ├── controllers/
+    │   ├── helpers/
+    │   └── routes/
+    └── repositories/
+        └── prisma/
 ```
 
 Código compartilhado fica em `src/common/`:
@@ -31,6 +33,7 @@ common/
 └── infrastructure/
     ├── env/
     ├── http/
+    ├── prisma/
     ├── providers/
     └── validation/
         └── zod/
@@ -76,7 +79,7 @@ Interfaces de repositório ficam em `domain/repositories/`.
 ### Implementações Prisma
 
 - Mantenha a interface e os tipos de entrada em `domain/repositories/`; não importe Prisma no domínio nem nos casos de uso.
-- Implemente cada interface em `infrastructure/http/prisma/repositories/`, em um arquivo `<recurso>-prisma.repository.ts`, como `auth-prisma.repository.ts` e `password-reset-token-prisma.repository.ts`.
+- Implemente cada interface em `infrastructure/repositories/prisma/`, em um arquivo `<recurso>-prisma.repository.ts`, como `auth-prisma.repository.ts` e `password-reset-token-prisma.repository.ts`.
 - Nomeie a classe `<Recurso>PrismaRepository` e faça-a implementar a interface correspondente do domínio.
 - Injete `PrismaClient` no construtor, usando por padrão o client exportado por `common/infrastructure/prisma/index.ts`. Importe o tipo e o client gerado de `common/infrastructure/prisma/generated/client/`.
 - Faça os métodos da classe atenderem ao contrato do repositório e retornarem os modelos de domínio correspondentes.
@@ -223,28 +226,10 @@ O ORM é Prisma 7 com PostgreSQL e driver adapter `@prisma/adapter-pg`. Mantenha
 
 - `schema.prisma` é a fonte do schema; `prisma.config.ts` define `DATABASE_URL` e o caminho `migrations/`.
 - O client é gerado em `common/infrastructure/prisma/generated/client/`. Depois de alterar o schema ou o generator, execute `pnpm prisma:generate` a partir de `apps/api`.
-- A instância de aplicação é exportada por `common/infrastructure/prisma/index.ts`; a conexão usa `DATABASE_URL` e o adapter PostgreSQL.
+- A instância de aplicação é exportada por `common/infrastructure/prisma/index.ts`; a conexão usa `DATABASE_URL` validada por `common/infrastructure/env/index.ts` e o adapter PostgreSQL.
 - Crie e aplique migrations de desenvolvimento com `pnpm prisma:migrate:dev -- --name <nome>` e aplique migrations existentes com `pnpm prisma:migrate:deploy`, a partir de `apps/api`. Mantenha todo o histórico em `common/infrastructure/prisma/migrations/`.
-- Para validar o schema, use `pnpm prisma:validate` a partir de `apps/api`.
-- Specs usam Vitest, ficam na mesma pasta do use case ou repositório Prisma testado e terminam em `.spec.ts`, como `auth-prisma.repository.spec.ts`. A configuração em `apps/api/vitest.config.ts` busca `src/**/*.spec.ts`, e o build da API exclui esses arquivos. As suítes rodam sequencialmente para evitar conflitos no banco compartilhado.
-- Testes usam `common/infrastructure/prisma/testing/`, `DATABASE_URL` e `NODE_ENV=test`. A configuração e o client de teste verificam `NODE_ENV`; use apenas um banco de teste isolado. Os scripts locais `test`, `test:watch` e `prisma:test:migrate:deploy` carregam `.env.test` via CLI do `dotenv`; no CI, use `test:ci` e `prisma:test:migrate:deploy:ci` com as variáveis fornecidas pelo job. Mantenha `.env.test.example` versionado e `.env.test` ignorado pelo Git.
-- Use a mesma chave `DATABASE_URL` nos ambientes `.env` e `.env.test`, apontando cada arquivo ao banco correspondente. Nunca versione URLs com credenciais reais.
+- Os testes e a infraestrutura específica de testes foram removidos temporariamente para serem reescritos. Não há banco de teste no Compose nem job de testes no CI atual. Antes de retomar testes de integração, prepare um banco isolado e uma configuração que não possa conectar ao banco de produção.
 - Não invente entidades, campos, relações ou restrições no schema; derive-os de `docs/specs/domain.md` e dos contratos relacionados.
-
-## Testes de integração
-
-- Use o PostgreSQL `postgres-test` de `apps/api/compose.yaml` e o client `common/infrastructure/prisma/testing/`; não conecte specs ao client padrão de produção.
-- Nos specs de repositório, instancie o repositório concreto passando `prismaTesting` explicitamente.
-- Nos specs de use case, use os repositórios Prisma reais e substitua providers que causariam efeitos externos, como envio de e-mail. Mantenha hash e persistência reais quando forem parte do comportamento verificado.
-- Conecte o client uma vez em `beforeAll`, limpe apenas os registros do módulo e prepare os dados-base em cada `beforeEach`, e desconecte em `afterAll`. Limpe tabelas dependentes antes das tabelas referenciadas.
-- Verifique resultados pela persistência e pelo comportamento público do use case, incluindo falhas, uso único e concorrência quando aplicável.
-- Para preparar e rodar os testes a partir da raiz, use:
-
-  ```sh
-  docker compose -f apps/api/compose.yaml up -d postgres-test
-  pnpm --filter api prisma:test:migrate:deploy
-  pnpm --filter api test
-  ```
 
 ## Ambiente
 

@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 
 import { UnauthorizedError } from '../../../domain/errors/unauthorized.js';
-import { AuthPrismaRepository } from '../../../../modules/auth/infrastructure/http/prisma/repositories/auth-prisma.repository.js';
+import { AuthPrismaRepository } from '../../../../modules/auth/infrastructure/repositories/prisma/auth-prisma.repository.js';
 import { env } from '../../env/index.js';
 import { ExpressCookieProvider } from '../../providers/cookie-provider/express-cookie.provider.js';
 import { JsonWebTokenProvider } from '../../providers/jwt-provider/jsonwebtoken-jwt.provider.js';
@@ -31,12 +31,7 @@ export async function authenticateSessionMiddleware(
     }
 
     const jwtProvider = new JsonWebTokenProvider(env.JWT_SECRET);
-    let payload: SessionJwtPayload;
-    try {
-      payload = jwtProvider.verifyToken<SessionJwtPayload>(token);
-    } catch {
-      throw new UnauthorizedError();
-    }
+    const payload = jwtProvider.verifyToken<SessionJwtPayload>(token);
 
     const sessionUserProvider = new AuthPrismaRepository();
     const user = await sessionUserProvider.findById(payload.sub);

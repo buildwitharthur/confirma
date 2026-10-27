@@ -3,13 +3,10 @@ import { z } from 'zod';
 
 import { ServiceUnavailableError } from '../../../../../common/domain/errors/service-unavailable.js';
 import { dataValidation } from '../../../../../common/infrastructure/validation/zod/data-validation.js';
-import { AccountPrismaRepository } from '../../../../accounts/infrastructure/http/prisma/repositories/account-prisma.repository.js';
+import { AccountPrismaRepository } from '../../../../accounts/infrastructure/repositories/prisma/account-prisma.repository.js';
 import { ContactRepository } from '../../../domain/repositories/contact.repository.js';
 import { LookupContactUseCase } from '../../../application/usecases/lookup-contact.usecase.js';
-import {
-  ContactRequest,
-  requireContactUserId,
-} from '../helpers/contact-request.js';
+import { SessionRequest } from '../../../../../common/infrastructure/http/middlewares/authenticate-session.middleware.js';
 
 const bodySchema = z
   .object({ phone: z.string().regex(/^\+[1-9]\d{1,14}$/) })
@@ -30,7 +27,7 @@ export const lookupContactController = async (
     new AccountPrismaRepository(),
     contactRepository,
   ).execute({
-    accountUserId: requireContactUserId(request as ContactRequest),
+    accountUserId: (request as SessionRequest).userId!,
     phone: body.phone,
   });
 

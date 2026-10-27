@@ -6,10 +6,10 @@ import {
   IssueInvitationInput,
   IssueInvitationResult,
   InvitationRepository,
-} from '../../../../domain/repositories/invitation.repository.js';
-import { InvitationModel } from '../../../../domain/models/invitation.model.js';
-import { prisma } from '../../../../../../common/infrastructure/prisma/index.js';
-import { PrismaClient } from '../../../../../../common/infrastructure/prisma/generated/client/client.js';
+} from '../../../domain/repositories/invitation.repository.js';
+import { InvitationModel } from '../../../domain/models/invitation.model.js';
+import { prisma } from '../../../../../common/infrastructure/prisma/index.js';
+import { PrismaClient } from '../../../../../common/infrastructure/prisma/generated/client/client.js';
 
 export class InvitationPrismaRepository implements InvitationRepository {
   constructor(private readonly client: PrismaClient = prisma) {}

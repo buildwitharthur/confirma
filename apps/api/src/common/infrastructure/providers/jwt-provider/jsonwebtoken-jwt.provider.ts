@@ -4,6 +4,7 @@ import {
   JwtPayload,
   JwtProvider,
 } from '../../../domain/providers/jwt-provider.js';
+import { UnauthorizedError } from '../../../domain/errors/unauthorized.js';
 
 export class JsonWebTokenProvider implements JwtProvider {
   constructor(private readonly secret: string) {}
@@ -13,12 +14,16 @@ export class JsonWebTokenProvider implements JwtProvider {
   }
 
   verifyToken<TPayload extends JwtPayload>(token: string): TPayload {
-    const payload = jwt.verify(token, this.secret);
+    try {
+      const payload = jwt.verify(token, this.secret);
 
-    if (typeof payload === 'string' || !payload.sub) {
-      throw new jwt.JsonWebTokenError('Invalid JWT payload');
+      if (typeof payload === 'string' || !payload.sub) {
+        throw new UnauthorizedError();
+      }
+
+      return payload as TPayload;
+    } catch {
+      throw new UnauthorizedError();
     }
-
-    return payload as TPayload;
   }
 }

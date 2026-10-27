@@ -1,47 +1,49 @@
 # Confirma
 
-Monorepo do Confirma, preparado para receber aplicações e pacotes de acordo com as especificações vigentes do produto.
+Monorepo do Confirma, serviço de confirmação de agendamentos por WhatsApp. A API, o painel e a landing ficam em `apps/`; os contratos de produto ficam em `docs/specs/` e os protótipos em `docs/design/`.
 
 ## Pré-requisitos
 
 - Node.js `>=24.20.0`
 - pnpm `12.3.4`
+- Docker, para o PostgreSQL local e as imagens das aplicações
 
 O repositório utiliza pnpm como gerenciador exclusivo de pacotes.
 
-## Instalação
+## Desenvolvimento
+
+Copie `apps/api/.env.example` para `apps/api/.env` e ajuste `JWT_SECRET` e `RESEND_API_KEY` para o seu ambiente. O Compose publica o PostgreSQL local na porta `5434`, já usada no exemplo de ambiente para a API executada fora do Docker. A API usa `http://localhost:3333` por padrão e o painel usa `http://localhost:3000`.
 
 ```bash
 pnpm install
+docker compose -f apps/api/compose.yaml up -d postgres
+pnpm --filter api prisma:migrate:deploy
+pnpm dev
 ```
 
 ## Comandos
 
 ```bash
-pnpm dev          # inicia tarefas de desenvolvimento dos workspaces
-pnpm build        # executa os builds dos workspaces
-pnpm lint         # verifica o código com ESLint
-pnpm lint:fix     # aplica correções automáticas do ESLint
-pnpm format       # formata os arquivos incluídos na política do Prettier
-pnpm format:check # verifica a formatação
-pnpm typecheck    # executa typecheck nos workspaces
-pnpm check        # lint, formatação e typecheck para CI
+pnpm dev           # inicia os servidores de desenvolvimento
+pnpm build         # compila os workspaces
+pnpm lint          # executa o ESLint
+pnpm lint:fix      # aplica correções automáticas do ESLint
+pnpm format        # formata os arquivos com Prettier
+pnpm format:check  # verifica a formatação
+pnpm typecheck     # verifica os tipos
+pnpm check         # lint, formatação e tipos
 ```
 
-Nesta etapa, `apps/` e `packages/` contêm somente marcadores `.gitkeep`; por isso, o Turbo ainda não encontra projetos de aplicação para executar. Cada futuro workspace deverá definir scripts `build`, `dev`, `lint`, `typecheck` e `test` conforme as tarefas que implementar.
+O CI executa `pnpm install --frozen-lockfile`, `pnpm check` e `pnpm build`. A suíte de testes da API está sendo reconstruída e ainda não integra o CI.
 
-O comando usado pelo CI é:
-
-```bash
-pnpm check
-```
-
-## Estrutura inicial
+## Estrutura
 
 ```text
-apps/       # aplicações futuras
-packages/   # pacotes compartilhados futuros
-docs/       # especificações do produto e referências visuais
+apps/api/      # API e persistência PostgreSQL/Prisma
+apps/panel/    # painel React/Vite
+apps/landing/  # landing Astro
+docs/specs/    # contratos do produto
+docs/design/   # protótipos e direção visual
 ```
 
-As configurações compartilhadas ficam na raiz: pnpm, Turborepo, TypeScript, ESLint, Prettier e EditorConfig.
+As imagens Docker de API, painel e landing são definidas nos respectivos `Dockerfile`. Painel e landing servem os builds estáticos com Nginx; a API executa em Node.js.

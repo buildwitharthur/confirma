@@ -7,7 +7,7 @@ import { JsonWebTokenProvider } from '../../../../../common/infrastructure/provi
 import { env } from '../../../../../common/infrastructure/env/index.js';
 import { dataValidation } from '../../../../../common/infrastructure/validation/zod/data-validation.js';
 import { AcceptInvitationUseCase } from '../../../application/usecases/accept-invitation.usecase.js';
-import { InvitationPrismaRepository } from '../prisma/repositories/invitation-prisma.repository.js';
+import { InvitationPrismaRepository } from '../../repositories/prisma/invitation-prisma.repository.js';
 
 export const acceptInvitationController = async (
   request: Request,

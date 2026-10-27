@@ -25,8 +25,9 @@ export class ResendMailProvider implements MailProvider {
         html: input.html,
         text: input.text,
       });
-
-      console.log('Resend email sent:', { error });
+      if (error) {
+        throw new ServiceUnavailableError();
+      }
     } catch {
       throw new ServiceUnavailableError();
     }

@@ -4,6 +4,7 @@ import {
   CookieProvider,
   CookieProviderOptions,
 } from '../../../domain/providers/cookie-provider.js';
+import { UnauthorizedError } from '../../../domain/errors/unauthorized.js';
 
 export class ExpressCookieProvider implements CookieProvider {
   constructor(
@@ -12,7 +13,11 @@ export class ExpressCookieProvider implements CookieProvider {
   ) {}
 
   get(name: string): string | undefined {
-    return this.request.cookies?.[name];
+    try {
+      return this.request.cookies?.[name];
+    } catch {
+      throw new UnauthorizedError();
+    }
   }
 
   set(name: string, value: string, options: CookieProviderOptions = {}): void {

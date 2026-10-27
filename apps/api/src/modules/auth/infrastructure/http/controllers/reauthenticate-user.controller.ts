@@ -1,8 +1,8 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { z } from 'zod';
 
-import { AuthPrismaRepository } from '../prisma/repositories/auth-prisma.repository.js';
-import { UnauthorizedError } from '../../../../../common/domain/errors/unauthorized.js';
+import { AuthPrismaRepository } from '../../repositories/prisma/auth-prisma.repository.js';
+import { SessionRequest } from '../../../../../common/infrastructure/http/middlewares/authenticate-session.middleware.js';
 import { BcryptHashProvider } from '../../../../../common/infrastructure/providers/hash-provider/bcrypt-hash.provider.js';
 import { ExpressCookieProvider } from '../../../../../common/infrastructure/providers/cookie-provider/express-cookie.provider.js';
 import { JsonWebTokenProvider } from '../../../../../common/infrastructure/providers/jwt-provider/jsonwebtoken-jwt.provider.js';
@@ -10,10 +10,8 @@ import { env } from '../../../../../common/infrastructure/env/index.js';
 import { dataValidation } from '../../../../../common/infrastructure/validation/zod/data-validation.js';
 import { ReauthenticateUserUseCase } from '../../../application/usecases/reauthenticate-user.usecase.js';
 
-type AuthenticatedRequest = Request & { userId?: string };
-
 export const reauthenticateUserController = async (
-  request: AuthenticatedRequest,
+  request: SessionRequest,
   response: Response,
 ): Promise<Response> => {
   const bodySchema = z
@@ -22,10 +20,6 @@ export const reauthenticateUserController = async (
     })
     .strict();
   const parsedBody = dataValidation(bodySchema, request.body);
-
-  if (!request.userId) {
-    throw new UnauthorizedError();
-  }
 
   const authRepository = new AuthPrismaRepository();
   const hashProvider = new BcryptHashProvider();
@@ -40,7 +34,7 @@ export const reauthenticateUserController = async (
   );
 
   const result = await useCase.execute({
-    userId: request.userId,
+    userId: request.userId!,
     password: parsedBody.password,
   });
 

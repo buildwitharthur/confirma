@@ -1,12 +1,9 @@
 import { Request, Response } from 'express';
 
 import { CryptoApiKeyProvider } from '../../../../../common/infrastructure/providers/api-key-provider/crypto-api-key.provider.js';
-import { AccountPrismaRepository } from '../prisma/repositories/account-prisma.repository.js';
+import { AccountPrismaRepository } from '../../repositories/prisma/account-prisma.repository.js';
 import { CreateApiKeyUseCase } from '../../../application/usecases/create-api-key.usecase.js';
-import {
-  AccountRequest,
-  requireAccountUserId,
-} from '../helpers/account-request.js';
+import { SessionRequest } from '../../../../../common/infrastructure/http/middlewares/authenticate-session.middleware.js';
 
 export const createApiKeyController = async (
   request: Request,
@@ -17,7 +14,7 @@ export const createApiKeyController = async (
     new CryptoApiKeyProvider(),
   );
   const result = await useCase.execute({
-    accountUserId: requireAccountUserId(request as AccountRequest),
+    accountUserId: (request as SessionRequest).userId!,
   });
 
   return response.status(201).json({

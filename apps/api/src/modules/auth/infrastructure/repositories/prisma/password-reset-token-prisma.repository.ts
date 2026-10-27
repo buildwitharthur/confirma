@@ -1,10 +1,10 @@
 import {
   CreatePasswordResetTokenInput,
   PasswordResetTokenRepository,
-} from '../../../../domain/repositories/password-reset-token.repository.js';
-import { PasswordResetTokenModel } from '../../../../domain/models/password-reset-token.model.js';
-import { prisma } from '../../../../../../common/infrastructure/prisma/index.js';
-import { PrismaClient } from '../../../../../../common/infrastructure/prisma/generated/client/client.js';
+} from '../../../domain/repositories/password-reset-token.repository.js';
+import { PasswordResetTokenModel } from '../../../domain/models/password-reset-token.model.js';
+import { prisma } from '../../../../../common/infrastructure/prisma/index.js';
+import { PrismaClient } from '../../../../../common/infrastructure/prisma/generated/client/client.js';
 
 export class PasswordResetTokenPrismaRepository implements PasswordResetTokenRepository {
   constructor(private readonly client: PrismaClient = prisma) {}

@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import { z } from 'zod';
 
-import { AuthPrismaRepository } from '../prisma/repositories/auth-prisma.repository.js';
-import { PasswordResetTokenPrismaRepository } from '../prisma/repositories/password-reset-token-prisma.repository.js';
+import { AuthPrismaRepository } from '../../repositories/prisma/auth-prisma.repository.js';
+import { PasswordResetTokenPrismaRepository } from '../../repositories/prisma/password-reset-token-prisma.repository.js';
 import { CryptoPasswordResetTokenProvider } from '../../../../../common/infrastructure/providers/password-reset-token-provider/crypto-password-reset-token.provider.js';
 import { ResendMailProvider } from '../../../../../common/infrastructure/providers/mail-provider/resend-mail.provider.js';
 import { env } from '../../../../../common/infrastructure/env/index.js';

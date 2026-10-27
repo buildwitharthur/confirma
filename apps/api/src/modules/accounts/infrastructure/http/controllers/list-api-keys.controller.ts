@@ -1,11 +1,8 @@
 import { Request, Response } from 'express';
 
-import { AccountPrismaRepository } from '../prisma/repositories/account-prisma.repository.js';
+import { AccountPrismaRepository } from '../../repositories/prisma/account-prisma.repository.js';
 import { ListApiKeysUseCase } from '../../../application/usecases/list-api-keys.usecase.js';
-import {
-  AccountRequest,
-  requireAccountUserId,
-} from '../helpers/account-request.js';
+import { SessionRequest } from '../../../../../common/infrastructure/http/middlewares/authenticate-session.middleware.js';
 
 export const listApiKeysController = async (
   request: Request,
@@ -13,7 +10,7 @@ export const listApiKeysController = async (
 ): Promise<Response> => {
   const useCase = new ListApiKeysUseCase(new AccountPrismaRepository());
   const result = await useCase.execute({
-    accountUserId: requireAccountUserId(request as AccountRequest),
+    accountUserId: (request as SessionRequest).userId!,
   });
 
   return response.status(200).json({

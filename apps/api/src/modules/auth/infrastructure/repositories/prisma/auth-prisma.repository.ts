@@ -1,7 +1,7 @@
-import { AuthModel } from '../../../../domain/models/auth.model.js';
-import { AuthRepository } from '../../../../domain/repositories/auth.repository.js';
-import { prisma } from '../../../../../../common/infrastructure/prisma/index.js';
-import { PrismaClient } from '../../../../../../common/infrastructure/prisma/generated/client/client.js';
+import { AuthModel } from '../../../domain/models/auth.model.js';
+import { AuthRepository } from '../../../domain/repositories/auth.repository.js';
+import { prisma } from '../../../../../common/infrastructure/prisma/index.js';
+import { PrismaClient } from '../../../../../common/infrastructure/prisma/generated/client/client.js';
 
 export class AuthPrismaRepository implements AuthRepository {
   constructor(private readonly client: PrismaClient = prisma) {}

@@ -4,13 +4,10 @@ import { z } from 'zod';
 import { RecoveryLogProvider } from '../../../../../common/domain/providers/recovery-log.provider.js';
 import { ServiceUnavailableError } from '../../../../../common/domain/errors/service-unavailable.js';
 import { dataValidation } from '../../../../../common/infrastructure/validation/zod/data-validation.js';
-import { AccountPrismaRepository } from '../../../../accounts/infrastructure/http/prisma/repositories/account-prisma.repository.js';
+import { AccountPrismaRepository } from '../../../../accounts/infrastructure/repositories/prisma/account-prisma.repository.js';
 import { ContactRepository } from '../../../domain/repositories/contact.repository.js';
 import { RequestContactUnblockUseCase } from '../../../application/usecases/request-contact-unblock.usecase.js';
-import {
-  ContactRequest,
-  requireContactUserId,
-} from '../helpers/contact-request.js';
+import { SessionRequest } from '../../../../../common/infrastructure/http/middlewares/authenticate-session.middleware.js';
 
 const bodySchema = z
   .object({
@@ -33,8 +30,7 @@ export const requestContactUnblockController = async (
     throw new ServiceUnavailableError();
   }
 
-  const authenticatedRequest = request as ContactRequest;
-  const userId = requireContactUserId(authenticatedRequest);
+  const userId = (request as SessionRequest).userId!;
   await new RequestContactUnblockUseCase(
     new AccountPrismaRepository(),
     contactRepository,

@@ -1,14 +1,11 @@
 import { Request, Response } from 'express';
 
 import { RecoveryLogProvider } from '../../../../../common/domain/providers/recovery-log.provider.js';
-import { AccountPrismaRepository } from '../prisma/repositories/account-prisma.repository.js';
+import { AccountPrismaRepository } from '../../repositories/prisma/account-prisma.repository.js';
 import { RevokeApiKeyUseCase } from '../../../application/usecases/revoke-api-key.usecase.js';
 import { dataValidation } from '../../../../../common/infrastructure/validation/zod/data-validation.js';
 import { z } from 'zod';
-import {
-  AccountRequest,
-  requireAccountUserId,
-} from '../helpers/account-request.js';
+import { SessionRequest } from '../../../../../common/infrastructure/http/middlewares/authenticate-session.middleware.js';
 
 export const revokeApiKeyController = async (
   request: Request,
@@ -22,7 +19,7 @@ export const revokeApiKeyController = async (
     keyId: request.params.key_id,
   });
   await useCase.execute({
-    accountUserId: requireAccountUserId(request as AccountRequest),
+    accountUserId: (request as SessionRequest).userId!,
     keyId,
   });
 

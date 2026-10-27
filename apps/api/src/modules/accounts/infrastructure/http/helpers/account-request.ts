@@ -1,21 +1,6 @@
-import { Request } from 'express';
+import { SessionRequest } from '../../../../../common/infrastructure/http/middlewares/authenticate-session.middleware.js';
 
-import { UnauthorizedError } from '../../../../../common/domain/errors/unauthorized.js';
-
-export type AccountRequest = Request & {
-  userId?: string;
-  reauthenticatedUntil?: string;
-};
-
-export function requireAccountUserId(request: AccountRequest): string {
-  if (!request.userId) {
-    throw new UnauthorizedError();
-  }
-
-  return request.userId;
-}
-
-export function getReauthenticatedUntil(request: AccountRequest): Date | null {
+export function getReauthenticatedUntil(request: SessionRequest): Date | null {
   if (!request.reauthenticatedUntil) {
     return null;
   }

@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 import { env } from '../../../../../common/infrastructure/env/index.js';
 import { ResendMailProvider } from '../../../../../common/infrastructure/providers/mail-provider/resend-mail.provider.js';
-import { InvitationPrismaRepository } from '../prisma/repositories/invitation-prisma.repository.js';
+import { InvitationPrismaRepository } from '../../repositories/prisma/invitation-prisma.repository.js';
 import { RequestInvitationUseCase } from '../../../application/usecases/request-invitation.usecase.js';
 import { dataValidation } from '../../../../../common/infrastructure/validation/zod/data-validation.js';
 

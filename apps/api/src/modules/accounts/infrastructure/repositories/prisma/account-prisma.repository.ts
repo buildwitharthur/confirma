@@ -1,13 +1,13 @@
 import {
   AccountRepository,
   UpdateAccountInput,
-} from '../../../../domain/repositories/account.repository.js';
-import { AccountModel } from '../../../../domain/models/account.model.js';
-import { AccountUsageModel } from '../../../../domain/models/account-usage.model.js';
-import { ApiKeyModel } from '../../../../domain/models/api-key.model.js';
-import { MessageTemplateModel } from '../../../../domain/models/message-template.model.js';
-import { prisma } from '../../../../../../common/infrastructure/prisma/index.js';
-import { PrismaClient } from '../../../../../../common/infrastructure/prisma/generated/client/client.js';
+} from '../../../domain/repositories/account.repository.js';
+import { AccountModel } from '../../../domain/models/account.model.js';
+import { AccountUsageModel } from '../../../domain/models/account-usage.model.js';
+import { ApiKeyModel } from '../../../domain/models/api-key.model.js';
+import { MessageTemplateModel } from '../../../domain/models/message-template.model.js';
+import { prisma } from '../../../../../common/infrastructure/prisma/index.js';
+import { PrismaClient } from '../../../../../common/infrastructure/prisma/generated/client/client.js';
 
 function toPrismaTime(value: string): Date {
   const [hours, minutes] = value.split(':').map(Number);
