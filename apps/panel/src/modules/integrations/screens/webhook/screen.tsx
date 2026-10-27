@@ -1,3 +1,5 @@
+import { PagePlaceholder } from '@/common/components/layouts/protected-layout/page-placeholder';
+
 export function WebhookIntegrationScreen() {
-	return null;
+	return <PagePlaceholder title="Webhook" />;
 }

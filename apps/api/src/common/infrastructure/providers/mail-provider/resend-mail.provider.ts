@@ -17,18 +17,16 @@ export class ResendMailProvider implements MailProvider {
   }
 
   async send(input: SendMailInput): Promise<void> {
-    try {
-      const { error } = await this.resend.emails.send({
-        from: this.from,
-        to: input.to,
-        subject: input.subject,
-        html: input.html,
-        text: input.text,
-      });
-      if (error) {
-        throw new ServiceUnavailableError();
-      }
-    } catch {
+    const { error } = await this.resend.emails.send({
+      from: this.from,
+      to: input.to,
+      subject: input.subject,
+      html: input.html,
+      text: input.text,
+    });
+
+    if (error) {
+      console.error('Error sending email:', error);
       throw new ServiceUnavailableError();
     }
   }

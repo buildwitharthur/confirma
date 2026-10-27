@@ -1,3 +1,5 @@
+import { PagePlaceholder } from '@/common/components/layouts/protected-layout/page-placeholder';
+
 export function FirstStepsScreen() {
-	return null;
+	return <PagePlaceholder title="Primeiros passos" />;
 }

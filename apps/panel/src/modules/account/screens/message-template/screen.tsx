@@ -1,3 +1,5 @@
+import { PagePlaceholder } from '@/common/components/layouts/protected-layout/page-placeholder';
+
 export function MessageTemplateScreen() {
-	return null;
+	return <PagePlaceholder title="Mensagens" />;
 }
