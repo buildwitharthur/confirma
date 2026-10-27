@@ -1,6 +1,7 @@
 import type { Ref } from 'react';
 import { Menu } from 'lucide-react';
 import { IconButton } from '@/common/components/ui/icon-button';
+import { ShellBreadcrumb } from './shell-breadcrumb';
 import { SIDEBAR_ID } from './shell-sidebar';
 import { ShellSlot } from './shell-slot';
 
@@ -28,7 +29,9 @@ export function ShellHeader({
 			>
 				<Menu strokeWidth={1.75} aria-hidden="true" />
 			</IconButton>
-			<ShellSlot label="Localização" className="min-w-0 flex-1" />
+			<div className="flex min-w-0 flex-1 items-center">
+				<ShellBreadcrumb />
+			</div>
 			<ShellSlot label="Status" className="max-md:hidden" />
 		</header>
 	);
