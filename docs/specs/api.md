@@ -17,8 +17,9 @@ Detalhes: [Auth](modules/auth/routes.md).
 
 - [x] GET /auth/invitations/inspect
 - [x] POST /auth/invitations/accept
+- [x] POST /site/access-requests
 
-Detalhes: [Convites](modules/invites/routes.md).
+O pedido público elegível emite e envia um convite; ver [Convites](modules/invites/routes.md). A resposta `202` é genérica e falhas do provedor retornam `503 service_unavailable`.
 
 ## Accounts
 
@@ -67,14 +68,6 @@ Detalhes: [Contatos](modules/contacts/routes.md).
 - [ ] POST /panel/integrations/webhook/events/{event_id}/redeliver
 
 Detalhes: [Integrações](modules/integrations/routes.md).
-
-## Access
-
-- [x] POST /site/access-requests
-
-Pedido elegível inicia o envio automático do convite por e-mail; ver [Acesso](modules/access/routes.md). A resposta `202` confirma o recebimento do pedido, não a entrega do e-mail.
-
-Detalhes: [Acesso](modules/access/routes.md).
 
 ## Webhooks recebidos
 

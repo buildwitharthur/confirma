@@ -13,7 +13,20 @@ export type AcceptInvitationResult =
   | { status: 'invalid' }
   | { status: 'identity_exists' };
 
+export type IssueInvitationInput = {
+  email: string;
+  tokenHash: Uint8Array;
+  expiresAt: Date;
+  requestedAt: Date;
+};
+
+export type IssueInvitationResult =
+  { status: 'created'; invitationId: string } | { status: 'ignored' };
+
 export interface InvitationRepository {
+  issueInvitation(input: IssueInvitationInput): Promise<IssueInvitationResult>;
+  deleteInvitation(invitationId: string): Promise<void>;
+
   /** Finds an invitation by comparing the supplied token with its stored hash. */
   findByToken(token: string): Promise<InvitationModel | null>;
 

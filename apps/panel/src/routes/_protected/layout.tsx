@@ -11,6 +11,7 @@ export const Route = createFileRoute('/_protected')({
 			queryFn: getSession,
 		});
 
+		console.log('session', session);
 		if (!session) {
 			// Sem sessão, nenhum dado em cache pode ser reaproveitado pela próxima conta.
 			queryClient.clear();

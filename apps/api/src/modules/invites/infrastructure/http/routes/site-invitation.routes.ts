@@ -1,22 +1,15 @@
 import { Router } from 'express';
 
-import { submitAccessRequestController } from '../controllers/submit-access-request.controller.js';
+import { requestInvitationController } from '../controllers/request-invitation.controller.js';
 
-export const accessRoutes = Router();
-
-/**
- * @swagger
- * tags:
- *   name: Access
- *   description: Solicitação pública de acesso ao piloto
- */
+export const siteInvitationRoutes = Router();
 
 /**
  * @swagger
  * /site/access-requests:
  *   post:
- *     summary: Solicita acesso ao piloto
- *     tags: [Access]
+ *     summary: Solicita acesso ao piloto e envia um convite
+ *     tags: [Invites]
  *     requestBody:
  *       required: true
  *       content:
@@ -29,11 +22,11 @@ export const accessRoutes = Router();
  *       415:
  *         description: Content-Type incompatível.
  *       422:
- *         description: Dados inválidos ou rejeição técnica.
+ *         description: Dados inválidos ou rejeição antispam.
  *       503:
- *         description: Serviço indisponível.
+ *         description: Serviço de e-mail indisponível.
  */
-accessRoutes.post('/access-requests', submitAccessRequestController);
+siteInvitationRoutes.post('/access-requests', requestInvitationController);
 
 /**
  * @swagger

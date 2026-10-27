@@ -47,6 +47,108 @@ describe('InvitationPrismaRepository integration', () => {
     });
   }
 
+  it('issues a seven-day invitation for an eligible email', async () => {
+    const requestedAt = new Date();
+    const tokenHash = hashToken('new-raw-token');
+
+    const result = await repository.issueInvitation({
+      email: 'new-invite@example.com',
+      tokenHash,
+      requestedAt,
+      expiresAt: new Date(requestedAt.getTime() + 7 * 24 * 60 * 60 * 1000),
+    });
+
+    expect(result.status).toBe('created');
+    if (result.status !== 'created') {
+      throw new Error('Expected the invitation to be created.');
+    }
+    const invitation = await prismaTesting.invitation.findUniqueOrThrow({
+      where: { id: result.invitationId },
+    });
+    expect(invitation.email).toBe('new-invite@example.com');
+    expect(Buffer.from(invitation.tokenHash)).toEqual(tokenHash);
+    expect(invitation.expiresAt).toEqual(
+      new Date(requestedAt.getTime() + 7 * 24 * 60 * 60 * 1000),
+    );
+  });
+
+  it('does not issue another invitation while a valid one exists', async () => {
+    await createInvitation({ email: 'existing-invite@example.com' });
+
+    await expect(
+      repository.issueInvitation({
+        email: 'existing-invite@example.com',
+        tokenHash: hashToken('another-token'),
+        requestedAt: new Date(),
+        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      }),
+    ).resolves.toEqual({ status: 'ignored' });
+    await expect(prismaTesting.invitation.count()).resolves.toBe(1);
+  });
+
+  it('does not issue an invitation for an email that already has an account', async () => {
+    await prismaTesting.accountUser.create({
+      data: {
+        email: 'existing-user@example.com',
+        passwordHash: Buffer.from('hashed-password'),
+      },
+    });
+
+    await expect(
+      repository.issueInvitation({
+        email: 'existing-user@example.com',
+        tokenHash: hashToken('account-token'),
+        requestedAt: new Date(),
+        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      }),
+    ).resolves.toEqual({ status: 'ignored' });
+    await expect(prismaTesting.invitation.count()).resolves.toBe(0);
+  });
+
+  it('replaces an expired invitation', async () => {
+    await createInvitation({
+      email: 'expired-invite@example.com',
+      token: 'expired-token',
+      expiresAt: new Date(Date.now() - 1),
+    });
+
+    await expect(
+      repository.issueInvitation({
+        email: 'expired-invite@example.com',
+        tokenHash: hashToken('renewed-token'),
+        requestedAt: new Date(),
+        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      }),
+    ).resolves.toMatchObject({ status: 'created' });
+    await expect(prismaTesting.invitation.count()).resolves.toBe(1);
+  });
+
+  it('creates at most one invitation for concurrent requests', async () => {
+    const email = 'concurrent-invite@example.com';
+    const requestedAt = new Date();
+    const results = await Promise.all([
+      repository.issueInvitation({
+        email,
+        tokenHash: hashToken('concurrent-token-one'),
+        requestedAt,
+        expiresAt: new Date(requestedAt.getTime() + 7 * 24 * 60 * 60 * 1000),
+      }),
+      repository.issueInvitation({
+        email,
+        tokenHash: hashToken('concurrent-token-two'),
+        requestedAt,
+        expiresAt: new Date(requestedAt.getTime() + 7 * 24 * 60 * 60 * 1000),
+      }),
+    ]);
+
+    expect(
+      results.filter((result) => result.status === 'created'),
+    ).toHaveLength(1);
+    await expect(
+      prismaTesting.invitation.count({ where: { email } }),
+    ).resolves.toBe(1);
+  });
+
   it('finds an invitation by the hash of its raw token', async () => {
     const invitation = await createInvitation();
 

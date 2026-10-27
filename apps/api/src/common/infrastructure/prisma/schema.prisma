@@ -15,22 +15,6 @@ enum AccountStatus {
   @@map("account_status")
 }
 
-enum AccessRequestWhatsAppProvider {
-  evolution_api
-  other
-  none_yet
-
-  @@map("access_request_whatsapp_provider")
-}
-
-enum AccessRequestStatus {
-  pending
-  invited
-  rejected
-
-  @@map("access_request_status")
-}
-
 enum ConsentMethod {
   whatsapp
   in_person
@@ -101,21 +85,6 @@ model Invitation {
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
 
   @@map("invitations")
-}
-
-model AccessRequest {
-  id               String                        @id @default(uuid()) @db.Uuid
-  name             String
-  email            String                        @unique
-  companyOrProject String                        @map("company_or_project")
-  whatsappProvider AccessRequestWhatsAppProvider @map("whatsapp_provider")
-  intendedUse      String?                       @map("intended_use")
-  status           AccessRequestStatus           @default(pending)
-  consentAt        DateTime                      @map("consent_at") @db.Timestamptz(3)
-  receivedAt       DateTime                      @default(now()) @map("received_at") @db.Timestamptz(3)
-  updatedAt        DateTime                      @updatedAt @map("updated_at") @db.Timestamptz(3)
-
-  @@map("access_requests")
 }
 
 model ApiKey {

@@ -1,5 +1,6 @@
 import { Resend } from 'resend';
 
+import { ServiceUnavailableError } from '../../../domain/errors/service-unavailable.js';
 import {
   MailProvider,
   SendMailInput,
@@ -16,16 +17,18 @@ export class ResendMailProvider implements MailProvider {
   }
 
   async send(input: SendMailInput): Promise<void> {
-    const { error } = await this.resend.emails.send({
-      from: this.from,
-      to: input.to,
-      subject: input.subject,
-      html: input.html,
-      text: input.text,
-    });
+    try {
+      const { error } = await this.resend.emails.send({
+        from: this.from,
+        to: input.to,
+        subject: input.subject,
+        html: input.html,
+        text: input.text,
+      });
 
-    if (error) {
-      throw new Error(error.message);
+      console.log('Resend email sent:', { error });
+    } catch {
+      throw new ServiceUnavailableError();
     }
   }
 }

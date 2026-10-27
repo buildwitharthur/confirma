@@ -19,6 +19,7 @@ const envSchema = z.object({
   RESEND_API_KEY: z.string().min(1),
   MAIL_FROM: z.string().min(1),
   PASSWORD_RESET_URL: z.string().url(),
+  INVITATION_ACCEPTANCE_URL: z.string().url(),
 });
 
 const parsedEnv = envSchema.safeParse(process.env);

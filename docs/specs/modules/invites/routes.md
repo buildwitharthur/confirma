@@ -1,8 +1,35 @@
 # Convites
 
-O convite dura sete dias e só pode ser consumido uma vez.
+O convite dura sete dias e só pode ser consumido uma vez. Convites de acesso ao piloto são emitidos pelo módulo de convites a partir do pedido público abaixo. O pedido e os dados adicionais do formulário não são persistidos; a API armazena somente o convite e o hash do token.
 
-No fluxo de acesso ao piloto, o convite é criado e enviado automaticamente após um pedido elegível, conforme [Acesso](../access/routes.md). O envio usa o e-mail normalizado do pedido. A criação do convite não cria a conta; isso ocorre somente em `POST /auth/invitations/accept`.
+### POST /site/access-requests
+
+**O que faz:** valida o formulário público e, quando elegível, cria e envia automaticamente um convite para o e-mail informado. Não há triagem manual. A conta só é criada quando a pessoa aceita o convite.
+
+**Autenticação:** pública.
+
+**Entrada:** exatamente os campos abaixo; `intended_use` pode ser omitido.
+
+```json
+{"name":"Marina Costa","email":"marina@example.com","company_or_project":"Clínica Exemplo","whatsapp_provider":"evolution_api","intended_use":"Confirmar consultas do piloto","consent":true,"form_opened_at":"2026-10-19T12:00:00Z","website":""}
+```
+
+`name` até 100 caracteres, `email` até 254, `company_or_project` até 120, `intended_use` até 500. `whatsapp_provider`: `evolution_api`, `other` ou `none_yet`. `consent` deve ser `true`. `form_opened_at` deve preceder o envio por pelo menos três segundos. `website` é honeypot obrigatório e vazio. Rejeite campos extras.
+
+**Passo a passo:**
+1. Valide o corpo, o consentimento e as proteções antispam.
+2. Normalize o e-mail.
+3. Se já houver conta ou convite não usado e válido, não crie nem envie outro convite. A resposta continua genérica.
+4. Para e-mail elegível, guarde somente o hash de um token aleatório, crie convite válido por sete dias e envie o link para a tela pública de aceitação.
+5. Garanta que submissões concorrentes não criem ou enviem convites duplicados.
+6. Se o provider de e-mail falhar, remova o convite criado nessa tentativa e propague o erro do provider. A fila e tentativas automáticas ficam para depois do MVP.
+7. Não revele se o e-mail já tem conta, convite ou se o envio foi realizado.
+
+**Resposta:** `202` uniforme para pedido elegível ou ignorado: `{"status":"received","message":"Recebemos sua solicitação."}`. O aceite do provider não confirma entrega na caixa de entrada.
+
+**Erros:** `400 bad_request`, `415 bad_request`, `422 validation_error` ou `submission_rejected`, `500 internal_error`, `503 service_unavailable` quando o provider recusar o envio.
+
+O pedido público não cria uma entidade própria nem uma conta. A aceitação segue `POST /auth/invitations/accept`.
 
 ### GET /auth/invitations/inspect
 

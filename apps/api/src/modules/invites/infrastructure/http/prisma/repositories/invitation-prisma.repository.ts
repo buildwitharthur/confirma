@@ -3,6 +3,8 @@ import { createHash } from 'node:crypto';
 import {
   AcceptInvitationRecord,
   AcceptInvitationResult,
+  IssueInvitationInput,
+  IssueInvitationResult,
   InvitationRepository,
 } from '../../../../domain/repositories/invitation.repository.js';
 import { InvitationModel } from '../../../../domain/models/invitation.model.js';
@@ -11,6 +13,63 @@ import { PrismaClient } from '../../../../../../common/infrastructure/prisma/gen
 
 export class InvitationPrismaRepository implements InvitationRepository {
   constructor(private readonly client: PrismaClient = prisma) {}
+
+  async issueInvitation(
+    input: IssueInvitationInput,
+  ): Promise<IssueInvitationResult> {
+    try {
+      return await this.client.$transaction(
+        async (transaction) => {
+          const existingUser = await transaction.accountUser.findUnique({
+            where: { email: input.email },
+            select: { id: true },
+          });
+
+          if (existingUser) return { status: 'ignored' };
+
+          const activeInvitation = await transaction.invitation.findFirst({
+            where: {
+              email: input.email,
+              usedAt: null,
+              expiresAt: { gt: input.requestedAt },
+            },
+            select: { id: true },
+          });
+
+          if (activeInvitation) return { status: 'ignored' };
+
+          await transaction.invitation.deleteMany({
+            where: { email: input.email },
+          });
+
+          const invitation = await transaction.invitation.create({
+            data: {
+              email: input.email,
+              tokenHash: Uint8Array.from(input.tokenHash),
+              expiresAt: input.expiresAt,
+            },
+            select: { id: true },
+          });
+
+          return { status: 'created', invitationId: invitation.id };
+        },
+        { isolationLevel: 'Serializable' },
+      );
+    } catch (error) {
+      if (
+        error instanceof Error &&
+        'code' in error &&
+        (error.code === 'P2002' || error.code === 'P2034')
+      ) {
+        return { status: 'ignored' };
+      }
+      throw error;
+    }
+  }
+
+  async deleteInvitation(invitationId: string): Promise<void> {
+    await this.client.invitation.deleteMany({ where: { id: invitationId } });
+  }
 
   async findByToken(token: string): Promise<InvitationModel | null> {
     const tokenHash = createHash('sha256').update(token).digest();
