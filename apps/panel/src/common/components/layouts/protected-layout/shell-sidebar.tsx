@@ -2,6 +2,7 @@ import type { Ref } from 'react';
 import { X } from 'lucide-react';
 import { IconButton } from '@/common/components/ui/icon-button';
 import { cn } from '@/common/utils/cn';
+import { ShellNav } from './shell-nav';
 import { ShellSlot } from './shell-slot';
 
 export const SIDEBAR_ID = 'navegacao-principal';
@@ -51,9 +52,7 @@ export function ShellSidebar({
 				</IconButton>
 			</div>
 			<ShellSlot tone="dark" label="Conta em uso" className="min-h-10" />
-			<nav aria-label="Seções do painel" className="grid flex-1 content-start">
-				<ShellSlot tone="dark" label="Navegação" className="min-h-40" />
-			</nav>
+			<ShellNav />
 			<div className="border-branco/8 border-t pt-3">
 				<ShellSlot tone="dark" label="Sessão" />
 			</div>
