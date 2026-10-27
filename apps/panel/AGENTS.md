@@ -56,10 +56,19 @@ src/
 - Use o loader para páginas em que os dados são uma carga inicial e não têm interatividade própria depois de exibidos. O loader deve concluir a busca e entregar os dados prontos para a screen, que os lê com `Route.useLoaderData()` ou `getRouteApi()` em componentes extraídos.
 - Não use esse padrão para tabelas e listagens com filtros, paginação, ordenação, atualização ou outras interações que mudem os dados exibidos. Trate esses dados como interativos e defina o padrão de consulta apropriado para a feature.
 - Quando a rota receber parâmetros de busca, valide-os com `validateSearch`; não leia `window.location` diretamente. Use `loaderDeps` para declarar quais valores validados devem invalidar o loader.
-- O `queryClient` é fornecido no contexto do TanStack Router em `common/providers/app-providers.tsx`. No loader, use `context.queryClient.ensureQueryData()` com uma `queryKey` estável que inclua os parâmetros relevantes e um `queryFn` que chame a função HTTP da tela. Isso compartilha o resultado com o cache do TanStack Query.
+- O `queryClient` é fornecido no contexto do TanStack Router em `common/providers/app-providers.tsx`. No loader, use `context.queryClient.ensureQueryData()` com a `queryKey` exportada pela função HTTP e um `queryFn` que chame essa função. Isso compartilha o resultado com o cache do TanStack Query.
 - Mantenha chamadas HTTP em `http/` e a configuração de carregamento junto ao arquivo de rota; não crie hooks de consulta apenas para encaminhar uma chamada feita pelo loader.
 - Defina `pendingComponent` para o carregamento e `errorComponent` para falhas inesperadas, como rede indisponível. Em `openapi-fetch`, respostas HTTP não exitosas são retornadas como `{ error, response }` e não rejeitam automaticamente a promise: o `queryFn` deve tratar os códigos esperados pelo fluxo, como convite inválido, sem confundi-los com falhas inesperadas.
 - Não transforme todo erro HTTP em erro genérico do Router. Preserve estados de negócio esperados na tela e permita tentar novamente falhas transitórias invalidando o loader quando apropriado.
+
+### Contexto compartilhado de rotas
+
+- Quando várias rotas descendentes precisam do mesmo dado inicial ou de uma mesma invariável validada, carregue-o uma vez no `beforeLoad` ou `loader` da rota pai.
+- Faça a consulta usando o `context.queryClient` e a `queryKey`/`queryFn` da operação; valide o resultado na rota pai e, em caso de falha esperada, redirecione ou lance o estado definido pelo fluxo.
+- Retorne do `beforeLoad` ou `loader` somente o valor já validado. O TanStack Router propaga esse retorno no `context` para as rotas descendentes.
+- Nos loaders e componentes filhos, consuma `context`/`useRouteContext()` em vez de repetir `ensureQueryData()` para o mesmo dado. Isso evita chamadas duplicadas e mantém a validação no limite da rota pai.
+- Use o contexto da rota para dados compartilhados no escopo daquela árvore; mantenha o TanStack Query como cache e fonte de dados de servidor. O contexto não substitui invalidação, atualização ou tratamento de `401`/erros posteriores.
+- Não coloque segredos, credenciais ou estado mutável global no contexto. Para dados que possam mudar enquanto a árvore estiver montada, defina explicitamente a estratégia de invalidação ou consulte o cache apropriado.
 
 ## Chamadas HTTP e tipos OpenAPI
 
@@ -68,6 +77,7 @@ src/
 - Implemente cada operação HTTP explicitamente na pasta `http/` da tela que a usa. Por exemplo, `src/modules/account/screens/account-settings/http/get-account.ts` contém a chamada de consulta da tela de conta.
 - Use `apiClient` com método e caminho definidos no OpenAPI. Deixe o TypeScript inferir parâmetros, corpo, resposta e erro; não escreva um segundo cliente gerado nem replique os tipos da especificação.
 - Funções em `http/` cuidam da requisição e entregam dados tipados. Hooks da tela podem orquestrar carregamento, cache e estado de interface sem esconder o contrato da operação.
+- Toda consulta usada com o TanStack Query exporta sua `queryKey` no mesmo arquivo da função HTTP, como uma função `<operacao>QueryKey` que recebe os parâmetros da consulta e retorna um array `as const`, por exemplo `inspectInvitationQueryKey(token)` em `inspect-invitation.ts`. Loaders, hooks, invalidações e atualizações de cache importam essa função; não escreva a chave literal fora de `http/`.
 - Só use operações documentadas em `/docs.json`. Rotas pendentes ou ausentes do OpenAPI ainda não têm tipos nem chamadas disponíveis; não as invente.
 - O cliente envia cookies com `credentials: 'include'`. Mutations devem cumprir as exigências de `Origin` e CSRF dos contratos. Não invente o nome nem o formato de cabeçalhos de segurança.
 
