@@ -2,6 +2,8 @@
 
 O convite dura sete dias e só pode ser consumido uma vez.
 
+No fluxo de acesso ao piloto, o convite é criado e enviado automaticamente após um pedido elegível, conforme [Acesso](../access/routes.md). O envio usa o e-mail normalizado do pedido. A criação do convite não cria a conta; isso ocorre somente em `POST /auth/invitations/accept`.
+
 ### GET /auth/invitations/inspect
 
 **O que faz:** consulta os dados de um convite sem consumi-lo.

@@ -1,10 +1,10 @@
 ﻿# Acesso ao piloto e administração
 
-O envio público é a única rota deste módulo. A administração dos pedidos pela equipe é interna e fica fora da API até que se defina o acesso da equipe.
+O envio público é a única rota deste módulo. Cada pedido válido elegível inicia automaticamente o envio de um convite para o e-mail informado; não há etapa de aprovação manual da equipe no fluxo do MVP.
 
 ### POST /site/access-requests
 
-**O que faz:** recebe pedido público de acesso ao piloto sem criar conta.
+**O que faz:** recebe um pedido público de acesso ao piloto e, quando elegível, envia automaticamente um convite por e-mail. O pedido e o convite não criam a conta; ela só é criada quando a pessoa aceita o convite.
 
 **Autenticação:** pública.
 
@@ -19,26 +19,29 @@ O envio público é a única rota deste módulo. A administração dos pedidos p
 **Passo a passo:**
 1. Valide os oito campos.
 2. Normalize o e-mail para identificar pedidos.
-3. Crie pedido `pending` se não houver pedido.
-4. Atualize pedido `pending` existente; não altere pedidos `invited` ou `rejected`.
-5. Garanta que envios concorrentes não dupliquem o pedido.
-6. Não registre rejeições antispam nem revele decisão interna.
+3. Se o e-mail já pertencer a uma conta, não crie pedido nem envie convite.
+4. Se já houver convite não usado e ainda válido para o e-mail, não crie outro convite. Retome eventual envio ainda pendente ligado a esse convite e não repita um envio já aceito pelo provedor.
+5. Para e-mail sem conta e sem convite válido, crie ou atualize o pedido e emita um convite de sete dias para o próprio e-mail informado. Se o registro existente estiver `rejected` por fluxo legado, uma nova solicitação válida o reabre como `pending` e segue o envio automático.
+6. Se existir convite anterior vencido ou usado, não o reutilize; sem conta e sem convite válido, emita um novo convite.
+7. Guarde somente o hash do token; envie o token em link de uso único para a tela pública de aceitação. A conta continua sendo criada somente na aceitação.
+8. Garanta que envios concorrentes e novas submissões não criem ou enviem convites duplicados.
+9. Registre o pedido e a intenção de envio antes do efeito externo. Mantenha o pedido `pending` enquanto o envio estiver pendente; marque-o `invited` quando o provedor aceitar a solicitação de envio. A entrega de e-mail deve ser retomável e idempotente; uma falha de entrega não pode criar outra identidade ou convite válido concorrente.
+10. Se o resultado da chamada ao provedor for incerto, não repita cegamente o envio; aplique a política de reconciliação/retry definida para e-mails transacionais.
+11. Não registre rejeições antispam nem revele se o e-mail já tem conta, convite ou se o envio foi realizado.
 
-**Resposta:** `202` uniforme para novo, atualizado ou ignorado: `{"status":"received","message":"Recebemos sua solicitação."}`.
+**Resposta:** `202` uniforme para pedido novo, atualizado ou ignorado: `{"status":"received","message":"Recebemos sua solicitação."}`. A resposta confirma o recebimento da solicitação, não a entrega do e-mail.
 
 **Erros:** `400 bad_request`, `415 bad_request`, `422 validation_error` ou `submission_rejected`, `500 internal_error`, `503 service_unavailable`.
 
 ## Administração interna
 
-Fora do escopo da API até que se defina o acesso da equipe. As regras abaixo continuam valendo para qualquer forma de administração:
-
-- Somente a equipe responsável analisa pedidos, e cada ação fica registrada para auditoria.
-- Convidar um pedido cria o convite, envia o e-mail e marca o pedido como `invited`. Repetir a ação não cria convites duplicados.
-- Recusar marca o pedido como `rejected` e não envia mensagem à pessoa. Um novo envio público não reabre o pedido; a reabertura exige ação explícita da equipe.
+O fluxo do MVP não exige painel, comando operacional ou decisão manual da equipe para aceitar pedidos e enviar convites. Ações administrativas futuras ficam fora deste contrato.
 
 ## Processos internos
 
-- Retenha pedidos `pending` por 180 dias após a última atualização, `rejected` por 180 dias após recebimento e `invited` por 30 dias após o convite.
+- Retenha pedidos `pending` por 180 dias após a última atualização, `rejected` (estado legado, sem novas recusas automáticas no fluxo do MVP) por 180 dias após recebimento e `invited` por 30 dias após o provedor aceitar o envio.
 - Apague pedido em até 15 dias após solicitação por e-mail.
-- O comando de exclusão administrativa de pedido não está definido; o usuário pode solicitar exclusão por e-mail e o prazo de retenção se aplica.
+- O pedido não cria conta; a aceitação do convite segue o contrato de [Convites](../invites/routes.md).
+
+O prazo e a política de tentativas do envio, bem como o tratamento operacional de um resultado incerto do provedor de e-mail, devem seguir o contrato transacional de e-mail quando definido; não considerar o aceite do provedor como confirmação de entrega na caixa de entrada.
 

@@ -72,6 +72,8 @@ Detalhes: [Integrações](modules/integrations/routes.md).
 
 - [x] POST /site/access-requests
 
+Pedido elegível inicia o envio automático do convite por e-mail; ver [Acesso](modules/access/routes.md). A resposta `202` confirma o recebimento do pedido, não a entrega do e-mail.
+
 Detalhes: [Acesso](modules/access/routes.md).
 
 ## Webhooks recebidos

@@ -20,6 +20,6 @@ O sistema de origem continua responsável por administrar a agenda e aplicar os 
 - Consulta, cancelamento e exclusão antecipada de dados de agendamentos.
 - Gestão de contatos, bloqueios e consentimentos.
 - Acompanhamento de uso, eventos e entregas de webhook.
-- Pedido público de acesso ao piloto.
+- Pedido público de acesso ao piloto com envio automático de convite por e-mail quando elegível; a conta é criada somente após o aceite do convite.
 
 Cada conta representa um estabelecimento, tem um usuário responsável e pode configurar uma conexão de WhatsApp, um template e um destino de webhook.

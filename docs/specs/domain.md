@@ -12,10 +12,10 @@ Relações: um usuário responsável, uma conexão atual, um template e um webho
 Representa o acesso responsável. Campos: `id: UUID`, `email: string`, `passwordHash: bytes`, `passwordChangedAt: datetime | null`, `createdAt: datetime`, `disabledAt: datetime | null`. Uma conta tem um usuário no escopo atual.
 
 ### Invitation
-Convite para criar acesso. Campos: `id: UUID`, `email: string`, `tokenHash: bytes`, `expiresAt: datetime`, `usedAt: datetime | null`, `createdAt: datetime`. É válido por sete dias. Conta e vínculo são criados na aceitação.
+Convite para criar acesso. Campos: `id: UUID`, `email: string`, `tokenHash: bytes`, `expiresAt: datetime`, `usedAt: datetime | null`, `createdAt: datetime`. É válido por sete dias, é enviado automaticamente por e-mail após um pedido público elegível e só pode ser consumido uma vez. Conta e vínculo são criados na aceitação.
 
 ### AccessRequest
-Pedido público de acesso. Campos: `id: UUID`, `name: string`, `email: string`, `companyOrProject: string`, `whatsappProvider: evolution_api | other | none_yet`, `intendedUse: string | null`, `status: pending | invited | rejected`, `consentAt: datetime`, `receivedAt: datetime`, `updatedAt: datetime`. E-mail normalizado é único. Pedido não cria conta.
+Pedido público de acesso. Campos: `id: UUID`, `name: string`, `email: string`, `companyOrProject: string`, `whatsappProvider: evolution_api | other | none_yet`, `intendedUse: string | null`, `status: pending | invited | rejected`, `consentAt: datetime`, `receivedAt: datetime`, `updatedAt: datetime`. E-mail normalizado é único. Um pedido elegível gera convite automático para o mesmo e-mail; não cria conta. `pending` indica que o envio do convite ainda não foi aceito pelo provedor; `invited` indica aceite do envio pelo provedor, não entrega garantida na caixa de entrada. `rejected` permanece somente para registros legados, pois o fluxo do MVP não inclui revisão ou recusa manual.
 
 ## Integrações
 
