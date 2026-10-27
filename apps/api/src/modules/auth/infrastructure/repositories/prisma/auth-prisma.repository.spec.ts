@@ -7,20 +7,24 @@ describe('AuthPrismaRepository integration tests', () => {
   let sut: AuthPrismaRepository;
 
   const userId = randomUUID();
+
   const email = 'marina@example.com';
 
   beforeEach(async () => {
     await prisma.$executeRaw`TRUNCATE TABLE "account_users" CASCADE`;
+
     sut = new AuthPrismaRepository(prisma);
   });
 
   it('should return null when the user is not found by email', async () => {
     const result = await sut.findByEmail(email);
+
     expect(result).toBeNull();
   });
 
   it('should find a user by email and map the password hash', async () => {
     const createdAt = new Date('2026-01-01T00:00:00.000Z');
+
     const passwordChangedAt = new Date('2026-01-02T00:00:00.000Z');
 
     await prisma.accountUser.create({
@@ -77,6 +81,7 @@ describe('AuthPrismaRepository integration tests', () => {
         passwordHash: Buffer.from('old-password-hash', 'utf8'),
       },
     });
+
     const passwordChangedAt = new Date('2026-01-03T00:00:00.000Z');
 
     await sut.updatePassword(userId, 'new-password-hash', passwordChangedAt);

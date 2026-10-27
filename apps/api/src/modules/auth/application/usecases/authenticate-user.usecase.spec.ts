@@ -50,6 +50,8 @@ describe('AuthenticateUserUseCase unit tests', () => {
   };
 
   beforeEach(() => {
+    vi.resetAllMocks();
+
     sut = new AuthenticateUserUseCase(
       repository,
       hashProvider,
