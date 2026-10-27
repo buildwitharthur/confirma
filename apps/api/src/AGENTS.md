@@ -136,7 +136,7 @@ const bodySchema = z.object({ value: z.string().min(1) }).strict();
 const body = dataValidation(bodySchema, request.body);
 ```
 
-Controllers recebem repositórios pelas interfaces disponíveis em `request.app.locals`; a composição da infraestrutura fornece suas implementações concretas. Interfaces não podem ser instanciadas diretamente.
+Controllers instanciam os adapters concretos e os passam ao construtor do use case pelas interfaces de domínio. Não use `app.locals` para compor essas dependências. Interfaces não podem ser instanciadas diretamente.
 
 ## Rotas
 
@@ -228,8 +228,126 @@ O ORM é Prisma 7 com PostgreSQL e driver adapter `@prisma/adapter-pg`. Mantenha
 - O client é gerado em `common/infrastructure/prisma/generated/client/`. Depois de alterar o schema ou o generator, execute `pnpm prisma:generate` a partir de `apps/api`.
 - A instância de aplicação é exportada por `common/infrastructure/prisma/index.ts`; a conexão usa `DATABASE_URL` validada por `common/infrastructure/env/index.ts` e o adapter PostgreSQL.
 - Crie e aplique migrations de desenvolvimento com `pnpm prisma:migrate:dev -- --name <nome>` e aplique migrations existentes com `pnpm prisma:migrate:deploy`, a partir de `apps/api`. Mantenha todo o histórico em `common/infrastructure/prisma/migrations/`.
-- Os testes e a infraestrutura específica de testes foram removidos temporariamente para serem reescritos. Não há banco de teste no Compose nem job de testes no CI atual. Antes de retomar testes de integração, prepare um banco isolado e uma configuração que não possa conectar ao banco de produção.
+- Os testes usam `Vitest` e carregam `apps/api/.env.test`. O banco de teste deve ser isolado do desenvolvimento e da produção.
 - Não invente entidades, campos, relações ou restrições no schema; derive-os de `docs/specs/domain.md` e dos contratos relacionados.
+
+## Testes
+
+Os testes ficam próximos do código que verificam, com o sufixo `.spec.ts`. Importe explicitamente os recursos do Vitest e use descrições de cenários em inglês.
+
+Os exemplos abaixo usam nomes genéricos para ensinar a estrutura. `ExampleModel`, `ExampleRepository`, `FindExampleUseCase`, `ExamplePrismaRepository` e a tabela `examples` são ilustrativos; não representam entidades ou contratos novos do produto. Ao aplicar o padrão, use os contratos reais do módulo.
+
+### Use cases
+
+- Use cases devem ter testes unitários sem Prisma, banco ou implementações em memória de repositório.
+- Use `sut` para a instância do caso de uso, recriada no `beforeEach`, e crie doubles dos contratos com `vi.fn()` e `satisfies`.
+- Inclua todos os métodos exigidos pela interface. Tipar cada `vi.fn` com o método correspondente também verifica os valores configurados pelo teste.
+- Exemplo de `find-example.usecase.spec.ts`, considerando um contrato `ExampleRepository` com `findById(id: string): Promise<ExampleModel | null>` e um use case que retorna o registro ou lança `NotFoundError`:
+
+```ts
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { NotFoundError } from '../../../../common/domain/errors/not-found.js';
+import type { ExampleRepository } from '../../domain/repositories/example.repository.js';
+import { FindExampleUseCase } from './find-example.usecase.js';
+
+describe('FindExampleUseCase unit tests', () => {
+  let sut: FindExampleUseCase;
+
+  const exampleRepository = {
+    findById: vi.fn<ExampleRepository['findById']>(),
+  } satisfies ExampleRepository;
+
+  beforeEach(() => {
+    exampleRepository.findById.mockReset();
+    sut = new FindExampleUseCase(exampleRepository);
+  });
+
+  it('should return an existing example', async () => {
+    const example = { id: 'example-id', name: 'Example' };
+    exampleRepository.findById.mockResolvedValue(example);
+
+    const result = await sut.execute({ id: example.id });
+
+    expect(result).toEqual(example);
+    expect(exampleRepository.findById).toHaveBeenCalledWith(example.id);
+  });
+
+  it('should reject an unknown example', async () => {
+    exampleRepository.findById.mockResolvedValue(null);
+
+    await expect(sut.execute({ id: 'unknown-id' })).rejects.toBeInstanceOf(
+      NotFoundError,
+    );
+  });
+});
+```
+
+- Declare os doubles como constantes no escopo do `describe` e configure somente o comportamento necessário em cada teste.
+- Providers, como hash, JWT, cookies e e-mail, também são substituídos por doubles quando forem dependências do caso de uso.
+- Teste comportamento: resultado, erros, dados enviados aos contratos e efeitos que o caso de uso deve ou não deve produzir.
+- Não teste detalhes internos, Prisma ou chamadas de infraestrutura dentro do teste do use case.
+- A configuração `restoreMocks` restaura spies criados com `vi.spyOn`; ela não limpa histórico nem implementações de doubles independentes criados com `vi.fn`. Resete esses doubles no `beforeEach` quando forem compartilhados entre cenários. Não dependa da ordem dos testes.
+
+### Repositórios Prisma
+
+- Repositórios Prisma devem ter testes de integração contra o PostgreSQL definido em `.env.test`.
+- Use `sut` para a instância do repositório e injete o client Prisma no construtor.
+- Limpe as tabelas necessárias no `beforeEach`, usando `TRUNCATE ... CASCADE` quando houver dependências. Confira que a conexão aponta para o banco exclusivo de testes antes de executar a limpeza.
+- Exemplo de `example-prisma.repository.spec.ts`, considerando um modelo ilustrativo com `id` e `name` e um repositório com `findById` e `updateName`:
+
+```ts
+import { beforeEach, describe, expect, it } from 'vitest';
+import { prisma } from '../../../../../common/infrastructure/prisma/index.js';
+import { ExamplePrismaRepository } from './example-prisma.repository.js';
+
+describe('ExamplePrismaRepository integration tests', () => {
+  let sut: ExamplePrismaRepository;
+
+  const exampleId = '11111111-1111-4111-8111-111111111111';
+
+  beforeEach(async () => {
+    await prisma.$executeRaw`TRUNCATE TABLE "examples" CASCADE`;
+    sut = new ExamplePrismaRepository(prisma);
+  });
+
+  it('should return null when the example does not exist', async () => {
+    const result = await sut.findById(exampleId);
+
+    expect(result).toBeNull();
+  });
+
+  it('should find an example by id', async () => {
+    await prisma.example.create({
+      data: { id: exampleId, name: 'Example' },
+    });
+
+    const result = await sut.findById(exampleId);
+
+    expect(result).toEqual({ id: exampleId, name: 'Example' });
+  });
+
+  it('should persist the updated name', async () => {
+    await prisma.example.create({
+      data: { id: exampleId, name: 'Example' },
+    });
+
+    await sut.updateName(exampleId, 'Updated example');
+
+    const saved = await prisma.example.findUnique({
+      where: { id: exampleId },
+    });
+    expect(saved?.name).toBe('Updated example');
+  });
+});
+```
+
+- Não é necessário chamar `prisma.$connect()` ou `prisma.$disconnect()` nos testes; o client compartilhado conecta sob demanda.
+- Insira dados de preparação pelo client de teste e verifique os métodos públicos do contrato do repositório.
+- Teste o comportamento e o mapeamento dos modelos, não as chamadas internas ou a implementação do Prisma.
+
+### Rotas
+
+No padrão atual, não criar testes de rotas. A cobertura fica nos use cases e nos repositórios Prisma.
 
 ## Ambiente
 

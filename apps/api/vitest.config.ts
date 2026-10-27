@@ -5,5 +5,6 @@ export default defineConfig({
     environment: 'node',
     fileParallelism: false,
     include: ['src/**/*.spec.ts'],
+    restoreMocks: true,
   },
 });

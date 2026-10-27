@@ -45,7 +45,8 @@ O Confirma é um SaaS B2B que confirma agendamentos por WhatsApp. Sistemas exter
 ## Validação
 
 - Depois de implementar cada feature, execute as verificações do CI definidas em `.github/workflows/ci.yml`: `pnpm install --frozen-lockfile`, `pnpm check` e `pnpm build`. Confirme que passaram antes do commit. O CI atual não executa testes nem migrations. Se uma verificação não puder ser executada, informe o motivo e não declare que o CI está passando.
-- Escreva testes proporcionais ao risco: regras isoladas, operações com persistência, contratos de rotas e webhooks, além de concorrência, idempotência e falhas onde se aplicam.
+- Antes de concluir cada solicitação de alteração, execute também `pnpm test`. Se os testes não puderem ser executados, informe o motivo e não declare a validação como concluída.
+- Na API, escreva testes unitários de use cases e testes de integração dos repositórios Prisma, seguindo os exemplos em `apps/api/src/AGENTS.md`. Cubra concorrência, idempotência e falhas onde se aplicam. O padrão atual não inclui testes de rotas.
 - Teste comportamento, não a implementação.
 - Não declare testes ou verificações que não executou.
 - Não altere regras de lint, tipos ou formatação para esconder erros.

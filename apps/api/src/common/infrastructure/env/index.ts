@@ -4,7 +4,9 @@ import { z } from 'zod';
 import { AppError } from '../../domain/errors/app-error.js';
 
 const envSchema = z.object({
-  NODE_ENV: z.enum(['development', 'production']).default('development'),
+  NODE_ENV: z
+    .enum(['development', 'test', 'production'])
+    .default('development'),
   PORT: z.coerce.number().int().positive().default(3333),
   API_URL: z.string().url().default('http://localhost:3333'),
   JWT_SECRET: z.string().min(1),

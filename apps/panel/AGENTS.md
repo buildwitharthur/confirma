@@ -116,6 +116,134 @@ src/
 - Ícones vêm de `lucide-react`. Não desenhe SVGs de ícone à mão; escolha o ícone do Lucide equivalente ao do protótipo e ajuste tamanho e `strokeWidth` para reproduzi-lo.
 - Não adicione outra biblioteca de componentes ou de ícones.
 
+## Exemplos de construção
+
+Os exemplos usam nomes genéricos e demonstram a estrutura com as ferramentas já adotadas no painel. Não definem novas telas, campos ou operações de produto. Adapte-os somente a contratos existentes e ao protótipo correspondente. Não crie os arquivos ilustrativos antecipadamente.
+
+### Componente visual com variantes
+
+Use props do elemento HTML nativo, `VariantProps`, tokens existentes e `tv()` no mesmo arquivo. Encaminhe `className` e as demais props para permitir composição. Exemplo de `common/components/ui/example-box.tsx`:
+
+```tsx
+import type { ComponentProps } from 'react';
+import { tv, type VariantProps } from 'tailwind-variants';
+
+const exampleBox = tv({
+	base: 'rounded-lg border p-4',
+	variants: {
+		tone: {
+			neutral: 'border-cinza-verde-claro bg-branco text-verde-escuro',
+			highlighted: 'border-verde bg-verde-claro text-verde-escuro',
+		},
+	},
+	defaultVariants: { tone: 'neutral' },
+});
+
+type ExampleBoxProps = ComponentProps<'div'> & VariantProps<typeof exampleBox>;
+
+export function ExampleBox({
+	tone,
+	className,
+	children,
+	...props
+}: ExampleBoxProps) {
+	return (
+		<div className={exampleBox({ tone, className })} {...props}>
+			{children}
+		</div>
+	);
+}
+```
+
+Esse exemplo é visual e usa HTML nativo. Para componentes interativos, use o primitivo correspondente do Radix, com suas partes e atributos de acessibilidade. Reutilize os componentes existentes antes de criar outro.
+
+### Formulário local da tela
+
+Mantenha schema, tipos, campos e submissão no componente do formulário. Use os componentes existentes para label, erro, input e botão. O callback representa a operação já definida pelo fluxo; uma rejeição deve ser tratada como falha, sem simular sucesso. Exemplo de `modules/<modulo>/screens/<tela>/components/example-form.tsx`:
+
+```tsx
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useEffect, useRef, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { Alert } from '@/common/components/ui/alert';
+import { Button } from '@/common/components/ui/button';
+import { Field, fieldDescribedBy } from '@/common/components/ui/field';
+import { Input } from '@/common/components/ui/input';
+
+const exampleSchema = z.object({
+	name: z.string().trim().min(1, 'Informe o nome.'),
+});
+
+type ExampleFormInput = z.input<typeof exampleSchema>;
+type ExampleFormOutput = z.output<typeof exampleSchema>;
+
+type ExampleFormProps = {
+	onSave: (values: ExampleFormOutput) => Promise<void>;
+};
+
+export function ExampleForm({ onSave }: ExampleFormProps) {
+	const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
+	const feedbackRef = useRef<HTMLDivElement>(null);
+	const {
+		register,
+		handleSubmit,
+		formState: { errors, isSubmitting },
+	} = useForm<ExampleFormInput, unknown, ExampleFormOutput>({
+		resolver: zodResolver(exampleSchema),
+		defaultValues: { name: '' },
+	});
+
+	useEffect(() => {
+		if (status !== 'idle') feedbackRef.current?.focus();
+	}, [status]);
+
+	async function onSubmit(values: ExampleFormOutput) {
+		setStatus('idle');
+
+		try {
+			await onSave(values);
+			setStatus('success');
+		} catch {
+			setStatus('error');
+		}
+	}
+
+	return (
+		<form noValidate onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
+			<Field label="Nome" htmlFor="example-name" error={errors.name?.message}>
+				<Input
+					id="example-name"
+					aria-required="true"
+					aria-invalid={errors.name ? true : undefined}
+					aria-describedby={fieldDescribedBy('example-name', {
+						error: !!errors.name,
+					})}
+					{...register('name')}
+				/>
+			</Field>
+			{status !== 'idle' && (
+				<Alert
+					ref={feedbackRef}
+					tone={status === 'error' ? 'err' : 'ok'}
+					title={status === 'error' ? 'Não foi possível salvar.' : 'Salvo.'}
+					live
+				>
+					{status === 'error' ? 'Tente novamente.' : 'Alteração concluída.'}
+				</Alert>
+			)}
+			<Button type="submit" variant="primary" loading={isSubmitting}>
+				{isSubmitting ? 'Salvando…' : 'Salvar'}
+			</Button>
+		</form>
+	);
+}
+```
+
+O campo `name` é ilustrativo. Na feature real, respeite os campos, limites, mensagens e estados definidos nos contratos e no protótipo. Quando a operação HTTP retornar `{ error, response }`, o hook ou callback deve interpretar o resultado antes de resolver `onSave`; resposta HTTP não exitosa não pode ser apresentada como sucesso. Erros de negócio esperados devem receber o tratamento específico do fluxo.
+
+`screen.tsx` compõe o formulário e mantém o título, a descrição e a estrutura visual da tela. O formulário não faz chamadas HTTP diretamente; a operação fica em `http/` e a orquestração em um hook quando necessário. Não extraia elementos estáticos para componentes sem uma responsabilidade própria.
+
 ## Validação
 
 - Siga as verificações do `AGENTS.md` da raiz do repositório, incluindo os jobs de CI definidos em `.github/workflows/` antes de concluir uma feature.
