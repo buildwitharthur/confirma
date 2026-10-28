@@ -2,12 +2,14 @@ import type { Ref } from 'react';
 import { X } from 'lucide-react';
 import { IconButton } from '@/common/components/ui/icon-button';
 import { cn } from '@/common/utils/cn';
+import { ShellAccount, type ShellAccountSummary } from './shell-account';
 import { ShellNav } from './shell-nav';
 import { ShellSlot } from './shell-slot';
 
 export const SIDEBAR_ID = 'navegacao-principal';
 
 type ShellSidebarProps = {
+	account: ShellAccountSummary;
 	/** Estado do drawer; em desktop a sidebar fica sempre visível. */
 	open: boolean;
 	onClose: () => void;
@@ -16,6 +18,7 @@ type ShellSidebarProps = {
 
 /** Sidebar fixa em desktop; abaixo de `lg` vira drawer sobre o conteúdo. */
 export function ShellSidebar({
+	account,
 	open,
 	onClose,
 	closeButtonRef,
@@ -51,7 +54,7 @@ export function ShellSidebar({
 					<X strokeWidth={1.75} aria-hidden="true" />
 				</IconButton>
 			</div>
-			<ShellSlot tone="dark" label="Conta em uso" className="min-h-10" />
+			<ShellAccount account={account} />
 			<ShellNav />
 			<div className="border-branco/8 border-t pt-3">
 				<ShellSlot tone="dark" label="Sessão" />
