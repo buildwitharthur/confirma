@@ -10,6 +10,10 @@ const button = tv({
 				'border-cinza-verde-medio bg-branco text-verde-escuro hover:border-verde-profundo hover:bg-verde-claro active:shadow-[inset_0_1px_2px_--alpha(var(--color-noite)/12%)]',
 			primary:
 				'border-verde-profundo bg-verde from-branco/8 text-branco hover:bg-verde-profundo hover:from-branco/6 active:bg-verde-profundo bg-linear-to-b to-transparent to-60% shadow-[inset_0_1px_0_--alpha(var(--color-branco)/16%),0_2px_5px_--alpha(var(--color-noite)/8%)] active:bg-none active:shadow-[inset_0_2px_3px_--alpha(var(--color-noite)/30%)]',
+			danger:
+				'border-vermelho bg-vermelho text-branco shadow-[inset_0_1px_0_--alpha(var(--color-branco)/14%),0_2px_5px_--alpha(var(--color-noite)/8%)] hover:brightness-92 active:shadow-[inset_0_2px_3px_--alpha(var(--color-noite)/30%)]',
+			'danger-outline':
+				'border-vermelho/32 bg-branco text-vermelho hover:border-vermelho hover:bg-vermelho/8',
 		},
 		size: {
 			sm: 'min-h-8.5 gap-1.5 px-3 text-[13px] [&_svg]:size-4',

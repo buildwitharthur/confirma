@@ -941,7 +941,9 @@ export interface paths {
                     headers: {
                         [name: string]: unknown;
                     };
-                    content?: never;
+                    content: {
+                        "application/json": components["schemas"]["ApiKeyList"];
+                    };
                 };
                 /** @description Sessão inválida. */
                 401: {
@@ -975,7 +977,9 @@ export interface paths {
                     headers: {
                         [name: string]: unknown;
                     };
-                    content?: never;
+                    content: {
+                        "application/json": components["schemas"]["ApiKeyCreated"];
+                    };
                 };
                 /** @description Sessão inválida. */
                 401: {
@@ -1048,14 +1052,18 @@ export interface paths {
                     headers: {
                         [name: string]: unknown;
                     };
-                    content?: never;
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
                 };
                 /** @description Confirmação externa indisponível. */
                 503: {
                     headers: {
                         [name: string]: unknown;
                     };
-                    content?: never;
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
                 };
             };
         };
@@ -1135,6 +1143,18 @@ export interface components {
             created_at: string;
             /** Format: date-time */
             revoked_at: string | null;
+        };
+        ApiKeyList: {
+            items: components["schemas"]["ApiKey"][];
+        };
+        ApiKeyCreated: {
+            /** Format: uuid */
+            id: string;
+            prefix: string;
+            /** @description Segredo completo, exibido somente nesta resposta. */
+            secret: string;
+            /** Format: date-time */
+            created_at: string;
         };
     };
     responses: never;

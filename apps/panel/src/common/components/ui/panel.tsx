@@ -9,18 +9,33 @@ const panel = tv({
 		description: 'text-cinza-verde-escuro mt-0.5 text-xs leading-[17px]',
 		body: 'p-5 max-md:px-4',
 	},
+	variants: {
+		/** Corpo sem espaçamento, para tabelas que ocupam a largura do painel. */
+		flush: {
+			true: { root: 'overflow-hidden', body: 'p-0 max-md:px-0' },
+		},
+	},
 });
 
 type PanelProps = {
 	title: string;
 	description?: ReactNode;
+	/** Ações do cabeçalho, alinhadas à direita do título. */
+	actions?: ReactNode;
+	flush?: boolean;
 	children: ReactNode;
 };
 
 /** Seção do conteúdo: cabeçalho com título e descrição, corpo abaixo da divisória. */
-export function Panel({ title, description, children }: PanelProps) {
+export function Panel({
+	title,
+	description,
+	actions,
+	flush = false,
+	children,
+}: PanelProps) {
 	const titleId = useId();
-	const styles = panel();
+	const styles = panel({ flush });
 
 	return (
 		<section aria-labelledby={titleId} className={styles.root()}>
@@ -31,6 +46,7 @@ export function Panel({ title, description, children }: PanelProps) {
 					</h2>
 					{description && <p className={styles.description()}>{description}</p>}
 				</div>
+				{actions}
 			</div>
 			<div className={styles.body()}>{children}</div>
 		</section>

@@ -8,6 +8,9 @@ const pill = tv({
 	},
 	variants: {
 		tone: {
+			neutral: {
+				base: 'bg-nevoa text-cinza-verde-escuro shadow-[inset_0_0_0_1px_var(--color-cinza-verde-claro)]',
+			},
 			info: { base: 'bg-branco text-verde-profundo' },
 			ok: { base: 'bg-verde-claro text-verde' },
 		},
@@ -15,7 +18,7 @@ const pill = tv({
 });
 
 type PillProps = {
-	tone: 'info' | 'ok';
+	tone: 'neutral' | 'info' | 'ok';
 	icon: LucideIcon;
 	label: string;
 };

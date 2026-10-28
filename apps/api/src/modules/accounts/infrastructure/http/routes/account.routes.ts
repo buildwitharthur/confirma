@@ -100,6 +100,29 @@ export const accountRoutes = Router();
  *           type: string
  *           format: date-time
  *           nullable: true
+ *     ApiKeyList:
+ *       type: object
+ *       required: [items]
+ *       properties:
+ *         items:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/ApiKey'
+ *     ApiKeyCreated:
+ *       type: object
+ *       required: [id, prefix, secret, created_at]
+ *       properties:
+ *         id:
+ *           type: string
+ *           format: uuid
+ *         prefix:
+ *           type: string
+ *         secret:
+ *           type: string
+ *           description: Segredo completo, exibido somente nesta resposta.
+ *         created_at:
+ *           type: string
+ *           format: date-time
  */
 
 /**
@@ -235,6 +258,10 @@ accountRoutes.put('/account/template', updateMessageTemplateController);
  *     responses:
  *       200:
  *         description: Chaves sem os segredos.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiKeyList'
  *       401:
  *         description: Sessão inválida.
  *       403:
@@ -246,6 +273,10 @@ accountRoutes.put('/account/template', updateMessageTemplateController);
  *     responses:
  *       201:
  *         description: Chave criada; o segredo é exibido uma vez.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiKeyCreated'
  *       401:
  *         description: Sessão inválida.
  *       403:
@@ -278,7 +309,15 @@ accountRoutes.post('/account/api-keys', createApiKeyController);
  *         description: Acesso negado.
  *       404:
  *         description: Chave não encontrada.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  *       503:
  *         description: Confirmação externa indisponível.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 accountRoutes.delete('/account/api-keys/:key_id', revokeApiKeyController);

@@ -1,7 +1,8 @@
 import type { ReactNode } from 'react';
 import { Panel } from '@/common/components/ui/panel';
 import type { components } from '@/common/http/generated/openapi';
-import { formatDateTime, formatLeadMinutes } from '../utils/format-account';
+import { formatDateTime } from '@/common/utils/format-date-time';
+import { formatLeadMinutes } from '../utils/format-account';
 
 type AccountCurrentValuesProps = {
 	account: components['schemas']['Account'];
