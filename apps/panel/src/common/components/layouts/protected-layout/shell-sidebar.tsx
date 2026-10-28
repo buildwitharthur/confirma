@@ -4,12 +4,13 @@ import { IconButton } from '@/common/components/ui/icon-button';
 import { cn } from '@/common/utils/cn';
 import { ShellAccount, type ShellAccountSummary } from './shell-account';
 import { ShellNav } from './shell-nav';
-import { ShellSlot } from './shell-slot';
+import { ShellSession, type ShellSessionData } from './shell-session';
 
 export const SIDEBAR_ID = 'navegacao-principal';
 
 type ShellSidebarProps = {
 	account: ShellAccountSummary;
+	session: ShellSessionData;
 	/** Estado do drawer; em desktop a sidebar fica sempre visível. */
 	open: boolean;
 	onClose: () => void;
@@ -19,6 +20,7 @@ type ShellSidebarProps = {
 /** Sidebar fixa em desktop; abaixo de `lg` vira drawer sobre o conteúdo. */
 export function ShellSidebar({
 	account,
+	session,
 	open,
 	onClose,
 	closeButtonRef,
@@ -57,7 +59,7 @@ export function ShellSidebar({
 			<ShellAccount account={account} />
 			<ShellNav />
 			<div className="border-branco/8 border-t pt-3">
-				<ShellSlot tone="dark" label="Sessão" />
+				<ShellSession session={session} />
 			</div>
 		</aside>
 	);

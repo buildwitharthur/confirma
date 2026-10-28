@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { useLocation } from '@tanstack/react-router';
 import type { ShellAccountSummary } from './shell-account';
 import { ShellHeader } from './shell-header';
+import type { ShellSessionData } from './shell-session';
 import { ShellSidebar } from './shell-sidebar';
 
 /** Mesmo breakpoint `lg` em que a sidebar deixa de ser drawer. */
@@ -9,11 +10,16 @@ const DESKTOP_QUERY = '(min-width: 64rem)';
 
 type ProtectedLayoutProps = {
 	account: ShellAccountSummary;
+	session: ShellSessionData;
 	children: ReactNode;
 };
 
 /** Composição única das rotas do shell: a rota entrega somente o conteúdo da área principal. */
-export function ProtectedLayout({ account, children }: ProtectedLayoutProps) {
+export function ProtectedLayout({
+	account,
+	session,
+	children,
+}: ProtectedLayoutProps) {
 	const pathname = useLocation({ select: (location) => location.pathname });
 	// O drawer pertence à rota em que foi aberto: qualquer navegação o fecha.
 	const [openedAt, setOpenedAt] = useState<string | null>(null);
@@ -61,6 +67,7 @@ export function ProtectedLayout({ account, children }: ProtectedLayoutProps) {
 			</a>
 			<ShellSidebar
 				account={account}
+				session={session}
 				open={drawerOpen}
 				onClose={closeDrawer}
 				closeButtonRef={closeButtonRef}

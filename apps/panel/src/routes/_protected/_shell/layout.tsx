@@ -9,10 +9,10 @@ export const Route = createFileRoute('/_protected/_shell')({
 });
 
 function Layout() {
-	const { account } = Route.useRouteContext();
+	const { account, session } = Route.useRouteContext();
 
 	return (
-		<ProtectedLayout account={account}>
+		<ProtectedLayout account={account} session={session}>
 			<Outlet />
 		</ProtectedLayout>
 	);
