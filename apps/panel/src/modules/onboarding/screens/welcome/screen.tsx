@@ -11,7 +11,12 @@ const routeApi = getRouteApi('/_protected/boas-vindas');
 
 /** WEL-01: recepção autenticada sem a navegação operacional, com um único CTA. */
 export function WelcomeScreen() {
-	const { email, accountName } = routeApi.useLoaderData();
+	const {
+		session: {
+			user: { email },
+		},
+		account: { name: accountName },
+	} = routeApi.useRouteContext();
 	const queryClient = useQueryClient();
 	const navigate = useNavigate();
 	const logout = useLogout();

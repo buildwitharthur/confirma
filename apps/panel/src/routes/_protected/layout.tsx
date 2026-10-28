@@ -3,6 +3,10 @@ import {
 	getSession,
 	getSessionQueryKey,
 } from '@/modules/auth/screens/login/http/get-session';
+import {
+	getAccount,
+	getAccountQueryKey,
+} from '@/modules/onboarding/screens/welcome/http/get-account';
 
 export const Route = createFileRoute('/_protected')({
 	beforeLoad: async ({ context: { queryClient } }) => {
@@ -17,7 +21,17 @@ export const Route = createFileRoute('/_protected')({
 			throw redirect({ to: '/entrar' });
 		}
 
-		return { session };
+		const account = await queryClient.ensureQueryData({
+			queryKey: getAccountQueryKey(),
+			queryFn: getAccount,
+		});
+
+		if (!account) {
+			queryClient.clear();
+			throw redirect({ to: '/entrar' });
+		}
+
+		return { session, account };
 	},
 	component: Layout,
 });
