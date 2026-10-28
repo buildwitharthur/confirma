@@ -1,0 +1,37 @@
+---
+import { Font } from 'astro:assets';
+import '../styles/global.css';
+
+interface Props {
+	title: string;
+	description: string;
+	/** Páginas fora da busca, como a de erro, usam `noindex`. */
+	indexable?: boolean;
+}
+
+const { title, description, indexable = true } = Astro.props;
+---
+
+<!doctype html>
+<html lang="pt-BR">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="description" content={description} />
+		<meta
+			name="robots"
+			content={indexable ? 'index, follow' : 'noindex, follow'}
+		/>
+		<meta name="theme-color" content="#0B1F1A" />
+		<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+		<Font cssVariable="--font-manrope" preload />
+		<Font cssVariable="--font-bricolage" preload />
+		<Font cssVariable="--font-geist-mono" />
+		<title>{title}</title>
+		<slot name="head" />
+	</head>
+	<body>
+		<slot />
+	</body>
+</html>

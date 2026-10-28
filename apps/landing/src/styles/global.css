@@ -20,9 +20,9 @@
 	--color-red: var(--confirma-acento-vermelho);
 	--color-coral: var(--confirma-acento-coral);
 
-	--font-sans: 'Manrope', sans-serif;
-	--font-display: 'Bricolage Grotesque', sans-serif;
-	--font-mono: 'Geist Mono', monospace;
+	--font-sans: var(--font-manrope);
+	--font-display: var(--font-bricolage);
+	--font-mono: var(--font-geist-mono);
 }
 
 html {
@@ -41,7 +41,7 @@ body {
 	margin: 0;
 	background: var(--confirma-marca-nevoa);
 	color: var(--confirma-marca-noite);
-	font-family: 'Manrope', sans-serif;
+	font-family: var(--font-manrope);
 	font-optical-sizing: auto;
 	text-rendering: optimizeLegibility;
 	-webkit-font-smoothing: antialiased;

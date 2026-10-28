@@ -1,0 +1,2 @@
+# Mantém LF no checkout em qualquer sistema, como exigem .editorconfig e Prettier.
+* text=auto eol=lf
