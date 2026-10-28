@@ -399,6 +399,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   AccountUser: 'AccountUser',
   Account: 'Account',
+  WhatsAppConnection: 'WhatsAppConnection',
   Invitation: 'Invitation',
   ApiKey: 'ApiKey',
   MessageTemplate: 'MessageTemplate',
@@ -422,7 +423,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "accountUser" | "account" | "invitation" | "apiKey" | "messageTemplate" | "monthlyUsage" | "passwordResetToken" | "contactBlock" | "unblockRequest" | "contactPrivacyEvent"
+    modelProps: "accountUser" | "account" | "whatsAppConnection" | "invitation" | "apiKey" | "messageTemplate" | "monthlyUsage" | "passwordResetToken" | "contactBlock" | "unblockRequest" | "contactPrivacyEvent"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -571,6 +572,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.AccountCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.AccountCountAggregateOutputType> | number
+        }
+      }
+    }
+    WhatsAppConnection: {
+      payload: Prisma.$WhatsAppConnectionPayload<ExtArgs>
+      fields: Prisma.WhatsAppConnectionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.WhatsAppConnectionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsAppConnectionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.WhatsAppConnectionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsAppConnectionPayload>
+        }
+        findFirst: {
+          args: Prisma.WhatsAppConnectionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsAppConnectionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.WhatsAppConnectionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsAppConnectionPayload>
+        }
+        findMany: {
+          args: Prisma.WhatsAppConnectionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsAppConnectionPayload>[]
+        }
+        create: {
+          args: Prisma.WhatsAppConnectionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsAppConnectionPayload>
+        }
+        createMany: {
+          args: Prisma.WhatsAppConnectionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.WhatsAppConnectionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsAppConnectionPayload>[]
+        }
+        delete: {
+          args: Prisma.WhatsAppConnectionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsAppConnectionPayload>
+        }
+        update: {
+          args: Prisma.WhatsAppConnectionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsAppConnectionPayload>
+        }
+        deleteMany: {
+          args: Prisma.WhatsAppConnectionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.WhatsAppConnectionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.WhatsAppConnectionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsAppConnectionPayload>[]
+        }
+        upsert: {
+          args: Prisma.WhatsAppConnectionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsAppConnectionPayload>
+        }
+        aggregate: {
+          args: Prisma.WhatsAppConnectionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateWhatsAppConnection>
+        }
+        groupBy: {
+          args: Prisma.WhatsAppConnectionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WhatsAppConnectionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.WhatsAppConnectionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WhatsAppConnectionCountAggregateOutputType> | number
         }
       }
     }
@@ -1235,6 +1310,25 @@ export const AccountScalarFieldEnum = {
 export type AccountScalarFieldEnum = (typeof AccountScalarFieldEnum)[keyof typeof AccountScalarFieldEnum]
 
 
+export const WhatsAppConnectionScalarFieldEnum = {
+  id: 'id',
+  accountId: 'accountId',
+  instanceIdentifier: 'instanceIdentifier',
+  senderPhone: 'senderPhone',
+  sendCredentialsCipher: 'sendCredentialsCipher',
+  receiveSecretCipher: 'receiveSecretCipher',
+  status: 'status',
+  connectionStatus: 'connectionStatus',
+  providerVersion: 'providerVersion',
+  lastCheckedAt: 'lastCheckedAt',
+  connectedAt: 'connectedAt',
+  replacedAt: 'replacedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type WhatsAppConnectionScalarFieldEnum = (typeof WhatsAppConnectionScalarFieldEnum)[keyof typeof WhatsAppConnectionScalarFieldEnum]
+
+
 export const InvitationScalarFieldEnum = {
   id: 'id',
   email: 'email',
@@ -1433,6 +1527,34 @@ export type EnumAccountStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$Pr
  */
 export type ListEnumAccountStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AccountStatus[]'>
     
+
+
+/**
+ * Reference to a field of type 'WhatsAppConnectionStatus'
+ */
+export type EnumWhatsAppConnectionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WhatsAppConnectionStatus'>
+
+
+
+/**
+ * Reference to a field of type 'WhatsAppConnectionStatus[]'
+ */
+export type ListEnumWhatsAppConnectionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WhatsAppConnectionStatus[]'>
+
+
+
+/**
+ * Reference to a field of type 'WhatsAppConnectionState'
+ */
+export type EnumWhatsAppConnectionStateFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WhatsAppConnectionState'>
+
+
+
+/**
+ * Reference to a field of type 'WhatsAppConnectionState[]'
+ */
+export type ListEnumWhatsAppConnectionStateFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WhatsAppConnectionState[]'>
+
 
 
 /**
@@ -1650,6 +1772,7 @@ export type PrismaClientOptions = PrismaClientOptionsWithAccelerateUrl | PrismaC
 export type GlobalOmitConfig = {
   accountUser?: Prisma.AccountUserOmit
   account?: Prisma.AccountOmit
+  whatsAppConnection?: Prisma.WhatsAppConnectionOmit
   invitation?: Prisma.InvitationOmit
   apiKey?: Prisma.ApiKeyOmit
   messageTemplate?: Prisma.MessageTemplateOmit

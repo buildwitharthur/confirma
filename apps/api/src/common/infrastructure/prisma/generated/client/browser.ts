@@ -28,6 +28,11 @@ export type AccountUser = Prisma.AccountUserModel
  */
 export type Account = Prisma.AccountModel
 /**
+ * Model WhatsAppConnection
+ *
+ */
+export type WhatsAppConnection = Prisma.WhatsAppConnectionModel
+/**
  * Model Invitation
  * 
  */

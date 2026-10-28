@@ -620,10 +620,6 @@ export type NullableEnumConsentMethodFieldUpdateOperationsInput = {
   set?: $Enums.ConsentMethod | null
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
-}
-
 export type ContactPrivacyEventCreateWithoutRecordedByUserInput = {
   id?: string
   sequence: number

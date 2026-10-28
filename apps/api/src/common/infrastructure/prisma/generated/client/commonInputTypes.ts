@@ -190,6 +190,73 @@ export type EnumAccountStatusWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumAccountStatusFilter<$PrismaModel>
 }
 
+export type EnumWhatsAppConnectionStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsAppConnectionStatus | Prisma.EnumWhatsAppConnectionStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsAppConnectionStatus[] | Prisma.ListEnumWhatsAppConnectionStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsAppConnectionStatus[] | Prisma.ListEnumWhatsAppConnectionStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsAppConnectionStatusFilter<$PrismaModel> | $Enums.WhatsAppConnectionStatus
+}
+
+export type EnumWhatsAppConnectionStateFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsAppConnectionState | Prisma.EnumWhatsAppConnectionStateFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsAppConnectionState[] | Prisma.ListEnumWhatsAppConnectionStateFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsAppConnectionState[] | Prisma.ListEnumWhatsAppConnectionStateFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsAppConnectionStateFilter<$PrismaModel> | $Enums.WhatsAppConnectionState
+}
+
+export type StringNullableFilter<$PrismaModel = never> = {
+  equals?: string | Prisma.StringFieldRefInput<$PrismaModel> | null
+  in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | null
+  notIn?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | null
+  lt?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  lte?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  gt?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  gte?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  contains?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  startsWith?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  endsWith?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  mode?: Prisma.QueryMode
+  not?: Prisma.NestedStringNullableFilter<$PrismaModel> | string | null
+}
+
+export type EnumWhatsAppConnectionStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsAppConnectionStatus | Prisma.EnumWhatsAppConnectionStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsAppConnectionStatus[] | Prisma.ListEnumWhatsAppConnectionStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsAppConnectionStatus[] | Prisma.ListEnumWhatsAppConnectionStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsAppConnectionStatusWithAggregatesFilter<$PrismaModel> | $Enums.WhatsAppConnectionStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumWhatsAppConnectionStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumWhatsAppConnectionStatusFilter<$PrismaModel>
+}
+
+export type EnumWhatsAppConnectionStateWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsAppConnectionState | Prisma.EnumWhatsAppConnectionStateFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsAppConnectionState[] | Prisma.ListEnumWhatsAppConnectionStateFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsAppConnectionState[] | Prisma.ListEnumWhatsAppConnectionStateFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsAppConnectionStateWithAggregatesFilter<$PrismaModel> | $Enums.WhatsAppConnectionState
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumWhatsAppConnectionStateFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumWhatsAppConnectionStateFilter<$PrismaModel>
+}
+
+export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: string | Prisma.StringFieldRefInput<$PrismaModel> | null
+  in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | null
+  notIn?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | null
+  lt?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  lte?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  gt?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  gte?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  contains?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  startsWith?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  endsWith?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  mode?: Prisma.QueryMode
+  not?: Prisma.NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedStringNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedStringNullableFilter<$PrismaModel>
+}
+
 export type BoolFilter<$PrismaModel = never> = {
   equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel>
   not?: Prisma.NestedBoolFilter<$PrismaModel> | boolean
@@ -487,6 +554,71 @@ export type NestedEnumAccountStatusWithAggregatesFilter<$PrismaModel = never> = 
   _max?: Prisma.NestedEnumAccountStatusFilter<$PrismaModel>
 }
 
+export type NestedEnumWhatsAppConnectionStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsAppConnectionStatus | Prisma.EnumWhatsAppConnectionStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsAppConnectionStatus[] | Prisma.ListEnumWhatsAppConnectionStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsAppConnectionStatus[] | Prisma.ListEnumWhatsAppConnectionStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsAppConnectionStatusFilter<$PrismaModel> | $Enums.WhatsAppConnectionStatus
+}
+
+export type NestedEnumWhatsAppConnectionStateFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsAppConnectionState | Prisma.EnumWhatsAppConnectionStateFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsAppConnectionState[] | Prisma.ListEnumWhatsAppConnectionStateFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsAppConnectionState[] | Prisma.ListEnumWhatsAppConnectionStateFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsAppConnectionStateFilter<$PrismaModel> | $Enums.WhatsAppConnectionState
+}
+
+export type NestedStringNullableFilter<$PrismaModel = never> = {
+  equals?: string | Prisma.StringFieldRefInput<$PrismaModel> | null
+  in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | null
+  notIn?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | null
+  lt?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  lte?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  gt?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  gte?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  contains?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  startsWith?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  endsWith?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedStringNullableFilter<$PrismaModel> | string | null
+}
+
+export type NestedEnumWhatsAppConnectionStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsAppConnectionStatus | Prisma.EnumWhatsAppConnectionStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsAppConnectionStatus[] | Prisma.ListEnumWhatsAppConnectionStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsAppConnectionStatus[] | Prisma.ListEnumWhatsAppConnectionStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsAppConnectionStatusWithAggregatesFilter<$PrismaModel> | $Enums.WhatsAppConnectionStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumWhatsAppConnectionStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumWhatsAppConnectionStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumWhatsAppConnectionStateWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsAppConnectionState | Prisma.EnumWhatsAppConnectionStateFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsAppConnectionState[] | Prisma.ListEnumWhatsAppConnectionStateFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsAppConnectionState[] | Prisma.ListEnumWhatsAppConnectionStateFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsAppConnectionStateWithAggregatesFilter<$PrismaModel> | $Enums.WhatsAppConnectionState
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumWhatsAppConnectionStateFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumWhatsAppConnectionStateFilter<$PrismaModel>
+}
+
+export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: string | Prisma.StringFieldRefInput<$PrismaModel> | null
+  in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | null
+  notIn?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | null
+  lt?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  lte?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  gt?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  gte?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  contains?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  startsWith?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  endsWith?: string | Prisma.StringFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedStringNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedStringNullableFilter<$PrismaModel>
+}
+
 export type NestedBoolFilter<$PrismaModel = never> = {
   equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel>
   not?: Prisma.NestedBoolFilter<$PrismaModel> | boolean
@@ -591,20 +723,6 @@ export type NestedUuidNullableWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedStringNullableFilter<$PrismaModel>
   _max?: Prisma.NestedStringNullableFilter<$PrismaModel>
-}
-
-export type NestedStringNullableFilter<$PrismaModel = never> = {
-  equals?: string | Prisma.StringFieldRefInput<$PrismaModel> | null
-  in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | null
-  notIn?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | null
-  lt?: string | Prisma.StringFieldRefInput<$PrismaModel>
-  lte?: string | Prisma.StringFieldRefInput<$PrismaModel>
-  gt?: string | Prisma.StringFieldRefInput<$PrismaModel>
-  gte?: string | Prisma.StringFieldRefInput<$PrismaModel>
-  contains?: string | Prisma.StringFieldRefInput<$PrismaModel>
-  startsWith?: string | Prisma.StringFieldRefInput<$PrismaModel>
-  endsWith?: string | Prisma.StringFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedStringNullableFilter<$PrismaModel> | string | null
 }
 
 

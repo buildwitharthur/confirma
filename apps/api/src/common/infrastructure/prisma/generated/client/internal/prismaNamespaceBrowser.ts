@@ -53,6 +53,7 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   AccountUser: 'AccountUser',
   Account: 'Account',
+  WhatsAppConnection: 'WhatsAppConnection',
   Invitation: 'Invitation',
   ApiKey: 'ApiKey',
   MessageTemplate: 'MessageTemplate',
@@ -107,6 +108,25 @@ export const AccountScalarFieldEnum = {
 } as const
 
 export type AccountScalarFieldEnum = (typeof AccountScalarFieldEnum)[keyof typeof AccountScalarFieldEnum]
+
+
+export const WhatsAppConnectionScalarFieldEnum = {
+  id: 'id',
+  accountId: 'accountId',
+  instanceIdentifier: 'instanceIdentifier',
+  senderPhone: 'senderPhone',
+  sendCredentialsCipher: 'sendCredentialsCipher',
+  receiveSecretCipher: 'receiveSecretCipher',
+  status: 'status',
+  connectionStatus: 'connectionStatus',
+  providerVersion: 'providerVersion',
+  lastCheckedAt: 'lastCheckedAt',
+  connectedAt: 'connectedAt',
+  replacedAt: 'replacedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type WhatsAppConnectionScalarFieldEnum = (typeof WhatsAppConnectionScalarFieldEnum)[keyof typeof WhatsAppConnectionScalarFieldEnum]
 
 
 export const InvitationScalarFieldEnum = {

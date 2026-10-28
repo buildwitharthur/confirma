@@ -286,6 +286,7 @@ export type AccountWhereInput = {
   monthlyUsages?: Prisma.MonthlyUsageListRelationFilter
   contactBlocks?: Prisma.ContactBlockListRelationFilter
   contactPrivacyEvents?: Prisma.ContactPrivacyEventListRelationFilter
+  whatsappConnections?: Prisma.WhatsAppConnectionListRelationFilter
 }
 
 export type AccountOrderByWithRelationInput = {
@@ -307,6 +308,7 @@ export type AccountOrderByWithRelationInput = {
   monthlyUsages?: Prisma.MonthlyUsageOrderByRelationAggregateInput
   contactBlocks?: Prisma.ContactBlockOrderByRelationAggregateInput
   contactPrivacyEvents?: Prisma.ContactPrivacyEventOrderByRelationAggregateInput
+  whatsappConnections?: Prisma.WhatsAppConnectionOrderByRelationAggregateInput
 }
 
 export type AccountWhereUniqueInput = Prisma.AtLeast<{
@@ -331,6 +333,7 @@ export type AccountWhereUniqueInput = Prisma.AtLeast<{
   monthlyUsages?: Prisma.MonthlyUsageListRelationFilter
   contactBlocks?: Prisma.ContactBlockListRelationFilter
   contactPrivacyEvents?: Prisma.ContactPrivacyEventListRelationFilter
+  whatsappConnections?: Prisma.WhatsAppConnectionListRelationFilter
 }, "id" | "accountUserId">
 
 export type AccountOrderByWithAggregationInput = {
@@ -389,6 +392,7 @@ export type AccountCreateInput = {
   monthlyUsages?: Prisma.MonthlyUsageCreateNestedManyWithoutAccountInput
   contactBlocks?: Prisma.ContactBlockCreateNestedManyWithoutAccountInput
   contactPrivacyEvents?: Prisma.ContactPrivacyEventCreateNestedManyWithoutAccountInput
+  whatsappConnections?: Prisma.WhatsAppConnectionCreateNestedManyWithoutAccountInput
 }
 
 export type AccountUncheckedCreateInput = {
@@ -409,6 +413,7 @@ export type AccountUncheckedCreateInput = {
   monthlyUsages?: Prisma.MonthlyUsageUncheckedCreateNestedManyWithoutAccountInput
   contactBlocks?: Prisma.ContactBlockUncheckedCreateNestedManyWithoutAccountInput
   contactPrivacyEvents?: Prisma.ContactPrivacyEventUncheckedCreateNestedManyWithoutAccountInput
+  whatsappConnections?: Prisma.WhatsAppConnectionUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type AccountUpdateInput = {
@@ -429,6 +434,7 @@ export type AccountUpdateInput = {
   monthlyUsages?: Prisma.MonthlyUsageUpdateManyWithoutAccountNestedInput
   contactBlocks?: Prisma.ContactBlockUpdateManyWithoutAccountNestedInput
   contactPrivacyEvents?: Prisma.ContactPrivacyEventUpdateManyWithoutAccountNestedInput
+  whatsappConnections?: Prisma.WhatsAppConnectionUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountUncheckedUpdateInput = {
@@ -449,6 +455,7 @@ export type AccountUncheckedUpdateInput = {
   monthlyUsages?: Prisma.MonthlyUsageUncheckedUpdateManyWithoutAccountNestedInput
   contactBlocks?: Prisma.ContactBlockUncheckedUpdateManyWithoutAccountNestedInput
   contactPrivacyEvents?: Prisma.ContactPrivacyEventUncheckedUpdateManyWithoutAccountNestedInput
+  whatsappConnections?: Prisma.WhatsAppConnectionUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountCreateManyInput = {
@@ -606,6 +613,20 @@ export type EnumAccountStatusFieldUpdateOperationsInput = {
   set?: $Enums.AccountStatus
 }
 
+export type AccountCreateNestedOneWithoutWhatsappConnectionsInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutWhatsappConnectionsInput, Prisma.AccountUncheckedCreateWithoutWhatsappConnectionsInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutWhatsappConnectionsInput
+  connect?: Prisma.AccountWhereUniqueInput
+}
+
+export type AccountUpdateOneRequiredWithoutWhatsappConnectionsNestedInput = {
+  create?: Prisma.XOR<Prisma.AccountCreateWithoutWhatsappConnectionsInput, Prisma.AccountUncheckedCreateWithoutWhatsappConnectionsInput>
+  connectOrCreate?: Prisma.AccountCreateOrConnectWithoutWhatsappConnectionsInput
+  upsert?: Prisma.AccountUpsertWithoutWhatsappConnectionsInput
+  connect?: Prisma.AccountWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AccountUpdateToOneWithWhereWithoutWhatsappConnectionsInput, Prisma.AccountUpdateWithoutWhatsappConnectionsInput>, Prisma.AccountUncheckedUpdateWithoutWhatsappConnectionsInput>
+}
+
 export type AccountCreateNestedOneWithoutApiKeysInput = {
   create?: Prisma.XOR<Prisma.AccountCreateWithoutApiKeysInput, Prisma.AccountUncheckedCreateWithoutApiKeysInput>
   connectOrCreate?: Prisma.AccountCreateOrConnectWithoutApiKeysInput
@@ -693,6 +714,7 @@ export type AccountCreateWithoutAccountUserInput = {
   monthlyUsages?: Prisma.MonthlyUsageCreateNestedManyWithoutAccountInput
   contactBlocks?: Prisma.ContactBlockCreateNestedManyWithoutAccountInput
   contactPrivacyEvents?: Prisma.ContactPrivacyEventCreateNestedManyWithoutAccountInput
+  whatsappConnections?: Prisma.WhatsAppConnectionCreateNestedManyWithoutAccountInput
 }
 
 export type AccountUncheckedCreateWithoutAccountUserInput = {
@@ -712,6 +734,7 @@ export type AccountUncheckedCreateWithoutAccountUserInput = {
   monthlyUsages?: Prisma.MonthlyUsageUncheckedCreateNestedManyWithoutAccountInput
   contactBlocks?: Prisma.ContactBlockUncheckedCreateNestedManyWithoutAccountInput
   contactPrivacyEvents?: Prisma.ContactPrivacyEventUncheckedCreateNestedManyWithoutAccountInput
+  whatsappConnections?: Prisma.WhatsAppConnectionUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type AccountCreateOrConnectWithoutAccountUserInput = {
@@ -747,6 +770,7 @@ export type AccountUpdateWithoutAccountUserInput = {
   monthlyUsages?: Prisma.MonthlyUsageUpdateManyWithoutAccountNestedInput
   contactBlocks?: Prisma.ContactBlockUpdateManyWithoutAccountNestedInput
   contactPrivacyEvents?: Prisma.ContactPrivacyEventUpdateManyWithoutAccountNestedInput
+  whatsappConnections?: Prisma.WhatsAppConnectionUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountUncheckedUpdateWithoutAccountUserInput = {
@@ -761,6 +785,103 @@ export type AccountUncheckedUpdateWithoutAccountUserInput = {
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutAccountNestedInput
+  messageTemplate?: Prisma.MessageTemplateUncheckedUpdateOneWithoutAccountNestedInput
+  monthlyUsages?: Prisma.MonthlyUsageUncheckedUpdateManyWithoutAccountNestedInput
+  contactBlocks?: Prisma.ContactBlockUncheckedUpdateManyWithoutAccountNestedInput
+  contactPrivacyEvents?: Prisma.ContactPrivacyEventUncheckedUpdateManyWithoutAccountNestedInput
+  whatsappConnections?: Prisma.WhatsAppConnectionUncheckedUpdateManyWithoutAccountNestedInput
+}
+
+export type AccountCreateWithoutWhatsappConnectionsInput = {
+  id?: string
+  name: string
+  timezone?: string
+  sendWindowStart?: Date | string
+  sendWindowEnd?: Date | string
+  firstSendLeadMinutes?: number
+  responseCutoffMinutes?: number
+  reminderDelayMinutes?: number
+  status?: $Enums.AccountStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accountUser: Prisma.AccountUserCreateNestedOneWithoutAccountInput
+  apiKeys?: Prisma.ApiKeyCreateNestedManyWithoutAccountInput
+  messageTemplate?: Prisma.MessageTemplateCreateNestedOneWithoutAccountInput
+  monthlyUsages?: Prisma.MonthlyUsageCreateNestedManyWithoutAccountInput
+  contactBlocks?: Prisma.ContactBlockCreateNestedManyWithoutAccountInput
+  contactPrivacyEvents?: Prisma.ContactPrivacyEventCreateNestedManyWithoutAccountInput
+}
+
+export type AccountUncheckedCreateWithoutWhatsappConnectionsInput = {
+  id?: string
+  name: string
+  timezone?: string
+  sendWindowStart?: Date | string
+  sendWindowEnd?: Date | string
+  firstSendLeadMinutes?: number
+  responseCutoffMinutes?: number
+  reminderDelayMinutes?: number
+  status?: $Enums.AccountStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accountUserId: string
+  apiKeys?: Prisma.ApiKeyUncheckedCreateNestedManyWithoutAccountInput
+  messageTemplate?: Prisma.MessageTemplateUncheckedCreateNestedOneWithoutAccountInput
+  monthlyUsages?: Prisma.MonthlyUsageUncheckedCreateNestedManyWithoutAccountInput
+  contactBlocks?: Prisma.ContactBlockUncheckedCreateNestedManyWithoutAccountInput
+  contactPrivacyEvents?: Prisma.ContactPrivacyEventUncheckedCreateNestedManyWithoutAccountInput
+}
+
+export type AccountCreateOrConnectWithoutWhatsappConnectionsInput = {
+  where: Prisma.AccountWhereUniqueInput
+  create: Prisma.XOR<Prisma.AccountCreateWithoutWhatsappConnectionsInput, Prisma.AccountUncheckedCreateWithoutWhatsappConnectionsInput>
+}
+
+export type AccountUpsertWithoutWhatsappConnectionsInput = {
+  update: Prisma.XOR<Prisma.AccountUpdateWithoutWhatsappConnectionsInput, Prisma.AccountUncheckedUpdateWithoutWhatsappConnectionsInput>
+  create: Prisma.XOR<Prisma.AccountCreateWithoutWhatsappConnectionsInput, Prisma.AccountUncheckedCreateWithoutWhatsappConnectionsInput>
+  where?: Prisma.AccountWhereInput
+}
+
+export type AccountUpdateToOneWithWhereWithoutWhatsappConnectionsInput = {
+  where?: Prisma.AccountWhereInput
+  data: Prisma.XOR<Prisma.AccountUpdateWithoutWhatsappConnectionsInput, Prisma.AccountUncheckedUpdateWithoutWhatsappConnectionsInput>
+}
+
+export type AccountUpdateWithoutWhatsappConnectionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  sendWindowStart?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sendWindowEnd?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  firstSendLeadMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  responseCutoffMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  reminderDelayMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accountUser?: Prisma.AccountUserUpdateOneRequiredWithoutAccountNestedInput
+  apiKeys?: Prisma.ApiKeyUpdateManyWithoutAccountNestedInput
+  messageTemplate?: Prisma.MessageTemplateUpdateOneWithoutAccountNestedInput
+  monthlyUsages?: Prisma.MonthlyUsageUpdateManyWithoutAccountNestedInput
+  contactBlocks?: Prisma.ContactBlockUpdateManyWithoutAccountNestedInput
+  contactPrivacyEvents?: Prisma.ContactPrivacyEventUpdateManyWithoutAccountNestedInput
+}
+
+export type AccountUncheckedUpdateWithoutWhatsappConnectionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  sendWindowStart?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sendWindowEnd?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  firstSendLeadMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  responseCutoffMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  reminderDelayMinutes?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accountUserId?: Prisma.StringFieldUpdateOperationsInput | string
   apiKeys?: Prisma.ApiKeyUncheckedUpdateManyWithoutAccountNestedInput
   messageTemplate?: Prisma.MessageTemplateUncheckedUpdateOneWithoutAccountNestedInput
   monthlyUsages?: Prisma.MonthlyUsageUncheckedUpdateManyWithoutAccountNestedInput
@@ -785,6 +906,7 @@ export type AccountCreateWithoutApiKeysInput = {
   monthlyUsages?: Prisma.MonthlyUsageCreateNestedManyWithoutAccountInput
   contactBlocks?: Prisma.ContactBlockCreateNestedManyWithoutAccountInput
   contactPrivacyEvents?: Prisma.ContactPrivacyEventCreateNestedManyWithoutAccountInput
+  whatsappConnections?: Prisma.WhatsAppConnectionCreateNestedManyWithoutAccountInput
 }
 
 export type AccountUncheckedCreateWithoutApiKeysInput = {
@@ -804,6 +926,7 @@ export type AccountUncheckedCreateWithoutApiKeysInput = {
   monthlyUsages?: Prisma.MonthlyUsageUncheckedCreateNestedManyWithoutAccountInput
   contactBlocks?: Prisma.ContactBlockUncheckedCreateNestedManyWithoutAccountInput
   contactPrivacyEvents?: Prisma.ContactPrivacyEventUncheckedCreateNestedManyWithoutAccountInput
+  whatsappConnections?: Prisma.WhatsAppConnectionUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type AccountCreateOrConnectWithoutApiKeysInput = {
@@ -839,6 +962,7 @@ export type AccountUpdateWithoutApiKeysInput = {
   monthlyUsages?: Prisma.MonthlyUsageUpdateManyWithoutAccountNestedInput
   contactBlocks?: Prisma.ContactBlockUpdateManyWithoutAccountNestedInput
   contactPrivacyEvents?: Prisma.ContactPrivacyEventUpdateManyWithoutAccountNestedInput
+  whatsappConnections?: Prisma.WhatsAppConnectionUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountUncheckedUpdateWithoutApiKeysInput = {
@@ -858,6 +982,7 @@ export type AccountUncheckedUpdateWithoutApiKeysInput = {
   monthlyUsages?: Prisma.MonthlyUsageUncheckedUpdateManyWithoutAccountNestedInput
   contactBlocks?: Prisma.ContactBlockUncheckedUpdateManyWithoutAccountNestedInput
   contactPrivacyEvents?: Prisma.ContactPrivacyEventUncheckedUpdateManyWithoutAccountNestedInput
+  whatsappConnections?: Prisma.WhatsAppConnectionUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountCreateWithoutMessageTemplateInput = {
@@ -877,6 +1002,7 @@ export type AccountCreateWithoutMessageTemplateInput = {
   monthlyUsages?: Prisma.MonthlyUsageCreateNestedManyWithoutAccountInput
   contactBlocks?: Prisma.ContactBlockCreateNestedManyWithoutAccountInput
   contactPrivacyEvents?: Prisma.ContactPrivacyEventCreateNestedManyWithoutAccountInput
+  whatsappConnections?: Prisma.WhatsAppConnectionCreateNestedManyWithoutAccountInput
 }
 
 export type AccountUncheckedCreateWithoutMessageTemplateInput = {
@@ -896,6 +1022,7 @@ export type AccountUncheckedCreateWithoutMessageTemplateInput = {
   monthlyUsages?: Prisma.MonthlyUsageUncheckedCreateNestedManyWithoutAccountInput
   contactBlocks?: Prisma.ContactBlockUncheckedCreateNestedManyWithoutAccountInput
   contactPrivacyEvents?: Prisma.ContactPrivacyEventUncheckedCreateNestedManyWithoutAccountInput
+  whatsappConnections?: Prisma.WhatsAppConnectionUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type AccountCreateOrConnectWithoutMessageTemplateInput = {
@@ -931,6 +1058,7 @@ export type AccountUpdateWithoutMessageTemplateInput = {
   monthlyUsages?: Prisma.MonthlyUsageUpdateManyWithoutAccountNestedInput
   contactBlocks?: Prisma.ContactBlockUpdateManyWithoutAccountNestedInput
   contactPrivacyEvents?: Prisma.ContactPrivacyEventUpdateManyWithoutAccountNestedInput
+  whatsappConnections?: Prisma.WhatsAppConnectionUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountUncheckedUpdateWithoutMessageTemplateInput = {
@@ -950,6 +1078,7 @@ export type AccountUncheckedUpdateWithoutMessageTemplateInput = {
   monthlyUsages?: Prisma.MonthlyUsageUncheckedUpdateManyWithoutAccountNestedInput
   contactBlocks?: Prisma.ContactBlockUncheckedUpdateManyWithoutAccountNestedInput
   contactPrivacyEvents?: Prisma.ContactPrivacyEventUncheckedUpdateManyWithoutAccountNestedInput
+  whatsappConnections?: Prisma.WhatsAppConnectionUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountCreateWithoutMonthlyUsagesInput = {
@@ -969,6 +1098,7 @@ export type AccountCreateWithoutMonthlyUsagesInput = {
   messageTemplate?: Prisma.MessageTemplateCreateNestedOneWithoutAccountInput
   contactBlocks?: Prisma.ContactBlockCreateNestedManyWithoutAccountInput
   contactPrivacyEvents?: Prisma.ContactPrivacyEventCreateNestedManyWithoutAccountInput
+  whatsappConnections?: Prisma.WhatsAppConnectionCreateNestedManyWithoutAccountInput
 }
 
 export type AccountUncheckedCreateWithoutMonthlyUsagesInput = {
@@ -988,6 +1118,7 @@ export type AccountUncheckedCreateWithoutMonthlyUsagesInput = {
   messageTemplate?: Prisma.MessageTemplateUncheckedCreateNestedOneWithoutAccountInput
   contactBlocks?: Prisma.ContactBlockUncheckedCreateNestedManyWithoutAccountInput
   contactPrivacyEvents?: Prisma.ContactPrivacyEventUncheckedCreateNestedManyWithoutAccountInput
+  whatsappConnections?: Prisma.WhatsAppConnectionUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type AccountCreateOrConnectWithoutMonthlyUsagesInput = {
@@ -1023,6 +1154,7 @@ export type AccountUpdateWithoutMonthlyUsagesInput = {
   messageTemplate?: Prisma.MessageTemplateUpdateOneWithoutAccountNestedInput
   contactBlocks?: Prisma.ContactBlockUpdateManyWithoutAccountNestedInput
   contactPrivacyEvents?: Prisma.ContactPrivacyEventUpdateManyWithoutAccountNestedInput
+  whatsappConnections?: Prisma.WhatsAppConnectionUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountUncheckedUpdateWithoutMonthlyUsagesInput = {
@@ -1042,6 +1174,7 @@ export type AccountUncheckedUpdateWithoutMonthlyUsagesInput = {
   messageTemplate?: Prisma.MessageTemplateUncheckedUpdateOneWithoutAccountNestedInput
   contactBlocks?: Prisma.ContactBlockUncheckedUpdateManyWithoutAccountNestedInput
   contactPrivacyEvents?: Prisma.ContactPrivacyEventUncheckedUpdateManyWithoutAccountNestedInput
+  whatsappConnections?: Prisma.WhatsAppConnectionUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountCreateWithoutContactBlocksInput = {
@@ -1061,6 +1194,7 @@ export type AccountCreateWithoutContactBlocksInput = {
   messageTemplate?: Prisma.MessageTemplateCreateNestedOneWithoutAccountInput
   monthlyUsages?: Prisma.MonthlyUsageCreateNestedManyWithoutAccountInput
   contactPrivacyEvents?: Prisma.ContactPrivacyEventCreateNestedManyWithoutAccountInput
+  whatsappConnections?: Prisma.WhatsAppConnectionCreateNestedManyWithoutAccountInput
 }
 
 export type AccountUncheckedCreateWithoutContactBlocksInput = {
@@ -1080,6 +1214,7 @@ export type AccountUncheckedCreateWithoutContactBlocksInput = {
   messageTemplate?: Prisma.MessageTemplateUncheckedCreateNestedOneWithoutAccountInput
   monthlyUsages?: Prisma.MonthlyUsageUncheckedCreateNestedManyWithoutAccountInput
   contactPrivacyEvents?: Prisma.ContactPrivacyEventUncheckedCreateNestedManyWithoutAccountInput
+  whatsappConnections?: Prisma.WhatsAppConnectionUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type AccountCreateOrConnectWithoutContactBlocksInput = {
@@ -1115,6 +1250,7 @@ export type AccountUpdateWithoutContactBlocksInput = {
   messageTemplate?: Prisma.MessageTemplateUpdateOneWithoutAccountNestedInput
   monthlyUsages?: Prisma.MonthlyUsageUpdateManyWithoutAccountNestedInput
   contactPrivacyEvents?: Prisma.ContactPrivacyEventUpdateManyWithoutAccountNestedInput
+  whatsappConnections?: Prisma.WhatsAppConnectionUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountUncheckedUpdateWithoutContactBlocksInput = {
@@ -1134,6 +1270,7 @@ export type AccountUncheckedUpdateWithoutContactBlocksInput = {
   messageTemplate?: Prisma.MessageTemplateUncheckedUpdateOneWithoutAccountNestedInput
   monthlyUsages?: Prisma.MonthlyUsageUncheckedUpdateManyWithoutAccountNestedInput
   contactPrivacyEvents?: Prisma.ContactPrivacyEventUncheckedUpdateManyWithoutAccountNestedInput
+  whatsappConnections?: Prisma.WhatsAppConnectionUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountCreateWithoutContactPrivacyEventsInput = {
@@ -1153,6 +1290,7 @@ export type AccountCreateWithoutContactPrivacyEventsInput = {
   messageTemplate?: Prisma.MessageTemplateCreateNestedOneWithoutAccountInput
   monthlyUsages?: Prisma.MonthlyUsageCreateNestedManyWithoutAccountInput
   contactBlocks?: Prisma.ContactBlockCreateNestedManyWithoutAccountInput
+  whatsappConnections?: Prisma.WhatsAppConnectionCreateNestedManyWithoutAccountInput
 }
 
 export type AccountUncheckedCreateWithoutContactPrivacyEventsInput = {
@@ -1172,6 +1310,7 @@ export type AccountUncheckedCreateWithoutContactPrivacyEventsInput = {
   messageTemplate?: Prisma.MessageTemplateUncheckedCreateNestedOneWithoutAccountInput
   monthlyUsages?: Prisma.MonthlyUsageUncheckedCreateNestedManyWithoutAccountInput
   contactBlocks?: Prisma.ContactBlockUncheckedCreateNestedManyWithoutAccountInput
+  whatsappConnections?: Prisma.WhatsAppConnectionUncheckedCreateNestedManyWithoutAccountInput
 }
 
 export type AccountCreateOrConnectWithoutContactPrivacyEventsInput = {
@@ -1207,6 +1346,7 @@ export type AccountUpdateWithoutContactPrivacyEventsInput = {
   messageTemplate?: Prisma.MessageTemplateUpdateOneWithoutAccountNestedInput
   monthlyUsages?: Prisma.MonthlyUsageUpdateManyWithoutAccountNestedInput
   contactBlocks?: Prisma.ContactBlockUpdateManyWithoutAccountNestedInput
+  whatsappConnections?: Prisma.WhatsAppConnectionUpdateManyWithoutAccountNestedInput
 }
 
 export type AccountUncheckedUpdateWithoutContactPrivacyEventsInput = {
@@ -1226,6 +1366,7 @@ export type AccountUncheckedUpdateWithoutContactPrivacyEventsInput = {
   messageTemplate?: Prisma.MessageTemplateUncheckedUpdateOneWithoutAccountNestedInput
   monthlyUsages?: Prisma.MonthlyUsageUncheckedUpdateManyWithoutAccountNestedInput
   contactBlocks?: Prisma.ContactBlockUncheckedUpdateManyWithoutAccountNestedInput
+  whatsappConnections?: Prisma.WhatsAppConnectionUncheckedUpdateManyWithoutAccountNestedInput
 }
 
 
@@ -1238,6 +1379,7 @@ export type AccountCountOutputType = {
   monthlyUsages: number
   contactBlocks: number
   contactPrivacyEvents: number
+  whatsappConnections: number
 }
 
 export type AccountCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1245,6 +1387,7 @@ export type AccountCountOutputTypeSelect<ExtArgs extends runtime.Types.Extension
   monthlyUsages?: boolean | AccountCountOutputTypeCountMonthlyUsagesArgs
   contactBlocks?: boolean | AccountCountOutputTypeCountContactBlocksArgs
   contactPrivacyEvents?: boolean | AccountCountOutputTypeCountContactPrivacyEventsArgs
+  whatsappConnections?: boolean | AccountCountOutputTypeCountWhatsappConnectionsArgs
 }
 
 /**
@@ -1285,6 +1428,13 @@ export type AccountCountOutputTypeCountContactPrivacyEventsArgs<ExtArgs extends 
   where?: Prisma.ContactPrivacyEventWhereInput
 }
 
+/**
+ * AccountCountOutputType without action
+ */
+export type AccountCountOutputTypeCountWhatsappConnectionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.WhatsAppConnectionWhereInput
+}
+
 
 export type AccountSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1305,6 +1455,7 @@ export type AccountSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   monthlyUsages?: boolean | Prisma.Account$monthlyUsagesArgs<ExtArgs>
   contactBlocks?: boolean | Prisma.Account$contactBlocksArgs<ExtArgs>
   contactPrivacyEvents?: boolean | Prisma.Account$contactPrivacyEventsArgs<ExtArgs>
+  whatsappConnections?: boolean | Prisma.Account$whatsappConnectionsArgs<ExtArgs>
   _count?: boolean | Prisma.AccountCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["account"]>
 
@@ -1363,6 +1514,7 @@ export type AccountInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   monthlyUsages?: boolean | Prisma.Account$monthlyUsagesArgs<ExtArgs>
   contactBlocks?: boolean | Prisma.Account$contactBlocksArgs<ExtArgs>
   contactPrivacyEvents?: boolean | Prisma.Account$contactPrivacyEventsArgs<ExtArgs>
+  whatsappConnections?: boolean | Prisma.Account$whatsappConnectionsArgs<ExtArgs>
   _count?: boolean | Prisma.AccountCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type AccountIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1381,6 +1533,7 @@ export type $AccountPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     monthlyUsages: Prisma.$MonthlyUsagePayload<ExtArgs>[]
     contactBlocks: Prisma.$ContactBlockPayload<ExtArgs>[]
     contactPrivacyEvents: Prisma.$ContactPrivacyEventPayload<ExtArgs>[]
+    whatsappConnections: Prisma.$WhatsAppConnectionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1795,6 +1948,7 @@ export interface Prisma__AccountClient<T, Null = never, ExtArgs extends runtime.
   monthlyUsages<T extends Prisma.Account$monthlyUsagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$monthlyUsagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MonthlyUsagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   contactBlocks<T extends Prisma.Account$contactBlocksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$contactBlocksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ContactBlockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   contactPrivacyEvents<T extends Prisma.Account$contactPrivacyEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$contactPrivacyEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ContactPrivacyEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  whatsappConnections<T extends Prisma.Account$whatsappConnectionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Account$whatsappConnectionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WhatsAppConnectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2349,6 +2503,30 @@ export type Account$contactPrivacyEventsArgs<ExtArgs extends runtime.Types.Exten
   take?: number
   skip?: number
   distinct?: Prisma.ContactPrivacyEventScalarFieldEnum | Prisma.ContactPrivacyEventScalarFieldEnum[]
+}
+
+/**
+ * Account.whatsappConnections
+ */
+export type Account$whatsappConnectionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the WhatsAppConnection
+   */
+  select?: Prisma.WhatsAppConnectionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the WhatsAppConnection
+   */
+  omit?: Prisma.WhatsAppConnectionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WhatsAppConnectionInclude<ExtArgs> | null
+  where?: Prisma.WhatsAppConnectionWhereInput
+  orderBy?: Prisma.WhatsAppConnectionOrderByWithRelationInput | Prisma.WhatsAppConnectionOrderByWithRelationInput[]
+  cursor?: Prisma.WhatsAppConnectionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.WhatsAppConnectionScalarFieldEnum | Prisma.WhatsAppConnectionScalarFieldEnum[]
 }
 
 /**

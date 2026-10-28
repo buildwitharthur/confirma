@@ -10,6 +10,7 @@
  */
 export type * from './models/AccountUser.js'
 export type * from './models/Account.js'
+export type * from './models/WhatsAppConnection.js'
 export type * from './models/Invitation.js'
 export type * from './models/ApiKey.js'
 export type * from './models/MessageTemplate.js'

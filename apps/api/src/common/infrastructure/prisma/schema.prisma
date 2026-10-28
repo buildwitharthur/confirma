@@ -72,8 +72,44 @@ model Account {
   monthlyUsages         MonthlyUsage[]
   contactBlocks         ContactBlock[]
   contactPrivacyEvents  ContactPrivacyEvent[]
+  whatsappConnections   WhatsAppConnection[]
 
   @@map("accounts")
+}
+
+enum WhatsAppConnectionStatus {
+  active
+  replacing
+  inactive
+
+  @@map("whatsapp_connection_status")
+}
+
+enum WhatsAppConnectionState {
+  connected
+  disconnected
+
+  @@map("whatsapp_connection_state")
+}
+
+model WhatsAppConnection {
+  id                    String                   @id @default(uuid()) @db.Uuid
+  accountId             String                   @map("account_id") @db.Uuid
+  instanceIdentifier    String                   @map("instance_identifier")
+  senderPhone           String                   @map("sender_phone")
+  sendCredentialsCipher Bytes                    @map("send_credentials_cipher")
+  receiveSecretCipher   Bytes                    @map("receive_secret_cipher")
+  status                WhatsAppConnectionStatus @default(active)
+  connectionStatus      WhatsAppConnectionState  @map("connection_status")
+  providerVersion       String?                  @map("provider_version")
+  lastCheckedAt         DateTime?                @map("last_checked_at") @db.Timestamptz(3)
+  connectedAt           DateTime?                @map("connected_at") @db.Timestamptz(3)
+  replacedAt            DateTime?                @map("replaced_at") @db.Timestamptz(3)
+  createdAt             DateTime                 @default(now()) @map("created_at") @db.Timestamptz(3)
+  account               Account                  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@index([accountId, status])
+  @@map("whatsapp_connections")
 }
 
 model Invitation {

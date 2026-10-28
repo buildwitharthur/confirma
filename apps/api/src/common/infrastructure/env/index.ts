@@ -30,6 +30,17 @@ const envSchema = z.object({
     .url()
     .default('http://localhost:3000/convite'),
   DATABASE_URL: z.string().min(1),
+  EVOLUTION_API_URL: z.string().url().optional(),
+  SECRET_ENCRYPTION_KEY: z
+    .string()
+    .optional()
+    .refine(
+      (value) =>
+        value === undefined ||
+        (Buffer.from(value, 'base64').length === 32 &&
+          Buffer.from(value, 'base64').toString('base64') === value),
+      'SECRET_ENCRYPTION_KEY must be a base64-encoded 32-byte key.',
+    ),
 });
 
 const parsedEnv = envSchema.safeParse(process.env);

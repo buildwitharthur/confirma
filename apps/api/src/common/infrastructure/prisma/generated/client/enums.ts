@@ -42,3 +42,20 @@ export const ContactPrivacyEventChannel = {
 } as const
 
 export type ContactPrivacyEventChannel = (typeof ContactPrivacyEventChannel)[keyof typeof ContactPrivacyEventChannel]
+
+
+export const WhatsAppConnectionStatus = {
+  active: 'active',
+  replacing: 'replacing',
+  inactive: 'inactive'
+} as const
+
+export type WhatsAppConnectionStatus = (typeof WhatsAppConnectionStatus)[keyof typeof WhatsAppConnectionStatus]
+
+
+export const WhatsAppConnectionState = {
+  connected: 'connected',
+  disconnected: 'disconnected'
+} as const
+
+export type WhatsAppConnectionState = (typeof WhatsAppConnectionState)[keyof typeof WhatsAppConnectionState]

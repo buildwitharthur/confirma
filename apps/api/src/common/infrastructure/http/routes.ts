@@ -5,6 +5,7 @@ import { accountRoutes } from '../../../modules/accounts/infrastructure/http/rou
 import { siteInvitationRoutes } from '../../../modules/invites/infrastructure/http/routes/site-invitation.routes.js';
 import { contactRoutes } from '../../../modules/contacts/infrastructure/http/routes/contact.routes.js';
 import { requireAccountAccessMiddleware } from './middlewares/require-account-access.middleware.js';
+import { integrationRoutes } from '../../../modules/integrations/infrastructure/http/routes/integration.routes.js';
 
 const routes = Router();
 
@@ -45,6 +46,7 @@ routes.use('/panel', authenticateSessionMiddleware);
 routes.use('/panel', requireAccountAccessMiddleware);
 routes.use('/panel', accountRoutes);
 routes.use('/panel', contactRoutes);
+routes.use('/panel', integrationRoutes);
 routes.use('/site', siteInvitationRoutes);
 
 export { routes };
