@@ -21,5 +21,6 @@ export const getAccountController = async (
     send_window_end: result.sendWindowEnd,
     first_send_lead_minutes: result.firstSendLeadMinutes,
     updated_at: result.updatedAt.toISOString(),
+    response_cutoff_minutes: result.responseCutoffMinutes,
   });
 };

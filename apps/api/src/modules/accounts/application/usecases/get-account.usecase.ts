@@ -10,6 +10,7 @@ export type GetAccountOutput = {
   sendWindowEnd: string;
   firstSendLeadMinutes: number;
   updatedAt: Date;
+  responseCutoffMinutes: number;
 };
 
 export class GetAccountUseCase {
@@ -29,6 +30,7 @@ export class GetAccountUseCase {
       sendWindowEnd: account.sendWindowEnd,
       firstSendLeadMinutes: account.firstSendLeadMinutes,
       updatedAt: account.updatedAt,
+      responseCutoffMinutes: account.responseCutoffMinutes,
     };
   }
 }

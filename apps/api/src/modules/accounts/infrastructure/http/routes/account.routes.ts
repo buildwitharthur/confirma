@@ -25,7 +25,7 @@ export const accountRoutes = Router();
  *   schemas:
  *     Account:
  *       type: object
- *       required: [id, name, timezone, send_window_start, send_window_end, first_send_lead_minutes, updated_at]
+ *       required: [id, name, timezone, send_window_start, send_window_end, first_send_lead_minutes, updated_at, response_cutoff_minutes]
  *       properties:
  *         id:
  *           type: string
@@ -46,6 +46,10 @@ export const accountRoutes = Router();
  *         updated_at:
  *           type: string
  *           format: date-time
+ *         response_cutoff_minutes:
+ *           type: integer
+ *           description: Corte de resposta; a antecedência precisa ser maior que ele.
+ *           example: 120
  *     AccountUpdate:
  *       type: object
  *       required: [name, timezone, first_send_lead_minutes, send_window_start, send_window_end]
@@ -129,12 +133,20 @@ export const accountRoutes = Router();
  *     responses:
  *       200:
  *         description: Conta atualizada.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Account'
  *       401:
  *         description: Sessão inválida.
  *       403:
  *         description: Acesso negado.
  *       422:
  *         description: Dados inválidos.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  *   delete:
  *     summary: Solicita exclusão da conta
  *     tags: [Accounts]

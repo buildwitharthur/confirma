@@ -53,6 +53,7 @@ describe('GetAccountUseCase unit tests', () => {
       sendWindowEnd: account.sendWindowEnd,
       firstSendLeadMinutes: account.firstSendLeadMinutes,
       updatedAt: account.updatedAt,
+      responseCutoffMinutes: account.responseCutoffMinutes,
     });
     expect(accountRepository.findByUserId).toHaveBeenCalledWith(
       account.accountUserId,

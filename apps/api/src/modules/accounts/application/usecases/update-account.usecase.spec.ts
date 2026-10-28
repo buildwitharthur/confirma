@@ -78,6 +78,7 @@ describe('UpdateAccountUseCase unit tests', () => {
       sendWindowStart: '09:15',
       sendWindowEnd: '18:45',
       updatedAt: updated.updatedAt,
+      responseCutoffMinutes: updated.responseCutoffMinutes,
     });
   });
 

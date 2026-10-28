@@ -19,6 +19,7 @@ export type UpdateAccountOutput = {
   sendWindowEnd: string;
   firstSendLeadMinutes: number;
   updatedAt: Date;
+  responseCutoffMinutes: number;
 };
 
 export class UpdateAccountUseCase {
@@ -71,6 +72,7 @@ export class UpdateAccountUseCase {
       sendWindowEnd: updated.sendWindowEnd,
       firstSendLeadMinutes: updated.firstSendLeadMinutes,
       updatedAt: updated.updatedAt,
+      responseCutoffMinutes: updated.responseCutoffMinutes,
     };
   }
 }

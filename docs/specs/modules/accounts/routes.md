@@ -12,9 +12,9 @@ As rotas deste módulo são do painel. Exigem sessão e conta ativa, salvo saíd
 
 **Passo a passo:**
 1. Leia a conta da sessão.
-2. Retorne nome, fuso, janela de envio, antecedência configurada e data da última alteração.
+2. Retorne nome, fuso, janela de envio, antecedência configurada, corte de resposta e data da última alteração.
 
-**Resposta:** `200` com `{"id":"<UUID>","name":"Clínica Exemplo","timezone":"America/Sao_Paulo","send_window_start":"08:00","send_window_end":"20:00","first_send_lead_minutes":1440,"updated_at":"2026-10-19T12:00:00Z"}`.
+**Resposta:** `200` com `{"id":"<UUID>","name":"Clínica Exemplo","timezone":"America/Sao_Paulo","send_window_start":"08:00","send_window_end":"20:00","first_send_lead_minutes":1440,"updated_at":"2026-10-19T12:00:00Z","response_cutoff_minutes":120}`. `response_cutoff_minutes` é somente leitura e serve para validar a antecedência.
 
 **Erros:** `401 unauthorized`, `403 forbidden`.
 
@@ -34,7 +34,7 @@ As rotas deste módulo são do painel. Exigem sessão e conta ativa, salvo saíd
 5. Salve a configuração.
 6. Aplique mudanças temporais somente a novos agendamentos.
 
-**Resposta:** `200` com a configuração atualizada.
+**Resposta:** `200` com a configuração atualizada, no mesmo formato de `GET /panel/account`.
 
 **Erros:** `401 unauthorized`, `403 forbidden`, `422 validation_error`.
 

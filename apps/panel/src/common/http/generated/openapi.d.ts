@@ -4,6 +4,99 @@
  */
 
 export interface paths {
+    "/health": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Verifica a disponibilidade da API */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description API disponível. */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/site/access-requests": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Solicita acesso ao piloto e envia um convite */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["AccessRequest"];
+                };
+            };
+            responses: {
+                /** @description Solicitação recebida sem revelar estado interno. */
+                202: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description Content-Type incompatível. */
+                415: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description Dados inválidos ou rejeição antispam. */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description Serviço de e-mail indisponível. */
+                503: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/auth/invitations/inspect": {
         parameters: {
             query?: never;
@@ -656,7 +749,9 @@ export interface paths {
                     headers: {
                         [name: string]: unknown;
                     };
-                    content?: never;
+                    content: {
+                        "application/json": components["schemas"]["Account"];
+                    };
                 };
                 /** @description Sessão inválida. */
                 401: {
@@ -677,7 +772,9 @@ export interface paths {
                     headers: {
                         [name: string]: unknown;
                     };
-                    content?: never;
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
                 };
             };
         };
@@ -967,69 +1064,34 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/site/access-requests": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Solicita acesso ao piloto */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["AccessRequest"];
-                };
-            };
-            responses: {
-                /** @description Solicitação recebida sem revelar estado interno. */
-                202: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-                /** @description Content-Type incompatível. */
-                415: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-                /** @description Dados inválidos ou rejeição técnica. */
-                422: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-                /** @description Serviço indisponível. */
-                503: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        Error: {
+            /** @example validation_error */
+            code: string;
+            /** @example Um ou mais campos são inválidos. */
+            message: string;
+        };
+        AccessRequest: {
+            name: string;
+            /** Format: email */
+            email: string;
+            company_or_project: string;
+            /** @enum {string} */
+            whatsapp_provider: "evolution_api" | "other" | "none_yet";
+            intended_use?: string;
+            /** @enum {boolean} */
+            consent: true;
+            /**
+             * Format: date-time
+             * @description Deve ser gerado pelo cliente na abertura efetiva do formulário.
+             */
+            form_opened_at: string;
+            /** @description Honeypot; deve permanecer vazio em solicitações válidas. */
+            website: string;
+        };
         Account: {
             /** Format: uuid */
             id: string;
@@ -1043,6 +1105,11 @@ export interface components {
             first_send_lead_minutes: number;
             /** Format: date-time */
             updated_at: string;
+            /**
+             * @description Corte de resposta; a antecedência precisa ser maior que ele.
+             * @example 120
+             */
+            response_cutoff_minutes: number;
         };
         AccountUpdate: {
             name: string;
@@ -1068,24 +1135,6 @@ export interface components {
             created_at: string;
             /** Format: date-time */
             revoked_at: string | null;
-        };
-        AccessRequest: {
-            name: string;
-            /** Format: email */
-            email: string;
-            company_or_project: string;
-            /** @enum {string} */
-            whatsapp_provider: "evolution_api" | "other" | "none_yet";
-            intended_use?: string;
-            /** @enum {boolean} */
-            consent: true;
-            /**
-             * Format: date-time
-             * @description Deve ser gerado pelo cliente na abertura efetiva do formulário.
-             */
-            form_opened_at: string;
-            /** @description Honeypot; deve permanecer vazio em solicitações válidas. */
-            website: string;
         };
     };
     responses: never;

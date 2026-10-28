@@ -33,7 +33,10 @@ const swaggerSpec = swaggerJSDoc({
       },
     },
   },
-  apis: ['./src/**/infrastructure/http/routes/*.ts'],
+  apis: [
+    './src/common/infrastructure/http/routes.ts',
+    './src/**/infrastructure/http/routes/*.ts',
+  ],
 });
 
 const app = express();
