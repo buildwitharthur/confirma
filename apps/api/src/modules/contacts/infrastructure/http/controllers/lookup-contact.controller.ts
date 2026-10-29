@@ -2,10 +2,11 @@ import { Request, Response } from 'express';
 import { z } from 'zod';
 
 import { ServiceUnavailableError } from '../../../../../common/domain/errors/service-unavailable.js';
+import { env } from '../../../../../common/infrastructure/env/index.js';
 import { dataValidation } from '../../../../../common/infrastructure/validation/zod/data-validation.js';
 import { AccountPrismaRepository } from '../../../../accounts/infrastructure/repositories/prisma/account-prisma.repository.js';
-import { ContactRepository } from '../../../domain/repositories/contact.repository.js';
 import { LookupContactUseCase } from '../../../application/usecases/lookup-contact.usecase.js';
+import { ContactPrismaRepository } from '../../repositories/prisma/contact-prisma.repository.js';
 import { SessionRequest } from '../../../../../common/infrastructure/http/middlewares/authenticate-session.middleware.js';
 
 const bodySchema = z
@@ -17,15 +18,13 @@ export const lookupContactController = async (
   response: Response,
 ): Promise<Response> => {
   const body = dataValidation(bodySchema, request.body);
-  const contactRepository = request.app.locals.contactRepository as
-    ContactRepository | undefined;
-  if (!contactRepository) {
+  if (!env.SECRET_ENCRYPTION_KEY) {
     throw new ServiceUnavailableError();
   }
 
   const result = await new LookupContactUseCase(
     new AccountPrismaRepository(),
-    contactRepository,
+    new ContactPrismaRepository(env.SECRET_ENCRYPTION_KEY),
   ).execute({
     accountUserId: (request as SessionRequest).userId!,
     phone: body.phone,

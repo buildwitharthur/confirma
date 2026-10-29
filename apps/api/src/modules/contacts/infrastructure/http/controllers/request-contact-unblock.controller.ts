@@ -1,12 +1,13 @@
 import { Request, Response } from 'express';
 import { z } from 'zod';
 
-import { RecoveryLogProvider } from '../../../../../common/domain/providers/recovery-log.provider.js';
 import { ServiceUnavailableError } from '../../../../../common/domain/errors/service-unavailable.js';
+import { UnavailableRecoveryLogProvider } from '../../../../../common/infrastructure/providers/recovery-log/unavailable-recovery-log.provider.js';
+import { env } from '../../../../../common/infrastructure/env/index.js';
 import { dataValidation } from '../../../../../common/infrastructure/validation/zod/data-validation.js';
 import { AccountPrismaRepository } from '../../../../accounts/infrastructure/repositories/prisma/account-prisma.repository.js';
-import { ContactRepository } from '../../../domain/repositories/contact.repository.js';
 import { RequestContactUnblockUseCase } from '../../../application/usecases/request-contact-unblock.usecase.js';
+import { ContactPrismaRepository } from '../../repositories/prisma/contact-prisma.repository.js';
 import { SessionRequest } from '../../../../../common/infrastructure/http/middlewares/authenticate-session.middleware.js';
 
 const bodySchema = z
@@ -22,19 +23,15 @@ export const requestContactUnblockController = async (
   response: Response,
 ): Promise<Response> => {
   const body = dataValidation(bodySchema, request.body);
-  const contactRepository = request.app.locals.contactRepository as
-    ContactRepository | undefined;
-  const recoveryLogProvider = request.app.locals.recoveryLogProvider as
-    RecoveryLogProvider | undefined;
-  if (!contactRepository || !recoveryLogProvider) {
+  if (!env.SECRET_ENCRYPTION_KEY) {
     throw new ServiceUnavailableError();
   }
 
   const userId = (request as SessionRequest).userId!;
   await new RequestContactUnblockUseCase(
     new AccountPrismaRepository(),
-    contactRepository,
-    recoveryLogProvider,
+    new ContactPrismaRepository(env.SECRET_ENCRYPTION_KEY),
+    new UnavailableRecoveryLogProvider(),
   ).execute({
     accountUserId: userId,
     phone: body.phone,
