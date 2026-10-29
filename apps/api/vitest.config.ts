@@ -6,9 +6,5 @@ export default defineConfig({
     fileParallelism: false,
     include: ['src/**/*.spec.ts'],
     restoreMocks: true,
-    coverage: {
-      provider: 'v8',
-      reporter: ['text', 'json', 'html'],
-    },
   },
 });

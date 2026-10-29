@@ -11,7 +11,7 @@
     "prisma:generate": "prisma generate --config src/common/infrastructure/prisma/prisma.config.ts",
     "prisma:migrate:dev": "prisma migrate dev --config src/common/infrastructure/prisma/prisma.config.ts",
     "env:load:test": "dotenv run --override -f .env.test --",
-    "test": "pnpm env:load:test pnpm prisma:migrate:deploy && pnpm env:load:test vitest run --coverage"
+    "test": "pnpm env:load:test pnpm prisma:migrate:deploy && pnpm env:load:test vitest run"
   },
   "keywords": [],
   "author": "",
@@ -42,7 +42,6 @@
     "@types/pg": "^8.23.1",
     "@types/swagger-jsdoc": "^6.0.4",
     "@types/swagger-ui-express": "^4.1.8",
-    "@vitest/coverage-v8": "5.0.5",
     "prisma": "^7.10.1",
     "tsx": "^4.23.15",
     "typescript": "^5.9.3",
