@@ -1,10 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { InvitationRepository } from '../../domain/repositories/invitation.repository.js';
 
-import { createHash } from 'node:crypto';
 import { SubmissionRejectedError } from '../../../../common/domain/errors/submission-rejected.js';
 import { ServiceUnavailableError } from '../../../../common/domain/errors/service-unavailable.js';
 import type { MailProvider } from '../../../../common/domain/providers/mail-provider.js';
+import type { InvitationTokenProvider } from '../../domain/providers/invitation-token.provider.js';
 import type { RequestInvitationInput } from './request-invitation.usecase.js';
 import { RequestInvitationUseCase } from './request-invitation.usecase.js';
 
@@ -19,6 +19,12 @@ describe('RequestInvitationUseCase unit tests', () => {
     findByToken: vi.fn<InvitationRepository['findByToken']>(),
     acceptInvitation: vi.fn<InvitationRepository['acceptInvitation']>(),
   } satisfies InvitationRepository;
+
+  const tokenHash = new Uint8Array([1, 2, 3]);
+
+  const invitationTokenProvider = {
+    generate: vi.fn<InvitationTokenProvider['generate']>(),
+  } satisfies InvitationTokenProvider;
 
   const mailProvider = {
     send: vi.fn<MailProvider['send']>(),
@@ -39,9 +45,14 @@ describe('RequestInvitationUseCase unit tests', () => {
     vi.resetAllMocks();
     vi.useFakeTimers();
     vi.setSystemTime(now);
+    invitationTokenProvider.generate.mockReturnValue({
+      token: 'plain-token',
+      tokenHash,
+    });
 
     sut = new RequestInvitationUseCase(
       invitationRepository,
+      invitationTokenProvider,
       mailProvider,
       'https://example.com/accept?source=pilot',
     );
@@ -68,13 +79,11 @@ describe('RequestInvitationUseCase unit tests', () => {
 
     const url = new URL(link!);
 
-    const token = url.searchParams.get('token');
-
-    expect(token).toMatch(/^[A-Za-z0-9_-]{43}$/);
+    expect(url.searchParams.get('token')).toBe('plain-token');
     expect(url.searchParams.get('source')).toBe('pilot');
     expect(issued).toEqual({
       email: 'example@example.com',
-      tokenHash: createHash('sha256').update(token!).digest(),
+      tokenHash,
       requestedAt: now,
       expiresAt: new Date(now.getTime() + 7 * 86400000),
     });
@@ -92,10 +101,16 @@ describe('RequestInvitationUseCase unit tests', () => {
   it('should not send another invitation when issuance is ignored', async () => {
     invitationRepository.issueInvitation.mockResolvedValue({
       status: 'ignored',
+      reason: 'active_invitation',
     });
+    const log = vi.spyOn(console, 'info').mockImplementation(() => undefined);
 
     await sut.execute(input);
 
+    expect(log).toHaveBeenCalledWith('[api] silent operation', {
+      operation: 'access_request',
+      result: 'ignored_active_invitation',
+    });
     expect(mailProvider.send).not.toHaveBeenCalled();
     expect(invitationRepository.deleteInvitation).not.toHaveBeenCalled();
   });
@@ -136,8 +151,13 @@ describe('RequestInvitationUseCase unit tests', () => {
     invitationRepository.deleteInvitation.mockRejectedValue(
       new Error('Cleanup failed'),
     );
+    const log = vi.spyOn(console, 'info').mockImplementation(() => undefined);
 
     await expect(sut.execute(input)).rejects.toBe(error);
+    expect(log).toHaveBeenCalledWith('[api] silent operation', {
+      operation: 'access_request',
+      result: 'invitation_cleanup_failed',
+    });
   });
 
   it('should not send when issuance fails', async () => {

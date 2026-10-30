@@ -99,9 +99,14 @@ describe('RevokeApiKeyUseCase unit tests', () => {
 
   it('should ignore a repeated revocation', async () => {
     accountRepository.findApiKey.mockResolvedValue({ ...key, revokedAt: now });
+    const log = vi.spyOn(console, 'info').mockImplementation(() => undefined);
 
     await sut.execute(input);
 
+    expect(log).toHaveBeenCalledWith('[api] silent operation', {
+      operation: 'api_key_revocation',
+      result: 'ignored_already_revoked',
+    });
     expect(recoveryLogProvider.confirmOperation).not.toHaveBeenCalled();
     expect(accountRepository.revokeApiKey).not.toHaveBeenCalled();
   });

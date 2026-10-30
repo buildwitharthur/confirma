@@ -3,7 +3,7 @@ import { ForbiddenError } from '../../../../common/domain/errors/forbidden.js';
 import type { AccountModel } from '../../domain/models/account.model.js';
 import type { AccountRepository } from '../../domain/repositories/account.repository.js';
 import { CreateApiKeyUseCase } from './create-api-key.usecase.js';
-import type { ApiKeyProvider } from '../../../../common/domain/providers/api-key.provider.js';
+import type { ApiKeyProvider } from '../../domain/providers/api-key.provider.js';
 
 describe('CreateApiKeyUseCase unit tests', () => {
   let sut: CreateApiKeyUseCase;

@@ -1,4 +1,4 @@
-import type { SecretProtector } from '../../../../common/domain/providers/secret-protector.provider.js';
+import type { SecretProtector } from '../../domain/providers/secret-protector.provider.js';
 import type { WhatsAppConnectionRepository } from '../../domain/repositories/whatsapp-connection.repository.js';
 import type { WhatsAppProvider } from '../../domain/providers/whatsapp-provider.js';
 import type { WhatsAppConnectionModel } from '../../domain/models/whatsapp-connection.model.js';
@@ -11,6 +11,8 @@ export type SaveWhatsAppConnectionInput = {
   receiveSecret: string;
 };
 
+export type SaveWhatsAppConnectionOutput = WhatsAppConnectionModel;
+
 export class SaveWhatsAppConnectionUseCase {
   constructor(
     private readonly repository: WhatsAppConnectionRepository,
@@ -20,7 +22,7 @@ export class SaveWhatsAppConnectionUseCase {
 
   async execute(
     input: SaveWhatsAppConnectionInput,
-  ): Promise<WhatsAppConnectionModel> {
+  ): Promise<SaveWhatsAppConnectionOutput> {
     const tested = await this.provider.testConnection({
       instanceIdentifier: input.instanceIdentifier,
       sendCredentials: input.sendCredentials,

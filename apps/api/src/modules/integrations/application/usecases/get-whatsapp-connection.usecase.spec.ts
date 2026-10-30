@@ -31,13 +31,15 @@ describe('GetWhatsAppConnectionUseCase unit tests', () => {
     };
     repository.findCurrent.mockResolvedValue(connection);
 
-    await expect(sut.execute('account-id')).resolves.toEqual(connection);
+    await expect(sut.execute({ accountId: 'account-id' })).resolves.toEqual(
+      connection,
+    );
     expect(repository.findCurrent).toHaveBeenCalledWith('account-id');
   });
 
   it('should return null when no current connection exists', async () => {
     repository.findCurrent.mockResolvedValue(null);
 
-    await expect(sut.execute('account-id')).resolves.toBeNull();
+    await expect(sut.execute({ accountId: 'account-id' })).resolves.toBeNull();
   });
 });

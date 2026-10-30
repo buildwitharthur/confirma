@@ -33,8 +33,8 @@ export async function authenticateSessionMiddleware(
     const jwtProvider = new JsonWebTokenProvider(env.JWT_SECRET);
     const payload = jwtProvider.verifyToken<SessionJwtPayload>(token);
 
-    const sessionUserProvider = new AuthPrismaRepository();
-    const user = await sessionUserProvider.findById(payload.sub);
+    const authRepository = new AuthPrismaRepository();
+    const user = await authRepository.findById(payload.sub);
 
     if (
       !user ||

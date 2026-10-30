@@ -39,6 +39,8 @@ export const invitationRoutes = Router();
  *                   format: email
  *                 account_name:
  *                   type: string
+ *       400:
+ *         description: Token ausente ou parâmetro desconhecido.
  *       404:
  *         description: Convite inválido.
  */
@@ -70,6 +72,8 @@ invitationRoutes.get('/inspect', inspectInvitationController);
  *     responses:
  *       201:
  *         description: Conta criada e sessão emitida.
+ *       400:
+ *         description: Corpo malformado.
  *       404:
  *         description: Convite inválido.
  *       409:

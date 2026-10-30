@@ -54,12 +54,18 @@ export const appointmentRoutes = Router();
  *                 maxLength: 240
  *               metadata:
  *                 type: object
+ *                 maxProperties: 50
+ *                 description: Até 16 KiB.
  *               test:
  *                 type: boolean
  *                 default: false
  *     responses:
  *       201:
  *         description: Dados recebidos e validados.
+ *       400:
+ *         description: Corpo malformado.
+ *       413:
+ *         description: Corpo acima de 64 KiB.
  *       422:
  *         description: Dados inválidos.
  */

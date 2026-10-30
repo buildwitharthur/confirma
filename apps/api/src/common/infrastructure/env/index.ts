@@ -9,12 +9,7 @@ const envSchema = z.object({
     .default('development'),
   PORT: z.coerce.number().int().positive().default(3333),
   API_URL: z.string().url().default('http://localhost:3333'),
-  JWT_SECRET: z.string().min(1).default('your-secret-key'),
-  JWT_EXPIRES_IN: z.coerce
-    .number()
-    .int()
-    .positive()
-    .default(12 * 60 * 60),
+  JWT_SECRET: z.string().min(1).default('confirma-secret-key'),
   SESSION_COOKIE_NAME: z.string().min(1).default('confirma_session'),
   RESEND_API_KEY: z.string().min(1),
   MAIL_FROM: z
@@ -46,7 +41,11 @@ const envSchema = z.object({
 const parsedEnv = envSchema.safeParse(process.env);
 
 if (!parsedEnv.success) {
-  throw new AppError('Invalid environment variables.');
+  const invalidVariables = parsedEnv.error.issues
+    .map((issue) => issue.path.join('.'))
+    .join(', ');
+
+  throw new AppError(`Invalid environment variables: ${invalidVariables}.`);
 }
 
 export const env = parsedEnv.data;

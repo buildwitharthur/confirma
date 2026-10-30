@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import type { SecretProtector } from '../../../../common/domain/providers/secret-protector.provider.js';
+import type { SecretProtector } from '../../domain/providers/secret-protector.provider.js';
 import type { WhatsAppProvider } from '../../domain/providers/whatsapp-provider.js';
 import type { WhatsAppConnectionRepository } from '../../domain/repositories/whatsapp-connection.repository.js';
 import { SaveWhatsAppConnectionUseCase } from './save-whatsapp-connection.usecase.js';

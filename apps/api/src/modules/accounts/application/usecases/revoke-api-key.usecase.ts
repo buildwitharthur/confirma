@@ -30,6 +30,10 @@ export class RevokeApiKeyUseCase {
       throw new NotFoundError();
     }
     if (apiKey.revokedAt) {
+      console.info('[api] silent operation', {
+        operation: 'api_key_revocation',
+        result: 'ignored_already_revoked',
+      });
       return;
     }
 

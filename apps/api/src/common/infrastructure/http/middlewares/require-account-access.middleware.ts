@@ -12,9 +12,9 @@ export async function requireAccountAccessMiddleware(
   next: NextFunction,
 ): Promise<void> {
   try {
-    const accountAccessProvider = new AccountPrismaRepository();
+    const accountRepository = new AccountPrismaRepository();
 
-    const account = await accountAccessProvider.findByUserId(request.userId!);
+    const account = await accountRepository.findByUserId(request.userId!);
     if (!account || account.status !== 'active') {
       throw new ForbiddenError();
     }

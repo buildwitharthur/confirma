@@ -1,13 +1,20 @@
 import { AuthRepository } from '../../domain/repositories/auth.repository.js';
 import { PasswordResetTokenRepository } from '../../domain/repositories/password-reset-token.repository.js';
 import { MailProvider } from '../../../../common/domain/providers/mail-provider.js';
-import { PasswordResetTokenProvider } from '../../../../common/domain/providers/password-reset-token-provider.js';
+import { PasswordResetTokenProvider } from '../../domain/providers/password-reset-token.provider.js';
 
 export type RequestPasswordResetInput = {
   email: string;
 };
 
 export type RequestPasswordResetOutput = void;
+
+function logResult(result: string): void {
+  console.info('[api] silent operation', {
+    operation: 'password_reset_request',
+    result,
+  });
+}
 
 export class RequestPasswordResetUseCase {
   constructor(
@@ -24,7 +31,13 @@ export class RequestPasswordResetUseCase {
     const email = input.email.trim().toLowerCase();
     const user = await this.authRepository.findByEmail(email);
 
-    if (!user || user.disabledAt) {
+    if (!user) {
+      logResult('ignored_unknown_recipient');
+      return;
+    }
+
+    if (user.disabledAt) {
+      logResult('ignored_disabled_recipient');
       return;
     }
 
@@ -39,11 +52,18 @@ export class RequestPasswordResetUseCase {
 
     const resetLink = `${this.resetUrl}?token=${encodeURIComponent(token)}`;
 
-    void this.mailProvider.send({
-      to: user.email,
-      subject: 'Redefinição de senha do Confirma',
-      html: `<p>Use este link para redefinir sua senha:</p><p><a href="${resetLink}">${resetLink}</a></p>`,
-      text: `Use este link para redefinir sua senha: ${resetLink}`,
-    });
+    // A resposta não espera o e-mail. Sem o tratamento da rejeição, uma falha do
+    // provedor viraria unhandled rejection e derrubaria o processo.
+    void this.mailProvider
+      .send({
+        to: user.email,
+        subject: 'Redefinição de senha do Confirma',
+        html: `<p>Use este link para redefinir sua senha:</p><p><a href="${resetLink}">${resetLink}</a></p>`,
+        text: `Use este link para redefinir sua senha: ${resetLink}`,
+      })
+      .then(
+        () => logResult('accepted'),
+        () => logResult('delivery_failed'),
+      );
   }
 }

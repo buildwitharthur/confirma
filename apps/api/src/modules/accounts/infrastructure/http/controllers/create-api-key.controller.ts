@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 
-import { CryptoApiKeyProvider } from '../../../../../common/infrastructure/providers/api-key-provider/crypto-api-key.provider.js';
+import { CryptoApiKeyProvider } from '../../providers/crypto-api-key.provider.js';
 import { AccountPrismaRepository } from '../../repositories/prisma/account-prisma.repository.js';
 import { CreateApiKeyUseCase } from '../../../application/usecases/create-api-key.usecase.js';
 import { SessionRequest } from '../../../../../common/infrastructure/http/middlewares/authenticate-session.middleware.js';

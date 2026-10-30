@@ -1,5 +1,6 @@
 import { Router } from 'express';
 
+import { requirePanelCommandMiddleware } from '../../../../../common/infrastructure/http/middlewares/require-panel-command.middleware.js';
 import { lookupContactController } from '../controllers/lookup-contact.controller.js';
 import { requestContactUnblockController } from '../controllers/request-contact-unblock.controller.js';
 
@@ -18,7 +19,7 @@ export const contactRoutes = Router();
  *   post:
  *     summary: Consulta o bloqueio de um telefone
  *     tags: [Contacts]
- *     security: [{ sessionCookie: [] }]
+ *     security: [{ sessionCookie: [], panelCommandHeader: [] }]
  *     requestBody:
  *       required: true
  *       content:
@@ -41,7 +42,11 @@ export const contactRoutes = Router();
  *       422:
  *         description: Telefone inválido.
  */
-contactRoutes.post('/contacts/lookup', lookupContactController);
+contactRoutes.post(
+  '/contacts/lookup',
+  requirePanelCommandMiddleware,
+  lookupContactController,
+);
 
 /**
  * @swagger
@@ -49,7 +54,7 @@ contactRoutes.post('/contacts/lookup', lookupContactController);
  *   post:
  *     summary: Solicita desbloqueio de contato
  *     tags: [Contacts]
- *     security: [{ sessionCookie: [] }]
+ *     security: [{ sessionCookie: [], panelCommandHeader: [] }]
  *     requestBody:
  *       required: true
  *       content:
@@ -63,7 +68,7 @@ contactRoutes.post('/contacts/lookup', lookupContactController);
  *                 type: string
  *               consent_method:
  *                 type: string
- *                 enum: [in_person, form, other]
+ *                 enum: [whatsapp, in_person, form, other]
  *               consent_at:
  *                 type: string
  *                 format: date-time
@@ -81,4 +86,8 @@ contactRoutes.post('/contacts/lookup', lookupContactController);
  *       503:
  *         description: Confirmação externa indisponível.
  */
-contactRoutes.post('/contacts/unblocks', requestContactUnblockController);
+contactRoutes.post(
+  '/contacts/unblocks',
+  requirePanelCommandMiddleware,
+  requestContactUnblockController,
+);

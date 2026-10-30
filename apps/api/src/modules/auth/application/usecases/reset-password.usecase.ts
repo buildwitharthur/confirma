@@ -3,7 +3,7 @@ import { PasswordResetTokenRepository } from '../../domain/repositories/password
 import { BadRequestError } from '../../../../common/domain/errors/bad-request.js';
 import { WeakPasswordError } from '../../../../common/domain/errors/weak-password.js';
 import { HashProvider } from '../../../../common/domain/providers/hash-provider.js';
-import { PasswordResetTokenProvider } from '../../../../common/domain/providers/password-reset-token-provider.js';
+import { PasswordResetTokenProvider } from '../../domain/providers/password-reset-token.provider.js';
 
 export type ResetPasswordInput = {
   token: string;

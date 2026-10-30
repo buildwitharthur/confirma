@@ -7,6 +7,7 @@ import { requestPasswordResetController } from '../controllers/request-password-
 import { resetPasswordController } from '../controllers/reset-password.controller.js';
 import { invitationRoutes } from '../../../../invites/infrastructure/http/routes/invitation.routes.js';
 import { authenticateSessionMiddleware } from '../../../../../common/infrastructure/http/middlewares/authenticate-session.middleware.js';
+import { requirePanelCommandMiddleware } from '../../../../../common/infrastructure/http/middlewares/require-panel-command.middleware.js';
 import { getCurrentSessionController } from '../controllers/get-current-session.controller.js';
 
 export const authRoutes = Router();
@@ -41,6 +42,8 @@ export const authRoutes = Router();
  *     responses:
  *       204:
  *         description: Sessão aberta; o cookie é emitido na resposta.
+ *       400:
+ *         description: Corpo malformado.
  *       401:
  *         description: Credenciais inválidas.
  */
@@ -87,14 +90,21 @@ authRoutes.get(
  *   post:
  *     summary: Encerra a sessão atual
  *     tags: [Auth]
- *     security: [{ sessionCookie: [] }]
+ *     security: [{ sessionCookie: [], panelCommandHeader: [] }]
  *     responses:
  *       204:
  *         description: Sessão encerrada.
  *       401:
  *         description: Sessão inválida.
+ *       403:
+ *         description: Origem ou cabeçalho de comando inválido.
  */
-authRoutes.post('/logout', authenticateSessionMiddleware, logoutUserController);
+authRoutes.post(
+  '/logout',
+  authenticateSessionMiddleware,
+  requirePanelCommandMiddleware,
+  logoutUserController,
+);
 
 /**
  * @swagger
@@ -159,7 +169,7 @@ authRoutes.post('/password/reset', resetPasswordController);
  *   post:
  *     summary: Reautentica a sessão para uma operação sensível
  *     tags: [Auth]
- *     security: [{ sessionCookie: [] }]
+ *     security: [{ sessionCookie: [], panelCommandHeader: [] }]
  *     requestBody:
  *       required: true
  *       content:
@@ -174,12 +184,26 @@ authRoutes.post('/password/reset', resetPasswordController);
  *     responses:
  *       200:
  *         description: Reautenticação emitida.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               required: [reauthenticated_until]
+ *               properties:
+ *                 reauthenticated_until:
+ *                   type: string
+ *                   format: date-time
+ *       400:
+ *         description: Corpo malformado.
  *       401:
  *         description: Senha ou sessão inválida.
+ *       403:
+ *         description: Origem ou cabeçalho de comando inválido.
  */
 authRoutes.post(
   '/reauthenticate',
   authenticateSessionMiddleware,
+  requirePanelCommandMiddleware,
   reauthenticateUserController,
 );
 authRoutes.use('/invitations', invitationRoutes);

@@ -1,5 +1,3 @@
-import { randomUUID } from 'node:crypto';
-
 import { ContactNotBlockedError } from '../../../../common/domain/errors/contact-not-blocked.js';
 import { RecoveryLogUnavailableError } from '../../../../common/domain/errors/recovery-log-unavailable.js';
 import { ValidationError } from '../../../../common/domain/errors/validation-error.js';
@@ -12,7 +10,7 @@ import { ConsentMethod } from '../../domain/models/contact-status.model.js';
 export type RequestContactUnblockInput = {
   accountUserId: string;
   phone: string;
-  consentMethod: Exclude<ConsentMethod, 'whatsapp'>;
+  consentMethod: ConsentMethod;
   consentAt: Date;
   recordedByUserId: string;
 };
@@ -22,6 +20,7 @@ export class RequestContactUnblockUseCase {
     private readonly accountRepository: AccountRepository,
     private readonly contactRepository: ContactRepository,
     private readonly recoveryLogProvider: RecoveryLogProvider,
+    private readonly generateOperationId: () => string,
   ) {}
 
   async execute(input: RequestContactUnblockInput): Promise<void> {
@@ -46,7 +45,7 @@ export class RequestContactUnblockUseCase {
       throw new ValidationError();
     }
 
-    const operationId = randomUUID();
+    const operationId = this.generateOperationId();
     const confirmed = await this.recoveryLogProvider.confirmOperation({
       operation: 'contact_unblock',
       operationId,
@@ -58,7 +57,7 @@ export class RequestContactUnblockUseCase {
       throw new RecoveryLogUnavailableError();
     }
 
-    await this.contactRepository.requestUnblock({
+    const result = await this.contactRepository.requestUnblock({
       accountId: account.id,
       phone: input.phone,
       consentMethod: input.consentMethod,
@@ -67,5 +66,18 @@ export class RequestContactUnblockUseCase {
       operationId,
       requestedAt,
     });
+
+    // O bloqueio pode ter sido encerrado entre a leitura inicial e o lock do repositório.
+    if (result === 'not_blocked') {
+      throw new ContactNotBlockedError();
+    }
+
+    // Repetir o pedido responde 202 como o primeiro, sem criar outro pendente.
+    if (result === 'already_pending') {
+      console.info('[api] silent operation', {
+        operation: 'contact_unblock_request',
+        result: 'ignored_already_pending',
+      });
+    }
   }
 }

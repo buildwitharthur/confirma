@@ -31,14 +31,7 @@ export const integrationRoutes = Router();
  *   put:
  *     summary: Testa e salva uma conexão WhatsApp
  *     tags: [Integrations]
- *     security: [{ sessionCookie: [] }]
- *     parameters:
- *       - in: header
- *         name: X-Requested-With
- *         required: true
- *         schema:
- *           type: string
- *           enum: [XMLHttpRequest]
+ *     security: [{ sessionCookie: [], panelCommandHeader: [] }]
  *     requestBody:
  *       required: true
  *       content:
@@ -68,6 +61,8 @@ export const integrationRoutes = Router();
  *         description: Dados inválidos.
  *       502:
  *         description: Falha ao testar a conexão com o provedor.
+ *       503:
+ *         description: Integração não configurada no servidor.
  */
 integrationRoutes.get(
   '/integrations/whatsapp',

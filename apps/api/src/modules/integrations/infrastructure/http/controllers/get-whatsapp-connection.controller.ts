@@ -11,7 +11,7 @@ export const getWhatsAppConnectionController = async (
 ): Promise<Response> => {
   const connection = await new GetWhatsAppConnectionUseCase(
     new WhatsAppConnectionPrismaRepository(),
-  ).execute(request.accountId!);
+  ).execute({ accountId: request.accountId! });
 
   if (!connection) throw new NotFoundError();
 

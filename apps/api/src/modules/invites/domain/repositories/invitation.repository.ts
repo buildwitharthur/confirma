@@ -21,7 +21,11 @@ export type IssueInvitationInput = {
 };
 
 export type IssueInvitationResult =
-  { status: 'created'; invitationId: string } | { status: 'ignored' };
+  | { status: 'created'; invitationId: string }
+  | {
+      status: 'ignored';
+      reason: 'identity_exists' | 'active_invitation' | 'concurrent_submission';
+    };
 
 export interface InvitationRepository {
   issueInvitation(input: IssueInvitationInput): Promise<IssueInvitationResult>;

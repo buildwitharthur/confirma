@@ -120,6 +120,39 @@ describe('ContactPrismaRepository integration tests', () => {
     });
   });
 
+  it('should not create a request when the phone is no longer blocked', async () => {
+    const phoneHash = hashContactPhone(secret, accountId, phone);
+    await prisma.contactBlock.create({
+      data: { accountId, phoneHash, isBlocked: false },
+    });
+    const requestedAt = new Date('2026-10-27T10:00:00Z');
+
+    const result = await sut.requestUnblock({
+      accountId,
+      phone,
+      consentMethod: 'form',
+      consentAt: requestedAt,
+      recordedByUserId: userId,
+      operationId: randomUUID(),
+      requestedAt,
+    });
+
+    expect(result).toBe('not_blocked');
+    expect(await prisma.unblockRequest.count()).toBe(0);
+  });
+
+  it('should keep the phone hash of persisted blocks', () => {
+    const hash = hashContactPhone(
+      'test-secret',
+      '11111111-1111-4111-8111-111111111111',
+      '+5511999999999',
+    );
+
+    expect(Buffer.from(hash).toString('hex')).toBe(
+      'a93047f1effe023be8819ea8a2bcf6dd900972c9c1c743bbbb2a77dccdb400e9',
+    );
+  });
+
   it('should create one pending request and advance the sequence atomically', async () => {
     const phoneHash = hashContactPhone(secret, accountId, phone);
     await prisma.contactBlock.create({
@@ -127,7 +160,7 @@ describe('ContactPrismaRepository integration tests', () => {
     });
 
     const requestedAt = new Date('2026-10-27T10:00:00Z');
-    await sut.requestUnblock({
+    const created = await sut.requestUnblock({
       accountId,
       phone,
       consentMethod: 'form',
@@ -138,7 +171,7 @@ describe('ContactPrismaRepository integration tests', () => {
     });
 
     const secondOperationId = randomUUID();
-    await sut.requestUnblock({
+    const repeated = await sut.requestUnblock({
       accountId,
       phone,
       consentMethod: 'other',
@@ -155,6 +188,8 @@ describe('ContactPrismaRepository integration tests', () => {
       where: { accountId, phoneHash },
     });
 
+    expect(created).toBe('created');
+    expect(repeated).toBe('already_pending');
     expect(block.currentSequence).toBe(5);
     expect(requests).toHaveLength(1);
     expect(requests[0].sequence).toBe(5);

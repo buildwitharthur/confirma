@@ -1,46 +1,35 @@
 import { Request, Response } from 'express';
-import { z } from 'zod';
 
 import { env } from '../../../../../common/infrastructure/env/index.js';
 import { ResendMailProvider } from '../../../../../common/infrastructure/providers/mail-provider/resend-mail.provider.js';
 import { InvitationPrismaRepository } from '../../repositories/prisma/invitation-prisma.repository.js';
+import { CryptoInvitationTokenProvider } from '../../providers/crypto-invitation-token.provider.js';
 import { RequestInvitationUseCase } from '../../../application/usecases/request-invitation.usecase.js';
+import { requestInvitationBodySchema } from '../../validation/zod/schemas/request-invitation.schema.js';
 import { dataValidation } from '../../../../../common/infrastructure/validation/zod/data-validation.js';
-
-const accessRequestSchema = z
-  .object({
-    name: z.string().max(100),
-    email: z.string().trim().email().max(254),
-    company_or_project: z.string().max(120),
-    whatsapp_provider: z.enum(['evolution_api', 'other', 'none_yet']),
-    intended_use: z.string().max(500).optional(),
-    consent: z.literal(true),
-    form_opened_at: z.iso.datetime({ offset: true }),
-    website: z.string(),
-  })
-  .strict();
 
 export const requestInvitationController = async (
   request: Request,
   response: Response,
 ): Promise<Response> => {
-  const body = dataValidation(accessRequestSchema, request.body);
+  const parsedBody = dataValidation(requestInvitationBodySchema, request.body);
 
   const useCase = new RequestInvitationUseCase(
     new InvitationPrismaRepository(),
+    new CryptoInvitationTokenProvider(),
     new ResendMailProvider(env.RESEND_API_KEY, env.MAIL_FROM),
     env.INVITATION_ACCEPTANCE_URL,
   );
 
   await useCase.execute({
-    name: body.name,
-    email: body.email,
-    companyOrProject: body.company_or_project,
-    whatsappProvider: body.whatsapp_provider,
-    intendedUse: body.intended_use ?? null,
+    name: parsedBody.name,
+    email: parsedBody.email,
+    companyOrProject: parsedBody.company_or_project,
+    whatsappProvider: parsedBody.whatsapp_provider,
+    intendedUse: parsedBody.intended_use ?? null,
     consentAt: new Date(),
-    formOpenedAt: new Date(body.form_opened_at),
-    website: body.website,
+    formOpenedAt: new Date(parsedBody.form_opened_at),
+    website: parsedBody.website,
   });
 
   return response.status(202).json({

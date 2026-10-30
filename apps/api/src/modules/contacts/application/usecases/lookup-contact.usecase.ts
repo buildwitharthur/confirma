@@ -1,8 +1,10 @@
 import { AccountRepository } from '../../../accounts/domain/repositories/account.repository.js';
 import { getActiveAccount } from '../../../accounts/application/helpers/account-access.js';
+import { ContactStatusModel } from '../../domain/models/contact-status.model.js';
 import { ContactRepository } from '../../domain/repositories/contact.repository.js';
 
 export type LookupContactInput = { accountUserId: string; phone: string };
+export type LookupContactOutput = ContactStatusModel;
 
 export class LookupContactUseCase {
   constructor(
@@ -10,7 +12,7 @@ export class LookupContactUseCase {
     private readonly contactRepository: ContactRepository,
   ) {}
 
-  async execute(input: LookupContactInput) {
+  async execute(input: LookupContactInput): Promise<LookupContactOutput> {
     const account = await getActiveAccount(
       this.accountRepository,
       input.accountUserId,
@@ -23,7 +25,7 @@ export class LookupContactUseCase {
     return (
       status ?? {
         phone: input.phone,
-        status: 'not_blocked' as const,
+        status: 'not_blocked',
         blockedAt: null,
         pendingUnblock: null,
         lastUnblock: null,

@@ -17,16 +17,20 @@ export class ResendMailProvider implements MailProvider {
   }
 
   async send(input: SendMailInput): Promise<void> {
-    const { error } = await this.resend.emails.send({
-      from: this.from,
-      to: input.to,
-      subject: input.subject,
-      html: input.html,
-      text: input.text,
-    });
+    try {
+      const { error } = await this.resend.emails.send({
+        from: this.from,
+        to: input.to,
+        subject: input.subject,
+        html: input.html,
+        text: input.text,
+      });
 
-    if (error) {
-      console.error('Error sending email:', error);
+      if (error) throw error;
+    } catch (error) {
+      // A resposta do provedor pode citar o destinatário; registre somente a categoria.
+      const name = error instanceof Error ? error.name : 'provider_error';
+      console.error('Error sending email:', name);
       throw new ServiceUnavailableError();
     }
   }

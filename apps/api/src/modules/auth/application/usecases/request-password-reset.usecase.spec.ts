@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { AuthRepository } from '../../domain/repositories/auth.repository.js';
 import type { AuthModel } from '../../domain/models/auth.model.js';
 import type { PasswordResetTokenRepository } from '../../domain/repositories/password-reset-token.repository.js';
-import type { PasswordResetTokenProvider } from '../../../../common/domain/providers/password-reset-token-provider.js';
+import type { PasswordResetTokenProvider } from '../../domain/providers/password-reset-token.provider.js';
 import type { MailProvider } from '../../../../common/domain/providers/mail-provider.js';
 import { RequestPasswordResetUseCase } from './request-password-reset.usecase.js';
 
@@ -114,6 +114,48 @@ describe('RequestPasswordResetUseCase unit tests', () => {
     await sut.execute(input);
 
     expect(mailProvider.send).toHaveBeenCalledTimes(1);
+  });
+
+  it('should log a mail provider failure instead of leaving it unhandled', async () => {
+    const log = vi.spyOn(console, 'info').mockImplementation(() => undefined);
+    authRepository.findByEmail.mockResolvedValue(user);
+    tokenProvider.generate.mockReturnValue({
+      token: 'token',
+      tokenHash: 'hash',
+    });
+    mailProvider.send.mockRejectedValue(new Error('Provider failed'));
+
+    expect(await sut.execute(input)).toBeUndefined();
+    await Promise.resolve();
+    await Promise.resolve();
+    expect(log).toHaveBeenCalledWith('[api] silent operation', {
+      operation: 'password_reset_request',
+      result: 'delivery_failed',
+    });
+  });
+
+  it('should log an ignored request without the email', async () => {
+    const log = vi.spyOn(console, 'info').mockImplementation(() => undefined);
+    authRepository.findByEmail.mockResolvedValue(null);
+
+    await sut.execute(input);
+
+    expect(log).toHaveBeenCalledWith('[api] silent operation', {
+      operation: 'password_reset_request',
+      result: 'ignored_unknown_recipient',
+    });
+  });
+
+  it('should log an ignored request for a disabled user', async () => {
+    const log = vi.spyOn(console, 'info').mockImplementation(() => undefined);
+    authRepository.findByEmail.mockResolvedValue({ ...user, disabledAt: now });
+
+    await sut.execute(input);
+
+    expect(log).toHaveBeenCalledWith('[api] silent operation', {
+      operation: 'password_reset_request',
+      result: 'ignored_disabled_recipient',
+    });
   });
 
   it('should not send a link when persistence fails', async () => {

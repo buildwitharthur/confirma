@@ -1,45 +1,30 @@
-import { createHmac } from 'node:crypto';
-
+import { NodeCrypto } from '../../../../../common/infrastructure/crypto/node-crypto.js';
 import { prisma } from '../../../../../common/infrastructure/prisma/index.js';
 import type { PrismaClient } from '../../../../../common/infrastructure/prisma/generated/client/client.js';
 import type {
   ContactConsentModel,
   ContactStatusModel,
-  RequestUnblockInput,
 } from '../../../domain/models/contact-status.model.js';
-import type { ContactRepository } from '../../../domain/repositories/contact.repository.js';
+import type {
+  ContactRepository,
+  RequestUnblockInput,
+  RequestUnblockResult,
+} from '../../../domain/repositories/contact.repository.js';
 
 export function hashContactPhone(
   secret: string,
   accountId: string,
   phone: string,
 ): Uint8Array<ArrayBuffer> {
-  const derivedKey = createHmac('sha256', secret)
-    .update('confirma:contact-phone-hash')
-    .digest();
+  const derivedKey = NodeCrypto.hmacSha256(
+    secret,
+    'confirma:contact-phone-hash',
+  );
 
   return Uint8Array.from(
-    createHmac('sha256', derivedKey).update(`${accountId}:${phone}`).digest(),
+    NodeCrypto.hmacSha256(derivedKey, `${accountId}:${phone}`),
   ) as Uint8Array<ArrayBuffer>;
 }
-
-type ContactBlockRecord = {
-  isBlocked: boolean;
-  blockedAt: Date | null;
-  currentSequence: number;
-  pendingUnblock: {
-    consentMethod: ContactConsentModel['consentMethod'];
-    consentAt: Date;
-    requestedAt: Date;
-    recordedByUser: { email: string } | null;
-  } | null;
-  privacyEvents: Array<{
-    consentMethod: ContactConsentModel['consentMethod'] | null;
-    consentAt: Date | null;
-    occurredAt: Date;
-    recordedByUser: { email: string } | null;
-  }>;
-};
 
 function toConsentModel(input: {
   consentMethod: ContactConsentModel['consentMethod'];
@@ -66,7 +51,7 @@ export class ContactPrismaRepository implements ContactRepository {
     phone: string,
   ): Promise<ContactStatusModel | null> {
     const phoneHash = hashContactPhone(this.phoneHashSecret, accountId, phone);
-    const contactBlock = (await this.client.contactBlock.findUnique({
+    const contactBlock = await this.client.contactBlock.findUnique({
       where: {
         accountId_phoneHash: { accountId, phoneHash },
       },
@@ -97,7 +82,7 @@ export class ContactPrismaRepository implements ContactRepository {
           },
         },
       },
-    })) as ContactBlockRecord | null;
+    });
 
     if (!contactBlock) return null;
 
@@ -132,14 +117,16 @@ export class ContactPrismaRepository implements ContactRepository {
     };
   }
 
-  async requestUnblock(input: RequestUnblockInput): Promise<void> {
+  async requestUnblock(
+    input: RequestUnblockInput,
+  ): Promise<RequestUnblockResult> {
     const phoneHash = hashContactPhone(
       this.phoneHashSecret,
       input.accountId,
       input.phone,
     );
 
-    await this.client.$transaction(async (transaction) => {
+    return this.client.$transaction(async (transaction) => {
       await transaction.$queryRaw`
         SELECT 1
         FROM "contact_blocks"
@@ -148,20 +135,20 @@ export class ContactPrismaRepository implements ContactRepository {
         FOR UPDATE
       `;
 
-      const contactBlock = (await transaction.contactBlock.findUnique({
+      const contactBlock = await transaction.contactBlock.findUnique({
         where: {
           accountId_phoneHash: { accountId: input.accountId, phoneHash },
         },
         select: {
+          isBlocked: true,
           currentSequence: true,
           pendingUnblock: { select: { operationId: true } },
         },
-      })) as {
-        currentSequence: number;
-        pendingUnblock: { operationId: string } | null;
-      } | null;
+      });
 
-      if (!contactBlock || contactBlock.pendingUnblock) return;
+      // Revalida sob o lock: o bloqueio pode ter mudado depois da leitura do caso de uso.
+      if (!contactBlock?.isBlocked) return 'not_blocked';
+      if (contactBlock.pendingUnblock) return 'already_pending';
 
       const sequence = contactBlock.currentSequence + 1;
       await transaction.contactBlock.update({
@@ -182,6 +169,8 @@ export class ContactPrismaRepository implements ContactRepository {
           recordedByUserId: input.recordedByUserId,
         },
       });
+
+      return 'created';
     });
   }
 }

@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { AuthRepository } from '../../domain/repositories/auth.repository.js';
 import type { PasswordResetTokenRepository } from '../../domain/repositories/password-reset-token.repository.js';
 import type { PasswordResetTokenModel } from '../../domain/models/password-reset-token.model.js';
-import type { PasswordResetTokenProvider } from '../../../../common/domain/providers/password-reset-token-provider.js';
+import type { PasswordResetTokenProvider } from '../../domain/providers/password-reset-token.provider.js';
 import type { HashProvider } from '../../../../common/domain/providers/hash-provider.js';
 import { BadRequestError } from '../../../../common/domain/errors/bad-request.js';
 import { WeakPasswordError } from '../../../../common/domain/errors/weak-password.js';

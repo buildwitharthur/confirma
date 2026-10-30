@@ -1,4 +1,4 @@
-import { ApiKeyProvider } from '../../../../common/domain/providers/api-key.provider.js';
+import { ApiKeyProvider } from '../../domain/providers/api-key.provider.js';
 import { AccountRepository } from '../../domain/repositories/account.repository.js';
 import { getActiveAccount } from '../helpers/account-access.js';
 

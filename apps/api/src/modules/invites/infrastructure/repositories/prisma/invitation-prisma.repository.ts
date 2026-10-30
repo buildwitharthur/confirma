@@ -1,5 +1,3 @@
-import { createHash } from 'node:crypto';
-
 import {
   AcceptInvitationRecord,
   AcceptInvitationResult,
@@ -8,6 +6,7 @@ import {
   InvitationRepository,
 } from '../../../domain/repositories/invitation.repository.js';
 import { InvitationModel } from '../../../domain/models/invitation.model.js';
+import { NodeCrypto } from '../../../../../common/infrastructure/crypto/node-crypto.js';
 import { prisma } from '../../../../../common/infrastructure/prisma/index.js';
 import { PrismaClient } from '../../../../../common/infrastructure/prisma/generated/client/client.js';
 
@@ -25,7 +24,9 @@ export class InvitationPrismaRepository implements InvitationRepository {
             select: { id: true },
           });
 
-          if (existingUser) return { status: 'ignored' };
+          if (existingUser) {
+            return { status: 'ignored', reason: 'identity_exists' };
+          }
 
           const activeInvitation = await transaction.invitation.findFirst({
             where: {
@@ -36,7 +37,9 @@ export class InvitationPrismaRepository implements InvitationRepository {
             select: { id: true },
           });
 
-          if (activeInvitation) return { status: 'ignored' };
+          if (activeInvitation) {
+            return { status: 'ignored', reason: 'active_invitation' };
+          }
 
           await transaction.invitation.deleteMany({
             where: { email: input.email },
@@ -61,7 +64,7 @@ export class InvitationPrismaRepository implements InvitationRepository {
         'code' in error &&
         (error.code === 'P2002' || error.code === 'P2034')
       ) {
-        return { status: 'ignored' };
+        return { status: 'ignored', reason: 'concurrent_submission' };
       }
       throw error;
     }
@@ -72,7 +75,7 @@ export class InvitationPrismaRepository implements InvitationRepository {
   }
 
   async findByToken(token: string): Promise<InvitationModel | null> {
-    const tokenHash = createHash('sha256').update(token).digest();
+    const tokenHash = NodeCrypto.sha256(token);
 
     return this.client.invitation.findUnique({
       where: { tokenHash },

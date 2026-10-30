@@ -6,22 +6,19 @@ import type {
   WhatsAppConnectionRepository,
 } from '../../../domain/repositories/whatsapp-connection.repository.js';
 
-type ConnectionRecord = {
-  id: string;
-  accountId: string;
-  instanceIdentifier: string;
-  senderPhone: string;
-  status: WhatsAppConnectionModel['status'];
-  connectionStatus: WhatsAppConnectionModel['connectionStatus'];
-  providerVersion: string | null;
-  lastCheckedAt: Date | null;
-  connectedAt: Date | null;
-  replacedAt: Date | null;
-};
-
-function toModel(connection: ConnectionRecord): WhatsAppConnectionModel {
-  return connection;
-}
+// Campos públicos da conexão; os cifrados nunca saem do repositório.
+const publicConnectionFields = {
+  id: true,
+  accountId: true,
+  instanceIdentifier: true,
+  senderPhone: true,
+  status: true,
+  connectionStatus: true,
+  providerVersion: true,
+  lastCheckedAt: true,
+  connectedAt: true,
+  replacedAt: true,
+} as const;
 
 export class WhatsAppConnectionPrismaRepository implements WhatsAppConnectionRepository {
   constructor(private readonly client: PrismaClient = prisma) {}
@@ -29,22 +26,10 @@ export class WhatsAppConnectionPrismaRepository implements WhatsAppConnectionRep
   async findCurrent(
     accountId: string,
   ): Promise<WhatsAppConnectionModel | null> {
-    const connection = await this.client.whatsAppConnection.findFirst({
+    return this.client.whatsAppConnection.findFirst({
       where: { accountId, status: 'active' },
-      select: {
-        id: true,
-        accountId: true,
-        instanceIdentifier: true,
-        senderPhone: true,
-        status: true,
-        connectionStatus: true,
-        providerVersion: true,
-        lastCheckedAt: true,
-        connectedAt: true,
-        replacedAt: true,
-      },
+      select: publicConnectionFields,
     });
-    return connection ? toModel(connection) : null;
   }
 
   async saveTestedConnection(
@@ -60,7 +45,7 @@ export class WhatsAppConnectionPrismaRepository implements WhatsAppConnectionRep
           sendCredentialsCipher: Buffer.alloc(0),
         },
       });
-      const connection = await transaction.whatsAppConnection.create({
+      return transaction.whatsAppConnection.create({
         data: {
           accountId: input.accountId,
           instanceIdentifier: input.instanceIdentifier,
@@ -79,20 +64,8 @@ export class WhatsAppConnectionPrismaRepository implements WhatsAppConnectionRep
           lastCheckedAt: input.checkedAt,
           connectedAt: input.checkedAt,
         },
-        select: {
-          id: true,
-          accountId: true,
-          instanceIdentifier: true,
-          senderPhone: true,
-          status: true,
-          connectionStatus: true,
-          providerVersion: true,
-          lastCheckedAt: true,
-          connectedAt: true,
-          replacedAt: true,
-        },
+        select: publicConnectionFields,
       });
-      return toModel(connection);
     });
   }
 }

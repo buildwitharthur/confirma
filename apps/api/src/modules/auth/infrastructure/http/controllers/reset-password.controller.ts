@@ -1,24 +1,23 @@
 import { Request, Response } from 'express';
-import { z } from 'zod';
 
 import { AuthPrismaRepository } from '../../repositories/prisma/auth-prisma.repository.js';
 import { PasswordResetTokenPrismaRepository } from '../../repositories/prisma/password-reset-token-prisma.repository.js';
 import { BcryptHashProvider } from '../../../../../common/infrastructure/providers/hash-provider/bcrypt-hash.provider.js';
-import { CryptoPasswordResetTokenProvider } from '../../../../../common/infrastructure/providers/password-reset-token-provider/crypto-password-reset-token.provider.js';
+import { CryptoPasswordResetTokenProvider } from '../../providers/crypto-password-reset-token.provider.js';
+import { BadRequestError } from '../../../../../common/domain/errors/bad-request.js';
 import { dataValidation } from '../../../../../common/infrastructure/validation/zod/data-validation.js';
 import { ResetPasswordUseCase } from '../../../application/usecases/reset-password.usecase.js';
+import { resetPasswordBodySchema } from '../../validation/zod/schemas/reset-password.schema.js';
 
 export const resetPasswordController = async (
   request: Request,
   response: Response,
 ): Promise<Response> => {
-  const bodySchema = z
-    .object({
-      token: z.string().min(1),
-      password: z.string().min(1),
-    })
-    .strict();
-  const parsedBody = dataValidation(bodySchema, request.body);
+  const parsedBody = dataValidation(
+    resetPasswordBodySchema,
+    request.body,
+    BadRequestError,
+  );
 
   const authRepository = new AuthPrismaRepository();
   const passwordResetTokenRepository = new PasswordResetTokenPrismaRepository();

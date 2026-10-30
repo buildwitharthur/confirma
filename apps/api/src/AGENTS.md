@@ -51,7 +51,7 @@ Não coloque regra específica de um módulo em `common` apenas para facilitar o
 
 ## Responsabilidade e destino dos arquivos
 
-Leia também o `AGENTS.md` da raiz para simplicidade, legibilidade e construção de features. Crie apenas as pastas necessárias à tarefa. A tabela abaixo define a organização desejada; a centralização criptográfica e a movimentação dos providers existentes ainda precisam ser implementadas em tarefas próprias.
+Leia também o `AGENTS.md` da raiz para simplicidade, legibilidade e construção de features. Crie apenas as pastas necessárias à tarefa. A tabela abaixo define a organização adotada.
 
 | Pasta                                                     | Quando e por que usar                                                                    |
 | --------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -252,6 +252,17 @@ Use `common/infrastructure/validation/zod/data-validation.ts` para validação d
 - Não crie códigos de erro fora de `docs/specs/api.md` e `docs/specs/domain.md`.
 - Não exponha stack trace, segredos, tokens ou dados pessoais completos.
 
+## Logs de operações silenciosas
+
+Algumas operações retornam sucesso mesmo quando não produzem uma alteração observável. Isso é intencional quando o contrato evita enumeração ou torna a operação idempotente; por exemplo, uma solicitação de recuperação de senha para um e-mail que não existe pode responder `200` sem enviar mensagem.
+
+- Preserve o status e o corpo genéricos definidos pelo contrato para os caminhos existentes e inexistentes.
+- Registre internamente o evento e a decisão tomada, como `password_reset_request` com resultado `ignored_unknown_recipient`, `accepted` ou `delivery_failed`, conforme o fluxo real.
+- Registre somente contexto operacional necessário: operação, resultado, status, método, rota e identificadores seguros. Não registre e-mail completo, telefone, token, senha, API key, credencial, corpo da requisição ou dados pessoais completos.
+- Não use o log para mudar a resposta HTTP nem para revelar ao cliente por que nada foi feito.
+- Mantenha o log próximo da decisão que conhece o motivo. Não adicione um logger ou provider genérico para um único caso; extraia essa dependência somente quando houver necessidade real de correlação, níveis ou transporte centralizado.
+- Use mensagens estáveis e resultados pesquisáveis. O texto deve explicar a decisão sem depender de interpolar dados sensíveis.
+
 ## Providers e infraestrutura
 
 Providers são contratos em `domain/providers/` e implementações em `infrastructure/providers/`, no módulo proprietário ou em `common` quando compartilhados.
@@ -291,7 +302,7 @@ Os testes ficam próximos do código que verificam, com o sufixo `.spec.ts`. Imp
 - Adicione ou ajuste testes ao mudar regras de use cases e operações de repositórios. Cubra sucesso, falhas previstas, limites relevantes e isolamento entre contas.
 - Para bugs, acrescente um cenário de regressão que reproduza o comportamento incorreto, quando testável.
 - Teste idempotência e concorrência com operações concorrentes reais no repositório quando o contrato exigir; mocks não comprovam atomicidade do banco.
-- Schemas com refinamentos, cálculos temporais, criptografia e middlewares de segurança merecem testes unitários específicos quando seu comportamento mudar. Evite apenas repetir chamadas simples de bibliotecas nas asserções.
+- Somente use cases e repositórios Prisma têm testes. Não crie specs para middlewares, schemas, providers, controllers ou rotas. Evite apenas repetir chamadas simples de bibliotecas nas asserções.
 - Refatorações de organização usam a suíte existente; acrescente casos se houver comportamento relevante sem proteção. Documentação, imports e formatação não precisam de novos testes artificiais.
 - Separe preparação, execução e verificação com linhas em branco. Use valores fictícios e relógio controlado quando necessário. Não envie e-mails ou mensagens reais nos testes.
 - Verifique resultado, erro, estado persistido e efeitos observáveis. Não teste métodos privados, ordem incidental de chamadas ou SQL gerado pelo ORM.

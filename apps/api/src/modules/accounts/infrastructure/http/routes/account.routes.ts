@@ -1,5 +1,6 @@
 import { Router } from 'express';
 
+import { requirePanelCommandMiddleware } from '../../../../../common/infrastructure/http/middlewares/require-panel-command.middleware.js';
 import { createApiKeyController } from '../controllers/create-api-key.controller.js';
 import { getAccountController } from '../controllers/get-account.controller.js';
 import { getAccountUsageController } from '../controllers/get-account-usage.controller.js';
@@ -146,7 +147,7 @@ export const accountRoutes = Router();
  *   patch:
  *     summary: Atualiza a conta
  *     tags: [Accounts]
- *     security: [{ sessionCookie: [] }]
+ *     security: [{ sessionCookie: [], panelCommandHeader: [] }]
  *     requestBody:
  *       required: true
  *       content:
@@ -173,7 +174,7 @@ export const accountRoutes = Router();
  *   delete:
  *     summary: Solicita exclusão da conta
  *     tags: [Accounts]
- *     security: [{ sessionCookie: [] }]
+ *     security: [{ sessionCookie: [], panelCommandHeader: [] }]
  *     requestBody:
  *       required: true
  *       content:
@@ -189,10 +190,24 @@ export const accountRoutes = Router();
  *         description: Acesso negado ou reautenticação necessária.
  *       422:
  *         description: Dados inválidos.
+ *       503:
+ *         description: Confirmação externa indisponível.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 accountRoutes.get('/account', getAccountController);
-accountRoutes.patch('/account', updateAccountController);
-accountRoutes.delete('/account', requestAccountDeletionController);
+accountRoutes.patch(
+  '/account',
+  requirePanelCommandMiddleware,
+  updateAccountController,
+);
+accountRoutes.delete(
+  '/account',
+  requirePanelCommandMiddleware,
+  requestAccountDeletionController,
+);
 
 /**
  * @swagger
@@ -228,13 +243,18 @@ accountRoutes.get('/account/usage', getAccountUsageController);
  *   put:
  *     summary: Atualiza o template
  *     tags: [Accounts]
- *     security: [{ sessionCookie: [] }]
+ *     security: [{ sessionCookie: [], panelCommandHeader: [] }]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/MessageTemplate'
+ *             type: object
+ *             required: [body]
+ *             additionalProperties: false
+ *             properties:
+ *               body:
+ *                 type: string
  *     responses:
  *       200:
  *         description: Template atualizado.
@@ -246,7 +266,11 @@ accountRoutes.get('/account/usage', getAccountUsageController);
  *         description: Template inválido.
  */
 accountRoutes.get('/account/template', getMessageTemplateController);
-accountRoutes.put('/account/template', updateMessageTemplateController);
+accountRoutes.put(
+  '/account/template',
+  requirePanelCommandMiddleware,
+  updateMessageTemplateController,
+);
 
 /**
  * @swagger
@@ -269,7 +293,7 @@ accountRoutes.put('/account/template', updateMessageTemplateController);
  *   post:
  *     summary: Cria uma chave da conta
  *     tags: [Accounts]
- *     security: [{ sessionCookie: [] }]
+ *     security: [{ sessionCookie: [], panelCommandHeader: [] }]
  *     responses:
  *       201:
  *         description: Chave criada; o segredo é exibido uma vez.
@@ -283,7 +307,11 @@ accountRoutes.put('/account/template', updateMessageTemplateController);
  *         description: Acesso negado.
  */
 accountRoutes.get('/account/api-keys', listApiKeysController);
-accountRoutes.post('/account/api-keys', createApiKeyController);
+accountRoutes.post(
+  '/account/api-keys',
+  requirePanelCommandMiddleware,
+  createApiKeyController,
+);
 
 /**
  * @swagger
@@ -291,7 +319,7 @@ accountRoutes.post('/account/api-keys', createApiKeyController);
  *   delete:
  *     summary: Revoga uma chave
  *     tags: [Accounts]
- *     security: [{ sessionCookie: [] }]
+ *     security: [{ sessionCookie: [], panelCommandHeader: [] }]
  *     parameters:
  *       - in: path
  *         name: key_id
@@ -320,4 +348,8 @@ accountRoutes.post('/account/api-keys', createApiKeyController);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-accountRoutes.delete('/account/api-keys/:key_id', revokeApiKeyController);
+accountRoutes.delete(
+  '/account/api-keys/:key_id',
+  requirePanelCommandMiddleware,
+  revokeApiKeyController,
+);

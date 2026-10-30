@@ -1,10 +1,16 @@
 import { AppError } from '../../../../common/domain/errors/app-error.js';
-import { ServiceUnavailableError } from '../../../../common/domain/errors/service-unavailable.js';
 import type {
   TestWhatsAppConnectionInput,
   TestWhatsAppConnectionResult,
   WhatsAppProvider,
 } from '../../domain/providers/whatsapp-provider.js';
+
+// O contrato de PUT /panel/integrations/whatsapp usa 502 para toda falha do adaptador.
+function adapterError(
+  message = 'Não foi possível testar a conexão WhatsApp.',
+): AppError {
+  return new AppError(message, 502, 'service_unavailable');
+}
 
 export class EvolutionApiWhatsAppProvider implements WhatsAppProvider {
   constructor(
@@ -33,7 +39,7 @@ export class EvolutionApiWhatsAppProvider implements WhatsAppProvider {
           : null;
 
       if (!providerVersion) {
-        throw new Error('Evolution API version response is invalid.');
+        throw adapterError();
       }
 
       const stateResponse = await this.request(
@@ -54,19 +60,13 @@ export class EvolutionApiWhatsAppProvider implements WhatsAppProvider {
           : null;
 
       if (state !== 'open') {
-        throw new AppError(
-          'A instância WhatsApp não está conectada.',
-          502,
-          'service_unavailable',
-        );
+        throw adapterError('A instância WhatsApp não está conectada.');
       }
 
       return { providerVersion, checkedAt: this.now() };
     } catch (error) {
       if (error instanceof AppError) throw error;
-      throw new ServiceUnavailableError(
-        'Não foi possível testar a conexão WhatsApp.',
-      );
+      throw adapterError();
     }
   }
 
@@ -79,15 +79,15 @@ export class EvolutionApiWhatsAppProvider implements WhatsAppProvider {
       headers: { apikey: apiKey },
       signal,
     });
+
     if (!response.ok) {
-      throw new AppError(
+      throw adapterError(
         response.status === 401
           ? 'Credenciais da conexão WhatsApp inválidas.'
-          : 'Não foi possível testar a conexão WhatsApp.',
-        502,
-        'service_unavailable',
+          : undefined,
       );
     }
+
     return response;
   }
 }

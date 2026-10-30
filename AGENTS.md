@@ -59,6 +59,7 @@ O Confirma é um SaaS B2B que confirma agendamentos por WhatsApp. Sistemas exter
 - **Efeitos externos:** reserve cada tentativa antes da chamada e revalide as condições no processamento assíncrono. Não presuma execução única. Nunca repita automaticamente uma ação cujo aceite externo seja incerto.
 - **Idempotência e concorrência:** cumpra as garantias descritas em cada rota.
 - **Segurança:** não registre senhas, tokens, segredos nem dados pessoais completos. Credenciais ficam cifradas ou com hash. Segredos aparecem completos só onde o contrato permite. Não desative verificações para fazer algo funcionar.
+- **Operações silenciosas:** quando o contrato exigir resposta genérica, como uma recuperação de senha para um e-mail inexistente, preserve o mesmo status e corpo para todos os casos, mas registre internamente a decisão e o resultado. O log não pode permitir enumeração: não inclua e-mail completo, telefone, token, credencial ou corpo da requisição; use apenas evento, operação, resultado e identificadores seguros ou mascarados quando necessários.
 - **Interface:** siga `docs/design/` sem redesenhar; trate carregamento, vazio, erro e sucesso; preserve acessibilidade, teclado e responsividade. Validação na interface não substitui a do backend.
 - **Dependências:** use as ferramentas já adotadas no projeto; não adicione outra para uma responsabilidade já coberta. Mudanças arquiteturais exigem aprovação.
 

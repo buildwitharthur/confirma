@@ -16,12 +16,3 @@ export interface ContactStatusModel {
   pendingUnblock: ContactConsentModel | null;
   lastUnblock: ContactConsentModel | null;
 }
-export type RequestUnblockInput = {
-  accountId: string;
-  phone: string;
-  consentMethod: Exclude<ConsentMethod, 'whatsapp'>;
-  consentAt: Date;
-  recordedByUserId: string;
-  operationId: string;
-  requestedAt: Date;
-};

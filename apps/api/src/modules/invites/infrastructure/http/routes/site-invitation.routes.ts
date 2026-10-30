@@ -1,5 +1,6 @@
 import { Router } from 'express';
 
+import { requireJsonContentMiddleware } from '../../../../../common/infrastructure/http/middlewares/require-json-content.middleware.js';
 import { requestInvitationController } from '../controllers/request-invitation.controller.js';
 
 export const siteInvitationRoutes = Router();
@@ -19,6 +20,8 @@ export const siteInvitationRoutes = Router();
  *     responses:
  *       202:
  *         description: Solicitação recebida sem revelar estado interno.
+ *       400:
+ *         description: Corpo malformado.
  *       415:
  *         description: Content-Type incompatível.
  *       422:
@@ -26,7 +29,11 @@ export const siteInvitationRoutes = Router();
  *       503:
  *         description: Serviço de e-mail indisponível.
  */
-siteInvitationRoutes.post('/access-requests', requestInvitationController);
+siteInvitationRoutes.post(
+  '/access-requests',
+  requireJsonContentMiddleware,
+  requestInvitationController,
+);
 
 /**
  * @swagger

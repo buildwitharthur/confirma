@@ -85,6 +85,7 @@ describe('UpdateAccountUseCase unit tests', () => {
   it.each([
     { name: '   ' },
     { timezone: 'Invalid/Zone' },
+    { timezone: '+03:00' },
     { firstSendLeadMinutes: 120 },
     { firstSendLeadMinutes: 119 },
     { sendWindowStart: '24:00' },

@@ -61,7 +61,10 @@ describe('InvitationPrismaRepository integration tests', () => {
       data: { email: input.email, passwordHash: Buffer.from('hash') },
     });
 
-    expect(await sut.issueInvitation(input)).toEqual({ status: 'ignored' });
+    expect(await sut.issueInvitation(input)).toEqual({
+      status: 'ignored',
+      reason: 'identity_exists',
+    });
     expect(await prisma.invitation.count()).toBe(0);
   });
 
@@ -73,7 +76,7 @@ describe('InvitationPrismaRepository integration tests', () => {
         ...input,
         tokenHash: Buffer.from('other-hash'),
       }),
-    ).toEqual({ status: 'ignored' });
+    ).toEqual({ status: 'ignored', reason: 'active_invitation' });
     expect(await prisma.invitation.count()).toBe(1);
     expect(await sut.findByToken(token)).toMatchObject({
       id: first.status === 'created' ? first.invitationId : '',

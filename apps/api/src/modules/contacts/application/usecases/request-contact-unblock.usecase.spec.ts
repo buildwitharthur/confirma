@@ -83,6 +83,7 @@ describe('RequestContactUnblockUseCase unit tests', () => {
       accountRepository,
       contactRepository,
       recoveryLogProvider,
+      () => 'operation-id',
     );
   });
 
@@ -91,18 +92,17 @@ describe('RequestContactUnblockUseCase unit tests', () => {
   beforeEach(() => {
     contactRepository.findStatus.mockResolvedValue(blocked);
     recoveryLogProvider.confirmOperation.mockResolvedValue(true);
+    contactRepository.requestUnblock.mockResolvedValue('created');
   });
 
-  it.each(['in_person', 'form', 'other'] as const)(
+  it.each(['whatsapp', 'in_person', 'form', 'other'] as const)(
     'should confirm the external record before persisting %s consent',
     async (consentMethod) => {
       await sut.execute({ ...input, consentMethod });
 
-      const [confirmation] = recoveryLogProvider.confirmOperation.mock.calls[0];
-
-      expect(confirmation).toEqual({
+      expect(recoveryLogProvider.confirmOperation).toHaveBeenCalledWith({
         operation: 'contact_unblock',
-        operationId: expect.stringMatching(/^[0-9a-f-]{36}$/),
+        operationId: 'operation-id',
         accountId: account.id,
         occurredAt: now,
       });
@@ -112,7 +112,7 @@ describe('RequestContactUnblockUseCase unit tests', () => {
         consentMethod,
         consentAt: input.consentAt,
         recordedByUserId: input.recordedByUserId,
-        operationId: confirmation.operationId,
+        operationId: 'operation-id',
         requestedAt: now,
       });
       expect(
@@ -163,6 +163,26 @@ describe('RequestContactUnblockUseCase unit tests', () => {
       expect(contactRepository.requestUnblock).toHaveBeenCalled();
     },
   );
+
+  it('should log a repeated request without the phone and keep the response', async () => {
+    const log = vi.spyOn(console, 'info').mockImplementation(() => undefined);
+    contactRepository.requestUnblock.mockResolvedValue('already_pending');
+
+    await expect(sut.execute(input)).resolves.toBeUndefined();
+
+    expect(log).toHaveBeenCalledWith('[api] silent operation', {
+      operation: 'contact_unblock_request',
+      result: 'ignored_already_pending',
+    });
+  });
+
+  it('should reject a block that ended before the request was persisted', async () => {
+    contactRepository.requestUnblock.mockResolvedValue('not_blocked');
+
+    await expect(sut.execute(input)).rejects.toBeInstanceOf(
+      ContactNotBlockedError,
+    );
+  });
 
   it.each([false, 'reject'] as const)(
     'should not create an unblock request when the external record fails: %s',

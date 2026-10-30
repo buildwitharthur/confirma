@@ -35,7 +35,9 @@ export class UpdateAccountUseCase {
       throw new ValidationError('O nome da conta não pode ficar vazio.');
     }
 
+    // Intl também aceita deslocamentos como +03:00, que não são fusos IANA.
     try {
+      if (/^[+-]/.test(input.timezone)) throw new RangeError();
       new Intl.DateTimeFormat('en', { timeZone: input.timezone });
     } catch {
       throw new ValidationError('O fuso horário informado não é válido.');

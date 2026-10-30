@@ -3,9 +3,10 @@ import cookieParser from 'cookie-parser';
 import express from 'express';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-import { env } from '../env/index.js';
+import { NotFoundError } from '../../domain/errors/not-found.js';
+import { panelOrigins } from '../config/panel-origins.js';
 import { routes } from './routes.js';
-import { errorHandler } from './middlewares/errorHandler.js';
+import { errorHandler } from './middlewares/error-handler.middleware.js';
 
 const swaggerSpec = swaggerJSDoc({
   definition: {
@@ -30,6 +31,13 @@ const swaggerSpec = swaggerJSDoc({
           name: 'confirma_session',
           description: 'Cookie de sessão HttpOnly emitido pelo Confirma.',
         },
+        panelCommandHeader: {
+          type: 'apiKey',
+          in: 'header',
+          name: 'X-Requested-With',
+          description:
+            'Comandos autenticados exigem o valor XMLHttpRequest e um Origin permitido.',
+        },
       },
     },
   },
@@ -41,18 +49,13 @@ const swaggerSpec = swaggerJSDoc({
 
 const app = express();
 
+// O CORS vem primeiro para que erros do parser de JSON também cheguem legíveis ao painel.
+app.use(cors({ credentials: true, origin: panelOrigins }));
+
+// O limite de /v1 precisa rodar antes do parser geral, que ignora corpos já lidos.
+app.use('/v1', express.json({ limit: '64kb' }));
 app.use(express.json());
 app.use(cookieParser());
-
-app.use(
-  cors({
-    credentials: true,
-    origin:
-      env.NODE_ENV === 'development'
-        ? ['https://app.useconfirma.com.br', 'http://localhost:3000']
-        : 'https://app.useconfirma.com.br',
-  }),
-);
 
 app.get('/docs.json', (_request, response) => {
   return response.json(swaggerSpec);
@@ -60,6 +63,7 @@ app.get('/docs.json', (_request, response) => {
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use(routes);
+app.use((_request, _response, next) => next(new NotFoundError()));
 app.use(errorHandler);
 
 export { app };
