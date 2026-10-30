@@ -19,6 +19,9 @@ Cada módulo deve ficar em `src/modules/<modulo>/` e seguir, quando necessário,
     │   ├── controllers/
     │   ├── helpers/
     │   └── routes/
+    ├── validation/
+    │   └── zod/
+    │       └── schemas/
     └── repositories/
         └── prisma/
 ```
@@ -122,6 +125,9 @@ Controllers ficam em `infrastructure/http/controllers/` e são arrow functions.
 
 - O controller valida entrada, traduz dados HTTP e chama um use case.
 - A validação deve usar `dataValidation` com schemas Zod estritos.
+- Schemas específicos de um módulo ficam em `infrastructure/validation/zod/schemas/`. O arquivo deve ter nome descritivo da operação, como `create-appointment.schema.ts`, e exportar um schema como `createAppointmentBodySchema`.
+- Mantenha os schemas Zod enxutos e focados no formato da entrada. Não extraia schemas genéricos para `common` sem repetição real entre módulos.
+- Use `parsedBody`, `parsedQuery` e `parsedParams` para os dados retornados por `dataValidation`.
 - Objetos desconhecidos devem ser rejeitados.
 - O controller instancia o use case e os adapters concretos necessários para aquela requisição.
 - O controller não decide transições ou regras de negócio.
@@ -131,9 +137,7 @@ Controllers ficam em `infrastructure/http/controllers/` e são arrow functions.
 Exemplo de validação:
 
 ```ts
-const bodySchema = z.object({ value: z.string().min(1) }).strict();
-
-const body = dataValidation(bodySchema, request.body);
+const parsedBody = dataValidation(createExampleBodySchema, request.body);
 ```
 
 Controllers instanciam os adapters concretos e os passam ao construtor do use case pelas interfaces de domínio. Não use `app.locals` para compor essas dependências. Interfaces não podem ser instanciadas diretamente.
