@@ -6,6 +6,7 @@ import { siteInvitationRoutes } from '../../../modules/invites/infrastructure/ht
 import { contactRoutes } from '../../../modules/contacts/infrastructure/http/routes/contact.routes.js';
 import { requireAccountAccessMiddleware } from './middlewares/require-account-access.middleware.js';
 import { integrationRoutes } from '../../../modules/integrations/infrastructure/http/routes/integration.routes.js';
+import { appointmentRoutes } from '../../../modules/appointments/infrastructure/http/routes/appointment.routes.js';
 
 const routes = Router();
 
@@ -41,6 +42,7 @@ routes.get('/health', (_, res) => {
   return res.status(200).json({ ok: 'true' });
 });
 
+routes.use('/v1', appointmentRoutes);
 routes.use('/auth', authRoutes);
 routes.use('/panel', authenticateSessionMiddleware);
 routes.use('/panel', requireAccountAccessMiddleware);
