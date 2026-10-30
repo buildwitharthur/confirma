@@ -1,6 +1,6 @@
 # Agendamentos
 
-As rotas `/v1` usam `Authorization: Bearer <api_key>`. O corpo máximo é 64 KiB; o limite é 60 requisições por minuto por chave. Erros usam `{"code":"...","message":"..."}`.
+As rotas `/v1` usam `Authorization: Bearer <api_key>`. Chave válida de conta que não está ativa recebe `403 account_inactive` em todas elas. O corpo máximo é 64 KiB; o limite é 60 requisições por minuto por chave. Erros usam `{"code":"...","message":"..."}`.
 
 ### POST /appointments
 
@@ -29,7 +29,7 @@ Obrigatórios: `external_id` (1–191 caracteres), `contact.name` (1–160), `co
 
 **Resposta:** `201` para criação e `200` para repetição idempotente. Exemplo: `{"id":"<UUID>","external_id":"agenda-8472","status":"scheduled","failure_reason":null,"canceled_by":null,"scheduled_at":"2026-10-20T17:00:00Z","timezone":"America/Sao_Paulo","test":false,"delivery_uncertain":false,"created_at":"2026-10-19T12:00:00Z","updated_at":"2026-10-19T12:00:00Z"}`.
 
-**Erros:** `401 unauthorized`, `409 idempotency_conflict` ou `account_not_configured`, `413 bad_request`, `422 validation_error`, `429 too_many_requests` (inclui `Retry-After`) ou `quota_exceeded`, `503 service_unavailable`.
+**Erros:** `401 unauthorized`, `403 account_inactive`, `409 idempotency_conflict` ou `account_not_configured`, `413 bad_request`, `422 validation_error`, `429 too_many_requests` (inclui `Retry-After`) ou `quota_exceeded`, `503 service_unavailable`.
 
 ### GET /appointments/{external_id}
 
@@ -47,7 +47,7 @@ Obrigatórios: `external_id` (1–191 caracteres), `contact.name` (1–160), `co
 
 **Resposta:** `200` com os campos do agendamento e `events` (lista com `id`, `sequence`, `type`, `resulting_status`, `reason`, `actor`, `occurred_at`) e `webhook_delivery` (`status`, `event_id`, `automatic_attempts`, `last_attempt_at`).
 
-**Erros:** `401 unauthorized`, `404 appointment_not_found`, `429 too_many_requests`.
+**Erros:** `401 unauthorized`, `403 account_inactive`, `404 appointment_not_found`, `429 too_many_requests`.
 
 ### POST /appointments/{external_id}/cancel
 
@@ -68,7 +68,7 @@ Obrigatórios: `external_id` (1–191 caracteres), `contact.name` (1–160), `co
 
 **Resposta:** `200` com o recurso `Appointment`; `status` é `canceled` e `canceled_by` é `system`.
 
-**Erros:** `401 unauthorized`, `404 appointment_not_found`, `409 appointment_started`, `429 too_many_requests`, `503 service_unavailable`.
+**Erros:** `401 unauthorized`, `403 account_inactive`, `404 appointment_not_found`, `409 appointment_started`, `429 too_many_requests`, `503 service_unavailable`.
 
 ### DELETE /appointments/{external_id}
 
@@ -89,7 +89,7 @@ Obrigatórios: `external_id` (1–191 caracteres), `contact.name` (1–160), `co
 
 **Resposta:** `204` quando concluída ou sem dado correspondente. `202` quando uma chamada iniciada ainda pode terminar, com `{"status":"pending","external_call_may_complete":true}`. A resposta não revela se o registro existia.
 
-**Erros:** `401 unauthorized`, `429 too_many_requests`, `503 service_unavailable`.
+**Erros:** `401 unauthorized`, `403 account_inactive`, `429 too_many_requests`, `503 service_unavailable`.
 
 ## Rotas do painel
 

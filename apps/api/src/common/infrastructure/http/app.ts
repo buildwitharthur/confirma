@@ -38,6 +38,12 @@ const swaggerSpec = swaggerJSDoc({
           description:
             'Comandos autenticados exigem o valor XMLHttpRequest e um Origin permitido.',
         },
+        apiKeyBearer: {
+          type: 'http',
+          scheme: 'bearer',
+          description:
+            'Chave de API enviada em Authorization: Bearer <api_key>.',
+        },
       },
     },
   },
@@ -52,9 +58,6 @@ const app = express();
 // O CORS vem primeiro para que erros do parser de JSON também cheguem legíveis ao painel.
 app.use(cors({ credentials: true, origin: panelOrigins }));
 
-// O limite de /v1 precisa rodar antes do parser geral, que ignora corpos já lidos.
-app.use('/v1', express.json({ limit: '64kb' }));
-app.use(express.json());
 app.use(cookieParser());
 
 app.get('/docs.json', (_request, response) => {

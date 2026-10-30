@@ -70,7 +70,7 @@ O procedimento completo, com diretórios de execução, banco alternativo e limp
 - Depois de implementar cada feature, execute na raiz `pnpm install --frozen-lockfile`, `pnpm check` e `pnpm build`, além dos testes. O CI em `.github/workflows/ci.yml` executa instalação, `pnpm test`, check e build; o script da API aplica migrations antes do Vitest. Consulte o workflow quando ele mudar.
 - `pnpm check` executa lint, formatação e os scripts de typecheck disponíveis. A API verifica tipos com `pnpm build` (`tsc`); não conclua que seus tipos passaram apenas pelo check.
 - Antes de concluir cada solicitação de alteração, execute também `pnpm test`. Se os testes não puderem ser executados, informe o motivo e não declare a validação como concluída.
-- Na API, escreva testes unitários de use cases e testes de integração dos repositórios Prisma, seguindo os exemplos em `apps/api/src/AGENTS.md`. Cubra concorrência, idempotência e falhas onde se aplicam. O padrão atual não inclui testes de rotas.
+- Na API, escreva testes unitários de use cases e testes de integração dos repositórios Prisma, seguindo os exemplos em `apps/api/src/AGENTS.md`. Cubra concorrência, idempotência e falhas onde se aplicam. Somente use cases e repositórios têm testes; não crie testes de middlewares, providers, configs, schemas, controllers ou rotas.
 - Teste comportamento, não a implementação.
 - Não crie testes artificiais para mudanças apenas de documentação, imports ou formatação. Execute as verificações exigidas e mantenha a cobertura existente; novos testes devem proteger um comportamento relevante.
 - Revise `git diff --check` e o diff final. Preserve alterações preexistentes do usuário e não formate o repositório inteiro para corrigir um arquivo.

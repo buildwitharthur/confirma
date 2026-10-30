@@ -17,6 +17,7 @@ export const appointmentRoutes = Router();
  *   post:
  *     summary: Recebe e valida um agendamento
  *     tags: [Appointments]
+ *     security: [{ apiKeyBearer: [] }]
  *     requestBody:
  *       required: true
  *       content:
@@ -64,6 +65,18 @@ export const appointmentRoutes = Router();
  *         description: Dados recebidos e validados.
  *       400:
  *         description: Corpo malformado.
+ *       401:
+ *         description: Credenciais ausentes, inválidas ou revogadas.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       403:
+ *         description: Chave válida de uma conta que não está ativa (account_inactive).
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  *       413:
  *         description: Corpo acima de 64 KiB.
  *       422:

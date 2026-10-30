@@ -13,6 +13,7 @@ describe('LookupContactUseCase unit tests', () => {
   const now = new Date('2026-10-27T12:00:00.000Z');
 
   const accountRepository = {
+    findById: vi.fn<AccountRepository['findById']>(),
     findByUserId: vi.fn<AccountRepository['findByUserId']>(),
     update: vi.fn<AccountRepository['update']>(),
     findMessageTemplate: vi.fn<AccountRepository['findMessageTemplate']>(),
@@ -20,6 +21,7 @@ describe('LookupContactUseCase unit tests', () => {
     listApiKeys: vi.fn<AccountRepository['listApiKeys']>(),
     createApiKey: vi.fn<AccountRepository['createApiKey']>(),
     findApiKey: vi.fn<AccountRepository['findApiKey']>(),
+    findApiKeysByPrefix: vi.fn<AccountRepository['findApiKeysByPrefix']>(),
     revokeApiKey: vi.fn<AccountRepository['revokeApiKey']>(),
     getCurrentUsage: vi.fn<AccountRepository['getCurrentUsage']>(),
     requestDeletion: vi.fn<AccountRepository['requestDeletion']>(),

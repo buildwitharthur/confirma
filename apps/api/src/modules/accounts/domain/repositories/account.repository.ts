@@ -13,6 +13,7 @@ export type UpdateAccountInput = Pick<
 >;
 
 export interface AccountRepository {
+  findById(accountId: string): Promise<AccountModel | null>;
   findByUserId(accountUserId: string): Promise<AccountModel | null>;
   update(accountId: string, input: UpdateAccountInput): Promise<AccountModel>;
   findMessageTemplate(accountId: string): Promise<MessageTemplateModel | null>;
@@ -27,6 +28,7 @@ export interface AccountRepository {
     secretHash: string;
   }): Promise<ApiKeyModel>;
   findApiKey(accountId: string, keyId: string): Promise<ApiKeyModel | null>;
+  findApiKeysByPrefix(prefix: string): Promise<ApiKeyModel[]>;
   revokeApiKey(keyId: string, revokedAt: Date): Promise<void>;
   getCurrentUsage(
     accountId: string,

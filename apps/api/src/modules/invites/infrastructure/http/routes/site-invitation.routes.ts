@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import { requireJsonContentMiddleware } from '../../../../../common/infrastructure/http/middlewares/require-json-content.middleware.js';
+import { requireJsonContentMiddleware } from '../middlewares/require-json-content.middleware.js';
 import { requestInvitationController } from '../controllers/request-invitation.controller.js';
 
 export const siteInvitationRoutes = Router();

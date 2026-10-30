@@ -38,6 +38,23 @@ describe('AccountPrismaRepository integration tests', () => {
     sut = new AccountPrismaRepository(prisma);
   });
 
+  it('should return null when the account id does not exist', async () => {
+    expect(await sut.findById(randomUUID())).toBeNull();
+  });
+
+  it('should find an account by id with its current status', async () => {
+    await sut.requestDeletion(accountId, now);
+
+    expect(await sut.findById(accountId)).toMatchObject({
+      id: accountId,
+      status: 'deleting',
+    });
+    expect(await sut.findById(otherAccountId)).toMatchObject({
+      id: otherAccountId,
+      status: 'active',
+    });
+  });
+
   it('should return null when the user has no account', async () => {
     expect(await sut.findByUserId(randomUUID())).toBeNull();
   });
@@ -209,6 +226,53 @@ describe('AccountPrismaRepository integration tests', () => {
     expect(await sut.findApiKey(accountId, key.id)).toEqual(key);
     expect(await sut.findApiKey(otherAccountId, key.id)).toBeNull();
     expect(await sut.findApiKey(accountId, randomUUID())).toBeNull();
+  });
+
+  it('should return no candidates for an unknown prefix', async () => {
+    await sut.createApiKey({
+      accountId,
+      prefix: 'cf_live_abc',
+      secretHash: 'aabb',
+    });
+
+    expect(await sut.findApiKeysByPrefix('cf_live_xyz')).toEqual([]);
+  });
+
+  it('should return every candidate sharing the exact prefix, including revoked keys of any account', async () => {
+    const active = await sut.createApiKey({
+      accountId,
+      prefix: 'cf_live_abc',
+      secretHash: 'aabb',
+    });
+
+    const fromOtherAccount = await sut.createApiKey({
+      accountId: otherAccountId,
+      prefix: 'cf_live_abc',
+      secretHash: 'ccdd',
+    });
+
+    const revoked = await sut.createApiKey({
+      accountId,
+      prefix: 'cf_live_abc',
+      secretHash: 'eeff',
+    });
+    await sut.revokeApiKey(revoked.id, now);
+    await sut.createApiKey({
+      accountId,
+      prefix: 'cf_live_abcd',
+      secretHash: '0011',
+    });
+
+    const result = await sut.findApiKeysByPrefix('cf_live_abc');
+
+    expect(result).toHaveLength(3);
+    expect(result).toEqual(
+      expect.arrayContaining([
+        active,
+        fromOtherAccount,
+        { ...revoked, revokedAt: now },
+      ]),
+    );
   });
 
   it('should revoke a key once while preserving the original timestamp and other keys', async () => {

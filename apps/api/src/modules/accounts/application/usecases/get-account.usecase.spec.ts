@@ -8,6 +8,7 @@ describe('GetAccountUseCase unit tests', () => {
   let sut: GetAccountUseCase;
 
   const accountRepository = {
+    findById: vi.fn<AccountRepository['findById']>(),
     findByUserId: vi.fn<AccountRepository['findByUserId']>(),
     update: vi.fn<AccountRepository['update']>(),
     findMessageTemplate: vi.fn<AccountRepository['findMessageTemplate']>(),
@@ -15,6 +16,7 @@ describe('GetAccountUseCase unit tests', () => {
     listApiKeys: vi.fn<AccountRepository['listApiKeys']>(),
     createApiKey: vi.fn<AccountRepository['createApiKey']>(),
     findApiKey: vi.fn<AccountRepository['findApiKey']>(),
+    findApiKeysByPrefix: vi.fn<AccountRepository['findApiKeysByPrefix']>(),
     revokeApiKey: vi.fn<AccountRepository['revokeApiKey']>(),
     getCurrentUsage: vi.fn<AccountRepository['getCurrentUsage']>(),
     requestDeletion: vi.fn<AccountRepository['requestDeletion']>(),

@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from 'express';
 
-import { AppError } from '../../../domain/errors/app-error.js';
+import { AppError } from '../../../../../common/domain/errors/app-error.js';
 
 export function requireJsonContentMiddleware(
   request: Request,

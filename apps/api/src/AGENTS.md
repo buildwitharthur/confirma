@@ -20,6 +20,7 @@ Cada módulo deve ficar em `src/modules/<modulo>/` e seguir, quando necessário,
     ├── http/
     │   ├── controllers/
     │   ├── helpers/
+    │   ├── middlewares/
     │   └── routes/
     ├── providers/
     ├── validation/
@@ -63,6 +64,7 @@ Leia também o `AGENTS.md` da raiz para simplicidade, legibilidade e construçã
 | `modules/<modulo>/infrastructure/http/routes/`            | Métodos e caminhos associados a controllers e middlewares, com Swagger                   |
 | `modules/<modulo>/infrastructure/http/controllers/`       | Validar, compor dependências, traduzir entrada e responder HTTP                          |
 | `modules/<modulo>/infrastructure/http/helpers/`           | Tipos e funções que conhecem o transporte HTTP                                           |
+| `modules/<modulo>/infrastructure/http/middlewares/`       | Middlewares úteis somente às rotas daquele módulo                                        |
 | `modules/<modulo>/infrastructure/validation/zod/schemas/` | Schemas enxutos de body, query e params, nomeados pela operação                          |
 | `modules/<modulo>/infrastructure/repositories/prisma/`    | Implementações de persistência, mapeamento e garantias atômicas                          |
 | `modules/<modulo>/infrastructure/providers/`              | Adaptadores dos contratos locais; por exemplo, Evolution API em integrations             |
@@ -73,7 +75,7 @@ Leia também o `AGENTS.md` da raiz para simplicidade, legibilidade e construçã
 | `common/infrastructure/crypto/`                           | Primitivas técnicas compartilhadas pelos adaptadores, quando houver necessidade concreta |
 | `common/infrastructure/config/`                           | Configurações e fallbacks compartilhados                                                 |
 | `common/infrastructure/env/`                              | Carregamento e validação das variáveis de ambiente                                       |
-| `common/infrastructure/http/`                             | Servidor, app Express, composição de rotas e middlewares transversais                    |
+| `common/infrastructure/http/`                             | Servidor, app Express, composição de rotas e middlewares usados por mais de um módulo    |
 | `common/infrastructure/prisma/`                           | Schema, migrations, configuração, client gerado e conexão                                |
 | `common/infrastructure/validation/zod/`                   | Executor compartilhado `dataValidation`; schemas específicos ficam no módulo             |
 
@@ -236,6 +238,7 @@ A interface fica disponível em `GET /docs` e o documento OpenAPI em `GET /docs.
 ## Middlewares HTTP e acesso à conta
 
 - Middlewares são associados às rotas HTTP ou aos roteadores que protegem; não são chamados por use cases.
+- Um middleware útil somente a um módulo fica em `modules/<modulo>/infrastructure/http/middlewares/`. Ele só fica em `common/infrastructure/http/middlewares/` quando é usado por mais de um módulo ou pela composição geral da aplicação.
 - Para rotas de sessão, aplique `authenticateSessionMiddleware` antes do controller.
 - Para rotas do painel, aplique `authenticateSessionMiddleware` primeiro e `requireAccountAccessMiddleware` em seguida, antes dos roteadores dos módulos.
 - Mantenha a validação de sessão em `common/infrastructure/http/middlewares/` porque ela é compartilhada por Auth e pelo painel.
@@ -302,7 +305,7 @@ Os testes ficam próximos do código que verificam, com o sufixo `.spec.ts`. Imp
 - Adicione ou ajuste testes ao mudar regras de use cases e operações de repositórios. Cubra sucesso, falhas previstas, limites relevantes e isolamento entre contas.
 - Para bugs, acrescente um cenário de regressão que reproduza o comportamento incorreto, quando testável.
 - Teste idempotência e concorrência com operações concorrentes reais no repositório quando o contrato exigir; mocks não comprovam atomicidade do banco.
-- Somente use cases e repositórios Prisma têm testes. Não crie specs para middlewares, schemas, providers, controllers ou rotas. Evite apenas repetir chamadas simples de bibliotecas nas asserções.
+- Somente use cases e repositórios Prisma têm testes. Não crie specs para middlewares, schemas, providers, configs, controllers ou rotas. Evite apenas repetir chamadas simples de bibliotecas nas asserções.
 - Refatorações de organização usam a suíte existente; acrescente casos se houver comportamento relevante sem proteção. Documentação, imports e formatação não precisam de novos testes artificiais.
 - Separe preparação, execução e verificação com linhas em branco. Use valores fictícios e relógio controlado quando necessário. Não envie e-mails ou mensagens reais nos testes.
 - Verifique resultado, erro, estado persistido e efeitos observáveis. Não teste métodos privados, ordem incidental de chamadas ou SQL gerado pelo ORM.

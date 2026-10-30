@@ -60,6 +60,14 @@ function toApiKeyModel(apiKey: {
 export class AccountPrismaRepository implements AccountRepository {
   constructor(private readonly client: PrismaClient = prisma) {}
 
+  async findById(accountId: string): Promise<AccountModel | null> {
+    const account = await this.client.account.findUnique({
+      where: { id: accountId },
+    });
+
+    return account ? toAccountModel(account) : null;
+  }
+
   async findByUserId(accountUserId: string): Promise<AccountModel | null> {
     const account = await this.client.account.findUnique({
       where: { accountUserId },
@@ -138,6 +146,14 @@ export class AccountPrismaRepository implements AccountRepository {
     });
 
     return apiKey ? toApiKeyModel(apiKey) : null;
+  }
+
+  async findApiKeysByPrefix(prefix: string): Promise<ApiKeyModel[]> {
+    const apiKeys = await this.client.apiKey.findMany({
+      where: { prefix },
+    });
+
+    return apiKeys.map(toApiKeyModel);
   }
 
   async revokeApiKey(keyId: string, revokedAt: Date): Promise<void> {

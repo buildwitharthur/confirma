@@ -3,7 +3,6 @@ import { randomBytes } from '@noble/ciphers/utils.js';
 
 import type { SecretProtector } from '../../domain/providers/secret-protector.provider.js';
 
-const keyLength = 32;
 const nonceLength = 24;
 const authTagLength = 16;
 
