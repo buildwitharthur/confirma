@@ -233,6 +233,8 @@ O ORM é Prisma 7 com PostgreSQL e driver adapter `@prisma/adapter-pg`. Mantenha
 
 ## Testes
 
+Para executar a validação da API, a partir de `apps/api`, rode `pnpm run pre:test`, depois `pnpm test` e, ao final, `pnpm run post:test`. O `pre:test` inicia o PostgreSQL; o `test` aplica as migrations e executa os testes; o `post:test` para e remove o container. Se os testes falharem, execute o `post:test` manualmente.
+
 Os testes ficam próximos do código que verificam, com o sufixo `.spec.ts`. Importe explicitamente os recursos do Vitest e use descrições de cenários em inglês.
 
 Os exemplos abaixo usam nomes genéricos para ensinar a estrutura. `ExampleModel`, `ExampleRepository`, `FindExampleUseCase`, `ExamplePrismaRepository` e a tabela `examples` são ilustrativos; não representam entidades ou contratos novos do produto. Ao aplicar o padrão, use os contratos reais do módulo.

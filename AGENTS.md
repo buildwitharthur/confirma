@@ -44,6 +44,8 @@ O Confirma é um SaaS B2B que confirma agendamentos por WhatsApp. Sistemas exter
 
 ## Validação
 
+Para validar a API, execute a partir de `apps/api`, nesta ordem: `pnpm run pre:test`, `pnpm test` e `pnpm run post:test`. O primeiro comando inicia o PostgreSQL de testes; `pnpm test` aplica as migrations e executa o Vitest; o último para e remove o container. Se `pnpm test` falhar, execute `pnpm run post:test` manualmente antes de concluir.
+
 - Depois de implementar cada feature, execute as verificações do CI definidas em `.github/workflows/ci.yml`: `pnpm install --frozen-lockfile`, `pnpm check` e `pnpm build`. Confirme que passaram antes do commit. O CI atual não executa testes nem migrations. Se uma verificação não puder ser executada, informe o motivo e não declare que o CI está passando.
 - Antes de concluir cada solicitação de alteração, execute também `pnpm test`. Se os testes não puderem ser executados, informe o motivo e não declare a validação como concluída.
 - Na API, escreva testes unitários de use cases e testes de integração dos repositórios Prisma, seguindo os exemplos em `apps/api/src/AGENTS.md`. Cubra concorrência, idempotência e falhas onde se aplicam. O padrão atual não inclui testes de rotas.
