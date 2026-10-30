@@ -6,4 +6,5 @@ export type GeneratedApiKey = {
 
 export interface ApiKeyProvider {
   generate(): GeneratedApiKey;
+  verify(secret: string, secretHash: string): boolean;
 }

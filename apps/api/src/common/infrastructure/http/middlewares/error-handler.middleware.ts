@@ -2,8 +2,12 @@
 import { AppError } from '../../../domain/errors/app-error.js';
 import { BadRequestError } from '../../../domain/errors/bad-request.js';
 
-// O express.json falha antes dos controllers; o contrato trata essas falhas como bad_request.
-function toBodyParserError(err: Error): AppError | null {
+// O express.json e a decodificação do caminho falham antes dos controllers; o contrato trata essas falhas como bad_request.
+function toRequestParsingError(err: Error): AppError | null {
+  if (err instanceof URIError) {
+    return new BadRequestError('O caminho da requisição é inválido.');
+  }
+
   const type = 'type' in err ? err.type : undefined;
 
   if (type === 'entity.parse.failed') {
@@ -38,7 +42,7 @@ export const errorHandler = (
     return next(err);
   }
 
-  const appError = err instanceof AppError ? err : toBodyParserError(err);
+  const appError = err instanceof AppError ? err : toRequestParsingError(err);
 
   if (appError) {
     console.warn('[api] handled application error', {

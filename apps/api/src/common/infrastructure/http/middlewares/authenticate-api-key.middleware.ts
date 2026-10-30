@@ -3,8 +3,10 @@ import { NextFunction, Request, Response } from 'express';
 import { AccountInactiveError } from '../../../domain/errors/account-inactive.js';
 import { UnauthorizedError } from '../../../domain/errors/unauthorized.js';
 import { AccountPrismaRepository } from '../../../../modules/accounts/infrastructure/repositories/prisma/account-prisma.repository.js';
-import { extractApiKeyPrefix } from '../../../../modules/accounts/infrastructure/providers/crypto-api-key.provider.js';
-import { CryptoApiKeyVerifier } from '../../../../modules/accounts/infrastructure/providers/crypto-api-key-verifier.js';
+import {
+  CryptoApiKeyProvider,
+  extractApiKeyPrefix,
+} from '../../../../modules/accounts/infrastructure/providers/crypto-api-key.provider.js';
 
 const BEARER_CREDENTIAL = /^Bearer (\S+)$/;
 
@@ -32,11 +34,11 @@ export async function authenticateApiKeyMiddleware(
     const candidates = await accountRepository.findApiKeysByPrefix(prefix);
 
     // O prefixo não é único: somente o hash identifica a chave entre as candidatas.
-    const apiKeyVerifier = new CryptoApiKeyVerifier();
+    const apiKeyProvider = new CryptoApiKeyProvider();
     const apiKey = candidates.find(
       (candidate) =>
         !candidate.revokedAt &&
-        apiKeyVerifier.verify(secret, candidate.secretHash),
+        apiKeyProvider.verify(secret, candidate.secretHash),
     );
     if (!apiKey) {
       throw invalidCredentials;

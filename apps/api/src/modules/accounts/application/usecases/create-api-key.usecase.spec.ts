@@ -40,6 +40,7 @@ describe('CreateApiKeyUseCase unit tests', () => {
 
   const apiKeyProvider = {
     generate: vi.fn<ApiKeyProvider['generate']>(),
+    verify: vi.fn<ApiKeyProvider['verify']>(),
   } satisfies ApiKeyProvider;
 
   beforeEach(() => {

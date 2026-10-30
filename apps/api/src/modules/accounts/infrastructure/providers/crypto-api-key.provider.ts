@@ -23,4 +23,11 @@ export class CryptoApiKeyProvider implements ApiKeyProvider {
 
     return { secret, prefix, secretHash };
   }
+
+  verify(secret: string, secretHash: string): boolean {
+    return NodeCrypto.safeEqual(
+      NodeCrypto.sha256(secret),
+      Buffer.from(secretHash, 'hex'),
+    );
+  }
 }

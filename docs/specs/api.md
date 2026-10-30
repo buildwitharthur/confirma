@@ -92,7 +92,7 @@ Toda resposta de erro usa somente `code` e `message`:
 }
 ```
 
-Use códigos HTTP conhecidos: `bad_request`, `unauthorized`, `forbidden`, `not_found`, `conflict`, `validation_error`, `too_many_requests`, `internal_error` e `service_unavailable`. Mantenha código específico de negócio somente quando o cliente precisar agir de forma diferente, como `invitation_invalid` ou `idempotency_conflict`. Não inclua identificadores de log no corpo HTTP.
+Use códigos HTTP conhecidos: `bad_request`, `unauthorized`, `forbidden`, `not_found`, `conflict`, `validation_error`, `too_many_requests`, `internal_error` e `service_unavailable`. Mantenha código específico de negócio somente quando o cliente precisar agir de forma diferente, como `invitation_invalid` ou `idempotency_conflict`. Não inclua identificadores de log no corpo HTTP. Em qualquer rota, um caminho com codificação inválida retorna `400 bad_request`.
 
 ## Situação dos contratos
 
