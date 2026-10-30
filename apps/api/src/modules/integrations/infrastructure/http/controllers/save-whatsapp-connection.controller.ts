@@ -3,7 +3,7 @@ import type { Response } from 'express';
 import { ServiceUnavailableError } from '../../../../../common/domain/errors/service-unavailable.js';
 import { env } from '../../../../../common/infrastructure/env/index.js';
 import { dataValidation } from '../../../../../common/infrastructure/validation/zod/data-validation.js';
-import { AesGcmSecretProtector } from '../../providers/aes-gcm-secret-protector.js';
+import { XChaChaSecretProtector } from '../../providers/xchacha-secret-protector.js';
 import { SaveWhatsAppConnectionUseCase } from '../../../application/usecases/save-whatsapp-connection.usecase.js';
 import { WhatsAppConnectionPrismaRepository } from '../../repositories/prisma/whatsapp-connection-prisma.repository.js';
 import { EvolutionApiWhatsAppProvider } from '../../providers/evolution-api-whatsapp.provider.js';
@@ -27,7 +27,7 @@ export const saveWhatsAppConnectionController = async (
   const result = await new SaveWhatsAppConnectionUseCase(
     new WhatsAppConnectionPrismaRepository(),
     new EvolutionApiWhatsAppProvider(env.EVOLUTION_API_URL),
-    new AesGcmSecretProtector(env.SECRET_ENCRYPTION_KEY),
+    new XChaChaSecretProtector(env.SECRET_ENCRYPTION_KEY),
   ).execute({
     accountId: request.accountId!,
     instanceIdentifier: parsedBody.instance_identifier,
