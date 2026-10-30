@@ -26,6 +26,26 @@ O Confirma é um SaaS B2B que confirma agendamentos por WhatsApp. Sistemas exter
 4. Liste os arquivos afetados e os impactos em outras partes do sistema.
 5. Para tarefas complexas, apresente um plano breve antes de executar.
 
+## Simplicidade e legibilidade
+
+- Implemente a solução mais simples que satisfaça os critérios de aceite e as garantias do contrato. Simplicidade não autoriza remover validação, isolamento de conta, segurança ou atomicidade exigida.
+- Prefira código direto, nomes descritivos e funções pequenas com responsabilidade clara. Uma função local não precisa de classe, interface, factory ou pasta própria.
+- Crie abstrações quando houver necessidade concreta: dependência substituível, duplicação real ou responsabilidade independente. Não antecipe filas, caches, retries, frameworks internos ou camadas genéricas para uso futuro.
+- Mantenha código específico no módulo que o usa. Compartilhe somente o que já tem consumidores ou responsabilidade transversal reais.
+- Deixe uma linha em branco entre funções e métodos e entre etapas lógicas de uma função. Não acrescente linhas vazias entre todas as instruções.
+- Comente os blocos que precisem de contexto, explicando sua finalidade, decisões e garantias. Não descreva cada atribuição nem repita o nome de uma função. Atualize comentários quando o comportamento mudar.
+- Siga ESLint, Prettier e TypeScript existentes. As convenções de espaçamento entre funções e de comentários também fazem parte da revisão humana; não estão todas automatizadas pelo lint.
+
+## Como construir uma feature
+
+1. Transforme o pedido em critérios observáveis: entrada, saída, erros, permissões, efeitos e limites. Delimite entregas incrementais e registre o que ficará pendente.
+2. Consulte as especificações e o guia do pacote. Para a API, leia `apps/api/src/AGENTS.md`; para o painel, `apps/panel/AGENTS.md`.
+3. Siga o caminho do dado no código e identifique os arquivos necessários. Use as ferramentas existentes; crie apenas as pastas que a implementação realmente utilizar.
+4. Implemente uma fatia pequena e verificável. Na API: contrato de entrada, operação de aplicação, persistência/adaptadores necessários e composição HTTP. No painel: chamada contratada, estado e interface do protótipo.
+5. Adicione ou ajuste testes para o comportamento alterado. Em bugs, reproduza a falha com um teste quando houver lógica testável. Refatorações devem preservar resultados, erros e formatos persistidos.
+6. Execute as verificações abaixo, revise o diff e atualize a documentação afetada. Em entregas provisórias autorizadas, explicite as limitações; não apresente o contrato completo como implementado.
+7. Entregue um resumo do resultado, verificações executadas e pendências. Não faça commit automaticamente.
+
 ## Regras de implementação
 
 - **Escopo:** faça somente o que a tarefa pede, em alterações pequenas e verificáveis. Não refatore partes sem relação nem crie abstrações para possibilidades futuras.
@@ -44,13 +64,17 @@ O Confirma é um SaaS B2B que confirma agendamentos por WhatsApp. Sistemas exter
 
 ## Validação
 
-Para validar a API, execute a partir de `apps/api`, nesta ordem: `pnpm run pre:test`, `pnpm test` e `pnpm run post:test`. O primeiro comando inicia o PostgreSQL de testes; `pnpm test` aplica as migrations e executa o Vitest; o último para e remove o container. Se `pnpm test` falhar, execute `pnpm run post:test` manualmente antes de concluir.
+O procedimento completo, com diretórios de execução, banco alternativo e limpeza após falhas, está em `docs/development/validation.md`.
 
-- Depois de implementar cada feature, execute as verificações do CI definidas em `.github/workflows/ci.yml`: `pnpm install --frozen-lockfile`, `pnpm check` e `pnpm build`. Confirme que passaram antes do commit. O CI atual não executa testes nem migrations. Se uma verificação não puder ser executada, informe o motivo e não declare que o CI está passando.
+- Depois de implementar cada feature, execute na raiz `pnpm install --frozen-lockfile`, `pnpm check` e `pnpm build`, além dos testes. O CI em `.github/workflows/ci.yml` executa instalação, `pnpm test`, check e build; o script da API aplica migrations antes do Vitest. Consulte o workflow quando ele mudar.
+- `pnpm check` executa lint, formatação e os scripts de typecheck disponíveis. A API verifica tipos com `pnpm build` (`tsc`); não conclua que seus tipos passaram apenas pelo check.
 - Antes de concluir cada solicitação de alteração, execute também `pnpm test`. Se os testes não puderem ser executados, informe o motivo e não declare a validação como concluída.
 - Na API, escreva testes unitários de use cases e testes de integração dos repositórios Prisma, seguindo os exemplos em `apps/api/src/AGENTS.md`. Cubra concorrência, idempotência e falhas onde se aplicam. O padrão atual não inclui testes de rotas.
 - Teste comportamento, não a implementação.
+- Não crie testes artificiais para mudanças apenas de documentação, imports ou formatação. Execute as verificações exigidas e mantenha a cobertura existente; novos testes devem proteger um comportamento relevante.
+- Revise `git diff --check` e o diff final. Preserve alterações preexistentes do usuário e não formate o repositório inteiro para corrigir um arquivo.
 - Não declare testes ou verificações que não executou.
+- Aprovação local não comprova o resultado remoto do CI. Informe falhas, bloqueios e uso de cache quando relevante; não declare validação completa se algum comando obrigatório não foi executado.
 - Não altere regras de lint, tipos ou formatação para esconder erros.
 
 ## Autonomia

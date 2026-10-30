@@ -14,6 +14,8 @@ Não invente rotas, campos, estados, transições, permissões, regras ou respos
 
 ## Organização atual
 
+Siga também os padrões de simplicidade e legibilidade do `AGENTS.md` da raiz: uma linha em branco entre funções, comentários que expliquem a finalidade dos blocos e extrações somente quando melhorarem a leitura ou atenderem a reuso concreto. As pastas de providers e schemas da API não são um padrão a copiar para o painel; mantenha as responsabilidades locais descritas abaixo.
+
 ```text
 src/
 ├── common/
@@ -245,6 +247,8 @@ O campo `name` é ilustrativo. Na feature real, respeite os campos, limites, men
 `screen.tsx` compõe o formulário e mantém o título, a descrição e a estrutura visual da tela. O formulário não faz chamadas HTTP diretamente; a operação fica em `http/` e a orquestração em um hook quando necessário. Não extraia elementos estáticos para componentes sem uma responsabilidade própria.
 
 ## Validação
+
+O procedimento comum está em `docs/development/validation.md`. Defina critérios de aceite a partir do contrato e do protótipo e verifique a interação, não apenas o build: carregamento, vazio, erro, sucesso, teclado, foco e responsividade. O pacote ainda não possui script `test`; não declare testes automatizados de interface sem tê-los executado nem instale um framework de testes para uma alteração trivial.
 
 - Siga as verificações do `AGENTS.md` da raiz do repositório, incluindo os jobs de CI definidos em `.github/workflows/` antes de concluir uma feature.
 - Para mudanças no painel, execute também `pnpm --filter @confirma/panel typecheck` e `pnpm --filter @confirma/panel build`.

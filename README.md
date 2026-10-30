@@ -6,7 +6,7 @@ Monorepo do Confirma, serviço de confirmação de agendamentos por WhatsApp. A 
 
 - Node.js `>=24.20.0`
 - pnpm `12.3.4`
-- Docker, para o PostgreSQL local e as imagens das aplicações
+- Docker, para o PostgreSQL local e as imagens das aplicações; testes também podem usar um PostgreSQL exclusivo fornecido por outro meio
 
 O repositório utiliza pnpm como gerenciador exclusivo de pacotes.
 
@@ -32,9 +32,25 @@ pnpm format        # formata os arquivos com Prettier
 pnpm format:check  # verifica a formatação
 pnpm typecheck     # verifica os tipos
 pnpm check         # lint, formatação e tipos
+pnpm test          # testes dos workspaces; requer banco de testes disponível
 ```
 
-O CI executa `pnpm install --frozen-lockfile`, `pnpm check` e `pnpm build`. A suíte de testes da API está sendo reconstruída e ainda não integra o CI.
+O CI executa `pnpm install --frozen-lockfile`, `pnpm test`, `pnpm check` e `pnpm build`. Ele fornece PostgreSQL e configura `.env.test`; os testes da API aplicam migrations antes do Vitest. Os tipos da API são verificados pelo build (`tsc`).
+
+## Guias de desenvolvimento
+
+- [AGENTS.md](AGENTS.md): simplicidade, legibilidade, construção de features e critérios de conclusão.
+- [Padrões da API](apps/api/src/AGENTS.md): responsabilidade de cada pasta, dependências, schemas, providers e exemplos de testes.
+- [Padrões do painel](apps/panel/AGENTS.md): telas, componentes, formulários e integração com a API.
+- [Validação](docs/development/validation.md): comandos locais e de CI, banco de testes, limpeza e interpretação dos resultados.
+
+Implemente a menor solução que cumpra o contrato. Comece pelas especificações do módulo, defina critérios de aceite, siga os padrões locais e valide a mudança. Não crie infraestrutura antecipada para necessidades futuras.
+
+## Testes locais da API
+
+Configure `apps/api/.env.test` para um banco exclusivo de testes. Na pasta `apps/api`, `pnpm run pre:test` inicia o container local na porta `5433`; aguarde o PostgreSQL aceitar conexões antes de executar `pnpm test`. Ao terminar, mesmo em falhas, execute `pnpm run post:test`. Esses comandos são separados e não são hooks automáticos.
+
+Para um banco de testes já disponível, configure `.env.test` e execute `pnpm test`, sem Docker. Consulte o [procedimento completo](docs/development/validation.md): os testes de repositório limpam tabelas.
 
 ## Estrutura
 

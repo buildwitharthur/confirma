@@ -13,12 +13,15 @@ Cada módulo deve ficar em `src/modules/<modulo>/` e seguir, quando necessário,
 │   └── usecases/
 ├── domain/
 │   ├── models/
+│   ├── providers/
 │   └── repositories/
 └── infrastructure/
+    ├── config/
     ├── http/
     │   ├── controllers/
     │   ├── helpers/
     │   └── routes/
+    ├── providers/
     ├── validation/
     │   └── zod/
     │       └── schemas/
@@ -34,6 +37,8 @@ common/
 │   ├── errors/
 │   └── providers/
 └── infrastructure/
+    ├── config/
+    ├── crypto/
     ├── env/
     ├── http/
     ├── prisma/
@@ -43,6 +48,40 @@ common/
 ```
 
 Não coloque regra específica de um módulo em `common` apenas para facilitar o acesso. Extraia código para o compartilhado somente quando houver uma responsabilidade realmente transversal.
+
+## Responsabilidade e destino dos arquivos
+
+Leia também o `AGENTS.md` da raiz para simplicidade, legibilidade e construção de features. Crie apenas as pastas necessárias à tarefa. A tabela abaixo define a organização desejada; a centralização criptográfica e a movimentação dos providers existentes ainda precisam ser implementadas em tarefas próprias.
+
+| Pasta                                                     | Quando e por que usar                                                                    |
+| --------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| `modules/<modulo>/domain/models/`                         | Entidades e tipos do contrato, sem Express, Zod ou Prisma                                |
+| `modules/<modulo>/domain/repositories/`                   | Contratos de persistência consumidos pelo módulo                                         |
+| `modules/<modulo>/domain/providers/`                      | Contratos de capacidades técnicas ou externas específicas do módulo                      |
+| `modules/<modulo>/application/usecases/`                  | Uma operação de aplicação por classe: regras e coordenação dos contratos                 |
+| `modules/<modulo>/application/helpers/`                   | Funções de apoio às regras da aplicação, quando extrair melhorar leitura ou reuso        |
+| `modules/<modulo>/infrastructure/http/routes/`            | Métodos e caminhos associados a controllers e middlewares, com Swagger                   |
+| `modules/<modulo>/infrastructure/http/controllers/`       | Validar, compor dependências, traduzir entrada e responder HTTP                          |
+| `modules/<modulo>/infrastructure/http/helpers/`           | Tipos e funções que conhecem o transporte HTTP                                           |
+| `modules/<modulo>/infrastructure/validation/zod/schemas/` | Schemas enxutos de body, query e params, nomeados pela operação                          |
+| `modules/<modulo>/infrastructure/repositories/prisma/`    | Implementações de persistência, mapeamento e garantias atômicas                          |
+| `modules/<modulo>/infrastructure/providers/`              | Adaptadores dos contratos locais; por exemplo, Evolution API em integrations             |
+| `modules/<modulo>/infrastructure/config/`                 | Configuração, composição ou fallback simples local, como objeto/função quando suficiente |
+| `common/domain/errors/`                                   | Erros compartilhados definidos pelo contrato                                             |
+| `common/domain/providers/`                                | Contratos realmente compartilhados entre módulos                                         |
+| `common/infrastructure/providers/`                        | Implementações compartilhadas desses contratos, como e-mail, bcrypt e JWT                |
+| `common/infrastructure/crypto/`                           | Primitivas técnicas compartilhadas pelos adaptadores, quando houver necessidade concreta |
+| `common/infrastructure/config/`                           | Configurações e fallbacks compartilhados                                                 |
+| `common/infrastructure/env/`                              | Carregamento e validação das variáveis de ambiente                                       |
+| `common/infrastructure/http/`                             | Servidor, app Express, composição de rotas e middlewares transversais                    |
+| `common/infrastructure/prisma/`                           | Schema, migrations, configuração, client gerado e conexão                                |
+| `common/infrastructure/validation/zod/`                   | Executor compartilhado `dataValidation`; schemas específicos ficam no módulo             |
+
+Um único consumidor não transforma lógica em configuração. Classes técnicas internas ficam na infraestrutura do módulo proprietário; funções de negócio ficam na aplicação. Evite pastas genéricas que misturem responsabilidades e não crie classes para funções simples apenas por uniformidade.
+
+Infraestrutura pode importar aplicação e domínio; aplicação depende de contratos do domínio. Domínio não importa infraestrutura. Não faça use cases importarem Prisma, Express, Zod ou ferramentas concretas como `NodeCrypto`.
+
+Use arquivos em `kebab-case`, classes/tipos em `PascalCase` e funções/variáveis em `camelCase`. Preserve os sufixos `.usecase.ts`, `.repository.ts`, `.controller.ts`, `.routes.ts`, `.schema.ts` e `.spec.ts`, com imports relativos `.js` no TypeScript ESM. Não crie barrels, factories ou classes base sem necessidade real.
 
 ## Helpers
 
@@ -215,7 +254,7 @@ Use `common/infrastructure/validation/zod/data-validation.ts` para validação d
 
 ## Providers e infraestrutura
 
-Providers são contratos em `common/domain/providers/` e implementações em `common/infrastructure/providers/`.
+Providers são contratos em `domain/providers/` e implementações em `infrastructure/providers/`, no módulo proprietário ou em `common` quando compartilhados.
 
 - O domínio depende de interfaces; a infraestrutura depende das bibliotecas externas.
 - Bibliotecas de terceiros não devem aparecer nos use cases quando um provider puder isolá-las.
@@ -223,6 +262,12 @@ Providers são contratos em `common/domain/providers/` e implementações em `co
 - Providers de JWT, hash, e-mail e cookies devem receber segredos e configurações por configuração de ambiente ou construtor.
 - Não use singleton global para dependências de aplicação.
 - Use `new` na composição do controller ou da infraestrutura conforme o ciclo de vida da dependência.
+
+Usar uma biblioteca não exige, por si só, uma nova camada. Um provider representa uma capacidade que a aplicação precisa substituir e testar por contrato, como envio de e-mail ou hash de senha. Resend e bcrypt são exemplos de adaptadores em classe.
+
+Uma ferramenta interna como `NodeCrypto` pode centralizar operações técnicas repetidas em `common/infrastructure/crypto/node-crypto.ts`. Ela não conhece prefixos de API key ou regras de recuperação de senha; os providers específicos preservam esses formatos. Implemente somente operações usadas. Ao refatorar criptografia, preserve algoritmos, codificações, tamanhos, chaves e formatos persistidos e teste compatibilidade com valores produzidos antes da mudança.
+
+Fallbacks sem estado, como a indisponibilidade do registro externo, podem ser objetos tipados em `infrastructure/config/`. Alterar sua composição não autoriza transformar indisponibilidade em sucesso. `config` não deve gerar tokens nem concentrar regras de negócio.
 
 ## Persistência com Prisma
 
@@ -237,9 +282,21 @@ O ORM é Prisma 7 com PostgreSQL e driver adapter `@prisma/adapter-pg`. Mantenha
 
 ## Testes
 
-Para executar a validação da API, a partir de `apps/api`, rode `pnpm run pre:test`, depois `pnpm test` e, ao final, `pnpm run post:test`. O `pre:test` inicia o PostgreSQL; o `test` aplica as migrations e executa os testes; o `post:test` para e remove o container. Se os testes falharem, execute o `post:test` manualmente.
+Siga `docs/development/validation.md`: a partir de `apps/api`, execute `pnpm run pre:test`, aguarde a disponibilidade do PostgreSQL, execute `pnpm test` e faça a limpeza com `pnpm run post:test`, inclusive em falhas. Docker é opcional quando um banco exclusivo de testes já é fornecido por outro meio.
 
 Os testes ficam próximos do código que verificam, com o sufixo `.spec.ts`. Importe explicitamente os recursos do Vitest e use descrições de cenários em inglês.
+
+### Quando e como escrever testes
+
+- Adicione ou ajuste testes ao mudar regras de use cases e operações de repositórios. Cubra sucesso, falhas previstas, limites relevantes e isolamento entre contas.
+- Para bugs, acrescente um cenário de regressão que reproduza o comportamento incorreto, quando testável.
+- Teste idempotência e concorrência com operações concorrentes reais no repositório quando o contrato exigir; mocks não comprovam atomicidade do banco.
+- Schemas com refinamentos, cálculos temporais, criptografia e middlewares de segurança merecem testes unitários específicos quando seu comportamento mudar. Evite apenas repetir chamadas simples de bibliotecas nas asserções.
+- Refatorações de organização usam a suíte existente; acrescente casos se houver comportamento relevante sem proteção. Documentação, imports e formatação não precisam de novos testes artificiais.
+- Separe preparação, execução e verificação com linhas em branco. Use valores fictícios e relógio controlado quando necessário. Não envie e-mails ou mensagens reais nos testes.
+- Verifique resultado, erro, estado persistido e efeitos observáveis. Não teste métodos privados, ordem incidental de chamadas ou SQL gerado pelo ORM.
+- Evite sleeps para simular concorrência: controle as condições e dispare as operações explicitamente.
+- Mantenha testes independentes. O Vitest usa `fileParallelism: false` porque repositórios compartilham o banco; não habilite paralelismo sem isolar os dados.
 
 Os exemplos abaixo usam nomes genéricos para ensinar a estrutura. `ExampleModel`, `ExampleRepository`, `FindExampleUseCase`, `ExamplePrismaRepository` e a tabela `examples` são ilustrativos; não representam entidades ou contratos novos do produto. Ao aplicar o padrão, use os contratos reais do módulo.
 
@@ -378,12 +435,8 @@ Use o `CookieProvider` para ler, gravar e remover cookies. O `cookie-parser` ape
 
 ## Verificação
 
-Antes de concluir uma alteração:
+Siga a sequência completa de `docs/development/validation.md`: instalação com lockfile, testes, check, build e revisão do diff. Comandos do monorepo rodam na raiz; `pre:test` e `post:test` pertencem a `apps/api`. `pnpm check` sozinho não verifica tipos da API: o build executa `tsc`.
 
-1. Execute o build ou typecheck da API.
-2. Execute ESLint nos arquivos alterados.
-3. Execute Prettier nos arquivos alterados.
-4. Execute `git diff --check`.
-5. Adicione testes proporcionais ao risco, especialmente para validação, erros, idempotência, concorrência e efeitos externos.
+Revise a camada de cada arquivo, schemas estritos, nomes `parsedBody`/`parsedQuery`/`parsedParams`, middlewares antes do controller e Swagger alinhado ao comportamento. Respostas provisórias só cabem nas entregas explicitamente autorizadas. Declare as partes pendentes sem apresentar o contrato completo como concluído.
 
 Não declare uma verificação que não foi executada e não altere regras de lint ou tipos para esconder falhas.
