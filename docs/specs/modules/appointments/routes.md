@@ -14,22 +14,22 @@ As rotas `/v1` usam `Authorization: Bearer <api_key>`. Chave válida de conta qu
 {"external_id":"agenda-8472","contact":{"name":"Maria da Silva","social_name":"Maria","phone":"+5511999999999"},"scheduled_at":"2026-10-20T14:00:00-03:00","professional_or_service":"Dra. Ana","metadata":{"unit":"centro"},"test":false}
 ```
 
-Obrigatórios: `external_id` (1–191 caracteres), `contact.name` (1–160), `contact.phone` em E.164 e `scheduled_at` futuro com fuso explícito. Opcionais: `social_name` (1–160), `professional_or_service` (até 240), `metadata` (objeto até 50 propriedades e 16 KiB) e `test` (padrão `false`). Rejeite propriedades desconhecidas. Não coloque dados sensíveis em `metadata`.
+Obrigatórios: `external_id` (1–191 caracteres), `contact.name` (1–160), `contact.phone` em E.164 e `scheduled_at` futuro com fuso explícito. Opcionais: `social_name` (1–160), `professional_or_service` (até 240), `metadata` (objeto até 50 propriedades e 16 KiB) e `test` (padrão `false`; no MVP só aceita `false`). Rejeite propriedades desconhecidas. Não coloque dados sensíveis em `metadata`.
 
 **Passo a passo:**
 1. Valide todos os campos antes de produzir efeitos.
 2. Exija conta ativa e webhook cadastrado. Para criação real, exija conexão WhatsApp testada.
-3. Procure `external_id` dentro da conta. Se o conteúdo normalizado for igual, devolva o existente sem nova cota ou envio. Se for diferente, retorne conflito.
-4. Garanta que chamadas concorrentes não criem duplicatas.
-5. Para criação real, verifique bloqueio, antecedência mínima de duas horas e janela. Se mais de uma condição falhar, escolha o primeiro motivo nesta ordem: bloqueio, prazo, janela. Aceite o registro como `failed`.
-6. Planeje o primeiro envio conforme a antecedência e a janela local da conta. A janela padrão é 08:00 inclusiva a 20:00 exclusiva e a antecedência padrão é 24 horas.
-7. Copie as regras temporais atuais para o agendamento.
-8. Para `test: true`, valide os dados e exija webhook, mas não exija provedor, não aplique bloqueio, antecedência ou janela, não envie WhatsApp e não consuma cota. Simule confirmação e webhook de teste.
-9. Conte até 1.000 agendamentos aceitos por mês; simulações e repetições idempotentes não contam. Avise em 80% e 100%.
+3. Procure `external_id` dentro da conta. Se o conteúdo normalizado for igual, devolva o existente sem novo envio. Se for diferente, retorne conflito.
+4. Garanta que chamadas concorrentes não criem duplicatas. Grave na mesma transação o agendamento, seus eventos, a `OutboundMessage` do primeiro envio e o `WebhookEvent`, quando houver. Toda criação registra `created` (sequência 1, estado `scheduled`, ator `source_system`). Um registro aceito como `failed` registra também `failed` (sequência 2, ator `confirma`, motivo em `reason`) e gera `appointment.failed` em `pending`.
+5. Para criação real, verifique bloqueio, antecedência mínima de duas horas e janela. Se mais de uma condição falhar, escolha o primeiro motivo nesta ordem: bloqueio, prazo, janela. Um primeiro envio planejado para depois do corte de resposta (`scheduled_at` menos o corte da conta) também é falha de prazo; exatamente no corte é aceito. Aceite o registro como `failed`.
+6. Planeje o primeiro envio conforme a antecedência e a janela local da conta. A janela padrão é 08:00 inclusiva a 20:00 exclusiva e a antecedência padrão é 24 horas. O instante ideal é `scheduled_at` menos a antecedência; se já passou, use o instante atual. Fora da janela, adie para a próxima abertura. Grave o resultado em `scheduledAt` da `OutboundMessage` `confirmation_request` em `pending`. Registros `failed` não planejam envio.
+7. Copie as regras temporais atuais para o agendamento. Pendente: hoje só `timezone` é copiado; a forma de guardar as demais será definida com os processos de lembrete e corte.
+8. Simulação fora do MVP: por ora a rota só aceita agendamentos reais e `test: true` retorna `422 validation_error`. Contrato futuro: para `test: true`, valide os dados e exija webhook, mas não exija provedor, não aplique bloqueio, antecedência ou janela, não envie WhatsApp. Simule confirmação e webhook de teste.
+9. Cota mensal (1.000 agendamentos aceitos, com avisos em 80% e 100%) está fora do MVP: não limite, não conte e não avise. O erro `quota_exceeded` não é retornado por ora.
 
 **Resposta:** `201` para criação e `200` para repetição idempotente. Exemplo: `{"id":"<UUID>","external_id":"agenda-8472","status":"scheduled","failure_reason":null,"canceled_by":null,"scheduled_at":"2026-10-20T17:00:00Z","timezone":"America/Sao_Paulo","test":false,"delivery_uncertain":false,"created_at":"2026-10-19T12:00:00Z","updated_at":"2026-10-19T12:00:00Z"}`.
 
-**Erros:** `401 unauthorized`, `403 account_inactive`, `409 idempotency_conflict` ou `account_not_configured`, `413 bad_request`, `422 validation_error`, `429 too_many_requests` (inclui `Retry-After`) ou `quota_exceeded`, `503 service_unavailable`.
+**Erros:** `401 unauthorized`, `403 account_inactive`, `409 idempotency_conflict` ou `account_not_configured`, `413 bad_request`, `422 validation_error`, `429 too_many_requests` (inclui `Retry-After`), `503 service_unavailable`.
 
 ### GET /appointments/{external_id}
 
@@ -154,4 +154,4 @@ Exigem sessão e conta ativa. A conta vem da sessão. Registros anonimizados, ex
 - Desconexão sem tentativa causa `provider_disconnected`; esgotamento causa `attempts_exhausted`. Aceite ou incerteza agenda lembrete quatro horas após o primeiro aceite.
 - Lembrete usa texto fixo. Respeita janela e corte de duas horas; pode ser adiado à próxima abertura. Falha e incerteza não mudam o estado nem geram webhook. Após troca, usa a conexão atual.
 - No corte de duas horas, marque `no_response` somente se ainda elegível. Resposta tardia pode alterar esse estado até o início da consulta.
-- `test` simula confirmação e webhook sem enviar mensagem.
+- Fora do MVP: `test` simula confirmação e webhook sem enviar mensagem.

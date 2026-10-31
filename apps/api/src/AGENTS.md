@@ -276,6 +276,8 @@ Providers são contratos em `domain/providers/` e implementações em `infrastru
 - Providers de JWT, hash, e-mail e cookies devem receber segredos e configurações por configuração de ambiente ou construtor.
 - Não use singleton global para dependências de aplicação.
 - Use `new` na composição do controller ou da infraestrutura conforme o ciclo de vida da dependência.
+- Em use cases, obtenha o relógio e os cálculos de data pelo `DateTimeProvider`. Day.js fica restrito ao adaptador, e os instantes circulam como `Date`.
+- Use o `IdProvider` somente quando o identificador precisar existir antes da persistência, como no corpo de um evento de webhook.
 
 Usar uma biblioteca não exige, por si só, uma nova camada. Um provider representa uma capacidade que a aplicação precisa substituir e testar por contrato, como envio de e-mail ou hash de senha. Resend e bcrypt são exemplos de adaptadores em classe.
 

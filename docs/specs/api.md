@@ -77,7 +77,7 @@ Detalhes: [Webhooks](modules/webhooks/routes.md).
 
 ## Limites e formatos
 
-Datas usam RFC 3339 e instantes gerados pelo Confirma usam UTC. Corpos JSON usam UTF-8 e `snake_case`. A conta vem da sessão ou da chave, nunca do corpo. Requisições rejeitam propriedades desconhecidas. A API `/v1` usa `Authorization: Bearer <api_key>`, responde `403 account_inactive` em todas as rotas quando a chave é válida, mas a conta não está ativa, aceita corpo bruto de até 64 KiB e limita cada chave a 60 requisições por minuto. A cota mensal é de 1.000 agendamentos aceitos por conta.
+Datas usam RFC 3339 e instantes gerados pelo Confirma usam UTC. Corpos JSON usam UTF-8 e `snake_case`. A conta vem da sessão ou da chave, nunca do corpo. Requisições rejeitam propriedades desconhecidas. A API `/v1` usa `Authorization: Bearer <api_key>`, responde `403 account_inactive` em todas as rotas quando a chave é válida, mas a conta não está ativa, aceita corpo bruto de até 64 KiB e limita cada chave a 60 requisições por minuto. A cota mensal de 1.000 agendamentos aceitos por conta está fora do MVP e ainda não é aplicada.
 
 O painel usa um JWT de sessão em cookie `HttpOnly`, `Secure`, `SameSite=Lax`, sem atributo `Domain`. CORS autenticado permite somente `https://app.useconfirma.com.br`. Comandos autenticados validam `Origin` e exigem cabeçalho personalizado ou token anti-CSRF. A chave de API não autentica rotas do painel.
 

@@ -18,6 +18,10 @@ O Confirma é um SaaS B2B que confirma agendamentos por WhatsApp. Sistemas exter
 4. Altere especificações somente com autorização e preserve os identificadores existentes.
 5. Não finalize comportamentos que `api.md` ou o módulo marcam como pendentes; isole formatos de provedores externos em adaptadores.
 
+## Escopo do MVP
+
+O foco é o fluxo principal com agendamentos reais. Ficam fora do MVP, até nova decisão: a cota mensal e a cobrança, e a simulação com `test: true` em `POST /appointments`, que retorna `validation_error`. Os contratos futuros continuam nas especificações, marcados como fora do MVP; não os implemente.
+
 ## Antes de implementar
 
 1. Identifique o objetivo e os critérios de aceite da tarefa.

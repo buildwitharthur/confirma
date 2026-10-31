@@ -46,6 +46,19 @@ export class DayjsDateTimeProvider implements DateTimeProvider {
     return minutes >= this.toMinutes(start) && minutes < this.toMinutes(end);
   }
 
+  // Se o início de hoje já passou no horário local, usa o de amanhã.
+  nextTimeWindowStart(value: Date, timezone: string, start: string): Date {
+    const minutes = this.toMinutes(start);
+    const local = dayjs(value).tz(timezone);
+    const today = local
+      .hour(Math.floor(minutes / 60))
+      .minute(minutes % 60)
+      .second(0)
+      .millisecond(0);
+
+    return (today.isAfter(local) ? today : today.add(1, 'day')).toDate();
+  }
+
   // Converte um horário "HH:mm" em minutos desde a meia-noite.
   private toMinutes(time: string): number {
     const [hour = 0, minute = 0] = time.split(':').map(Number);

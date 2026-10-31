@@ -10,4 +10,6 @@ export interface DateTimeProvider {
     start: string,
     end: string,
   ): boolean;
+  // Próximo instante, estritamente posterior a value, em que o relógio local do timezone marca start.
+  nextTimeWindowStart(value: Date, timezone: string, start: string): Date;
 }

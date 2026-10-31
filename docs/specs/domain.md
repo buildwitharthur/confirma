@@ -61,13 +61,13 @@ Tipos: `created`, `send_accepted`, `send_uncertain`, `reminder_sent`, `reminder_
 Mensagem lógica para o contato. Campos: `id: UUID`, `type: confirmation_request | reminder | response_ack | clarification | stop_ack`, `status: pending | in_progress | accepted | uncertain | failed | discarded | canceled`, `scheduledAt: datetime | null`, `acceptedAt: datetime | null`, `deliveryUncertain: boolean`. Incerteza não permite repetir a mensagem.
 
 ### WebhookEvent
-Evento destinado ao integrador. Campos: `id: UUID`, `type: appointment.confirmed | appointment.canceled | appointment.no_response | appointment.failed | webhook.test`, `occurredAt: datetime`, `sequence: integer | null`, `test: boolean`, `deliveryStatus: pending | delivering | delivered | delivery_failed | suppressed`. Reentregas preservam ID e corpo. A entrega não muda o agendamento.
+Evento destinado ao integrador. Campos: `id: UUID`, `type: appointment.confirmed | appointment.canceled | appointment.no_response | appointment.failed | webhook.test`, `occurredAt: datetime`, `sequence: integer | null`, `test: boolean`, `body: object`, `deliveryStatus: pending | delivering | delivered | delivery_failed | suppressed`. Reentregas preservam ID e corpo. A entrega não muda o agendamento.
 
 ### WebhookDeliveryAttempt
 Tentativa de entrega de um evento. Campos: `id: UUID`, `number: integer`, `kind: automatic | manual`, `attemptedAt: datetime`, `outcome: success | http_error | timeout | network_error`, `httpStatus: integer | null`. Pertence a um `WebhookEvent`; é registrada na reserva e concluída com o resultado. Não guarda corpo nem assinatura.
 
 ### MonthlyUsage
-Uso mensal de agendamentos aceitos. Campos: `periodStart: date`, `timezone: IANA timezone`, `acceptedAppointments: integer`, `notified80At: datetime | null`, `notified100At: datetime | null`. Uma contagem por conta e mês; exclusão de agendamento não reduz a contagem.
+Uso mensal de agendamentos aceitos. Campos: `periodStart: date`, `timezone: IANA timezone`, `acceptedAppointments: integer`, `notified80At: datetime | null`, `notified100At: datetime | null`. Uma contagem por conta e mês; exclusão de agendamento não reduz a contagem. Fora do MVP: a criação de agendamentos ainda não atualiza esta contagem.
 
 ## Erros de negócio
 

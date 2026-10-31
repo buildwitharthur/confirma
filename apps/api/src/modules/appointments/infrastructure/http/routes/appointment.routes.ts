@@ -66,7 +66,9 @@ export const panelAppointmentRoutes = Router();
  *                 description: Até 16 KiB.
  *               test:
  *                 type: boolean
+ *                 enum: [false]
  *                 default: false
+ *                 description: A simulação está fora do MVP; true retorna validation_error.
  *     responses:
  *       201:
  *         description: Dados recebidos e validados.

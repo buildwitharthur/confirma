@@ -2,11 +2,8 @@ import { z } from 'zod';
 
 const e164PhoneSchema = z.string().regex(/^\+[1-9]\d{1,14}$/);
 
-const scheduledAtSchema = z.iso
-  .datetime({ offset: true })
-  .refine((value) => new Date(value).getTime() > Date.now(), {
-    message: 'must be a future date.',
-  });
+// A regra de data futura pertence ao use case; aqui só o formato RFC 3339 com offset.
+const scheduledAtSchema = z.iso.datetime({ offset: true });
 
 const metadataSchema = z
   .object({})
@@ -34,6 +31,11 @@ export const createAppointmentBodySchema = z
     scheduled_at: scheduledAtSchema,
     professional_or_service: z.string().max(240).optional(),
     metadata: metadataSchema.optional(),
-    test: z.boolean().default(false),
+    // A simulação está fora do MVP: test: true é rejeitado como validation_error.
+    test: z
+      .literal(false, {
+        error: 'must be false; simulation is not supported yet.',
+      })
+      .default(false),
   })
   .strict();
